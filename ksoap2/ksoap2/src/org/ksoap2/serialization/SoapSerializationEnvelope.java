@@ -141,7 +141,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
         if (parser.getEventType() == parser.TEXT) {
         	text = parser.getText();
-            result = new SoapPrimitive(namespace, name, text);
+            result = new SoapPrimitive(typeNamespace, typeName, text);
             parser.next();
         }   
 
@@ -150,7 +150,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 			if (text != null && text.trim().length() != 0) 
 				throw new RuntimeException("Malformed input: Mixed content");
 
-            SoapObject so = new SoapObject(namespace, name);
+            SoapObject so = new SoapObject(typeNamespace, typeName);
 
             while (parser.getEventType() != parser.END_TAG) {
                 so.addProperty(
@@ -162,7 +162,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                         null,
                         null,
                         PropertyInfo.OBJECT_TYPE));
-                parser.next();
+
+                parser.nextTag();
             }
 
             result = so;
