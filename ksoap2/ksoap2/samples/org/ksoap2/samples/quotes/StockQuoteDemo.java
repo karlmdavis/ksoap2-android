@@ -1,8 +1,6 @@
 package org.ksoap2.samples.quotes;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
-import java.io.*;
-import javax.microedition.io.*;
 
 import org.ksoap2.*;
 import org.ksoap2.serialization.*;
