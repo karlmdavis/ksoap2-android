@@ -11,7 +11,7 @@
  * under the License.
  *
  * The Initial Developer of kSOAP is Stefan Haustein. Copyright (C)
- * 2000, 2001 Stefan Haustein, D-46045 Oberhausen (Rhld.),
+ * 2000, 2001, 2002 Stefan Haustein, D-46045 Oberhausen (Rhld.),
  * Germany. All Rights Reserved.
  *
  * Contributor(s): John D. Beatty, Dave Dash, F. Hunter, Renaud Tognelli,
