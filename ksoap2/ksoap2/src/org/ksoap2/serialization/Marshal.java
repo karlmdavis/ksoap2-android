@@ -11,8 +11,7 @@ public interface Marshal {
         implementation, please note that the start and and tag must be
         consumed. This is not symmetric to writeInstance, but
         otherwise it would not be possible to access the attributes of
-        the start tag here. The underlying XML parser is accessible
-        using parser.parser. */
+        the start tag here.  */
 
     public Object readInstance(
         XmlPullParser parser,
@@ -24,8 +23,7 @@ public interface Marshal {
     /** Write the instance to the given SoapWriter. In contrast to 
         readInstance, it is not neccessary to care about the
         sorrounding start and end tags. Additional attributes must be
-        writen before anything else is written. The underlying xml
-        writer is accessible using writer.writer. */
+        writen before anything else is written. */
 
     public void writeInstance(
         XmlSerializer writer,
