@@ -1,7 +1,6 @@
 package org.ksoap2.marshal;
 
 import java.io.*;
-import org.kobjects.serialization.*;
 import org.xmlpull.v1.*;
 import org.ksoap2.*;
 
@@ -32,7 +31,7 @@ class DM implements Marshal {
             default :
                 throw new RuntimeException();
         }
-    }
+    } 
 
     public void writeInstance(XmlSerializer writer, Object instance)
         throws IOException {
@@ -41,9 +40,9 @@ class DM implements Marshal {
     }
 
     public void register(SoapSerializationEnvelope cm) {
-        cm.addMapping(cm.xsd, "int", ElementType.INTEGER_CLASS, this);
-        cm.addMapping(cm.xsd, "long", ElementType.LONG_CLASS, this);
-        cm.addMapping(cm.xsd, "string", ElementType.STRING_CLASS, this);
-        cm.addMapping(cm.xsd, "boolean", ElementType.BOOLEAN_CLASS, this);
+        cm.addMapping(cm.xsd, "int", PropertyInfo.INTEGER_CLASS, this);
+        cm.addMapping(cm.xsd, "long", PropertyInfo.LONG_CLASS, this);
+        cm.addMapping(cm.xsd, "string", PropertyInfo.STRING_CLASS, this);
+        cm.addMapping(cm.xsd, "boolean", PropertyInfo.BOOLEAN_CLASS, this);
     }
 }

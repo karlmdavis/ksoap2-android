@@ -172,7 +172,7 @@ public class SoapObject implements KvmSerializable {
 
 		PropertyInfo pi = new PropertyInfo();
 		pi.name = name;
-		pi.type = value == null ? ElementType.OBJECT_CLASS : value.getClass();
+		pi.type = value == null ? PropertyInfo.OBJECT_CLASS : value.getClass();
 
         return addProperty(pi, value);
     }
