@@ -126,19 +126,30 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     protected Object readUnknown(
         XmlPullParser parser,
-        String namespace,
-        String name)
+        String typeNamespace,
+        String typeName)
         throws IOException, XmlPullParserException {
+
+		String name = parser.getName ();
+		String namespace = parser.getNamespace();
 
         parser.next(); // start tag
 
-        Object result;
+        Object result = null;
+
+		String text = null;
 
         if (parser.getEventType() == parser.TEXT) {
-            result = new SoapPrimitive(namespace, name, parser.getText());
+        	text = parser.getText();
+            result = new SoapPrimitive(namespace, name, text);
             parser.next();
         }   
-        else {
+
+		if (parser.getEventType() == parser.START_TAG) {
+
+			if (text != null && text.trim().length() != 0) 
+				throw new RuntimeException("Malformed input: Mixed content");
+
             SoapObject so = new SoapObject(namespace, name);
 
             while (parser.getEventType() != parser.END_TAG) {
@@ -153,10 +164,11 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                         PropertyInfo.OBJECT_TYPE));
                 parser.next();
             }
+
             result = so;
         }
 
-        parser.require(parser.END_TAG, null, null);
+        parser.require(parser.END_TAG, namespace, name);
 
         return result;
     }
