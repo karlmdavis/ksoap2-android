@@ -21,11 +21,11 @@ public interface Marshal {
         PropertyInfo expected)
         throws IOException, XmlPullParserException;
 
-    /** Write the instance to the given SoapWriter. In contrast to
-    readInstance, it is not neccessary to care about the
-    sorrounding start and end tags. Additional attributes must be
-    writen before anything else is written. The underlying xml
-    writer is accessible using writer.writer. */
+    /** Write the instance to the given SoapWriter. In contrast to 
+        readInstance, it is not neccessary to care about the
+        sorrounding start and end tags. Additional attributes must be
+        writen before anything else is written. The underlying xml
+        writer is accessible using writer.writer. */
 
     public void writeInstance(
         XmlSerializer writer,
