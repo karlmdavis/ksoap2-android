@@ -162,6 +162,7 @@ public class SoapServlet extends HttpServlet {
 
             SoapObject soapReq = (SoapObject) envelope.bodyIn;
             SoapObject result = invoke(service, soapReq);
+            System.out.println ("result: "+result);
             envelope.bodyOut = result;
         }
         catch (SoapFault f) {
@@ -181,12 +182,20 @@ public class SoapServlet extends HttpServlet {
             //		logSOAP (req, resEnv, false);
             res.setContentType("text/xml; charset=utf-8");
             res.setHeader("Connection", "close");
-            OutputStream os = res.getOutputStream();
+//            StringBuffer sb = new StringBuffer();
+//            OutputStream os = res.getOutputStream();
+            StringWriter sw = new StringWriter();
             XmlSerializer writer = new KXmlSerializer();
-            writer.setOutput(os, "utf-8");
-            envelope.write(writer);
+            writer.setOutput(System.out, null);
+            try {
+                envelope.write(writer);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
             writer.flush();
-            os.close();
+            System.out.println("result xml: "+sw);
+            //sb.close();
         }
         res.flushBuffer();
     }
@@ -214,6 +223,9 @@ public class SoapServlet extends HttpServlet {
 
         Method method = service.getClass().getMethod(name, types);
         Object result = method.invoke(service, args);
+        
+        System.out.println("result:" + result);
+        
         SoapObject response =
             new SoapObject(soapReq.getNamespace(), name + "Response");
         if (result != null)

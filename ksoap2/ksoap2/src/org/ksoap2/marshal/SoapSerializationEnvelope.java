@@ -17,7 +17,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     static final Marshal DEFAULT_MARSHAL = new DM();
 
     Hashtable idMap = new Hashtable();
-    Vector multiRef = new Vector();
+    Vector multiRef;// = new Vector();
     Vector types = new Vector();
 
     public boolean implicitTypes;
@@ -495,6 +495,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     public void writeBody(XmlSerializer writer) throws IOException {
 
+        multiRef = new Vector();
         multiRef.addElement(bodyOut);
         types.addElement(ElementType.OBJECT_TYPE);
 
@@ -541,14 +542,14 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         for (int i = 0; i < cnt; i++) {
 
             obj.getPropertyInfo(i, info);
-
+    
             //      Object value = obj.getProperty (i);
 
-            //      if (value != null) {
-            writer.startTag(null, info.name);
-            writeProperty(writer, obj.getProperty(i), info);
-            writer.endTag(null, info.name);
-            //}
+            if (!info.nonpermanent) {
+                writer.startTag(null, info.name);
+                writeProperty(writer, obj.getProperty(i), info);
+                writer.endTag(null, info.name);
+            }
         }
     }
 
