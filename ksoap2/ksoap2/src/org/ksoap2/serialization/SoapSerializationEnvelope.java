@@ -124,6 +124,20 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         parser.require(XmlPullParser.END_TAG, null, null);
     }
 
+
+	/** 
+	 * If the type of the object cannot be determined, and thus
+	 * no Marshal class can handle the object, this method is
+	 * called. It will build either a SoapPrimitive or a SoapObject
+	 * 
+	 * @param parser
+	 * @param typeNamespace
+	 * @param typeName
+	 * @return
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
+
     protected Object readUnknown(
         XmlPullParser parser,
         String typeNamespace,
@@ -133,7 +147,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 		String name = parser.getName ();
 		String namespace = parser.getNamespace();
 
-        parser.next(); // start tag
+        parser.next(); // move to text, inner start tag or end tag
 
         Object result = null;
 
@@ -144,11 +158,16 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             result = new SoapPrimitive(typeNamespace, typeName, text);
             parser.next();
         }   
+		else if(parser.getEventType() == XmlPullParser.END_TAG) {
+			result = new SoapObject(typeNamespace, typeName);
+		}
+		
+		
+		if (parser.getEventType() == XmlPullParser.START_TAG){
 
-		if (parser.getEventType() == XmlPullParser.START_TAG) {
-
-			if (text != null && text.trim().length() != 0) 
+		 	if(text != null && text.trim().length() != 0) {
 				throw new RuntimeException("Malformed input: Mixed content");
+			}
 
             SoapObject so = new SoapObject(typeNamespace, typeName);
 
