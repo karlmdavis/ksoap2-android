@@ -18,7 +18,7 @@ public class MarshalBase64 implements Marshal {
     public Object readInstance (
                 XmlPullParser parser,
 				String namespace, String name,
-				ElementType expected) throws IOException, XmlPullParserException {
+				PropertyInfo expected) throws IOException, XmlPullParserException {
 
 //	parser.read (); // start tag
 	Object result = Base64.decode 

@@ -128,7 +128,10 @@ public class SoapObject implements KvmSerializable {
     public void getPropertyInfo(int index, PropertyInfo pi) {
         PropertyInfo p = (PropertyInfo) info.elementAt(index);
         pi.name = p.name;
-        pi.copy(p);
+        pi.namespace = p.namespace;
+        pi.flags = p.flags;
+        pi.type = p.type;
+        pi.elementType = p.elementType;
     }
 
     /**
@@ -143,7 +146,7 @@ public class SoapObject implements KvmSerializable {
         SoapObject o = new SoapObject(namespace, name);
         for (int i = 0; i < data.size(); i++) {
             PropertyInfo p = (PropertyInfo) info.elementAt(i);
-            o.addProperty(p.name, p, data.elementAt(i));
+            o.addProperty(p, data.elementAt(i));
         }
         return o;
     }
@@ -167,32 +170,13 @@ public class SoapObject implements KvmSerializable {
      */
     public SoapObject addProperty(String name, Object value) {
 
-        return addProperty(
-            new PropertyInfo(
-                name,
-                value == null ? ElementType.OBJECT_CLASS : value.getClass()),
-            value);
+		PropertyInfo pi = new PropertyInfo();
+		pi.name = name;
+		pi.type = value == null ? ElementType.OBJECT_CLASS : value.getClass();
+
+        return addProperty(pi, value);
     }
 
-    /** @deprecated
-    Adds a property (parameter) to the object.  This is essentially
-    a sub element.
-    
-    @param name the name of the property
-    @param type the type or class of the element
-    @param value the value of the property
-    */
-
-    public SoapObject addProperty(
-        String name,
-        ElementType type,
-        Object value) {
-
-        PropertyInfo p = new PropertyInfo();
-        p.copy(type);
-        p.name = name;
-        return addProperty(p, value);
-    }
 
     /** Adds a property (parameter) to the object.  This is
     essentially a sub element.

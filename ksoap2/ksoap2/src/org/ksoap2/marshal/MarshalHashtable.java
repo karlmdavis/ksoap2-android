@@ -22,7 +22,6 @@ package org.ksoap2.marshal;
 import java.io.*;
 import java.util.*;
 
-import org.kobjects.serialization.ElementType;
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
@@ -53,7 +52,7 @@ public class MarshalHashtable implements Marshal {
         XmlPullParser parser,
         String namespace,
         String name,
-        ElementType expected)
+        PropertyInfo expected)
         throws IOException, XmlPullParserException {
 
         Hashtable instance = new Hashtable();
@@ -79,7 +78,7 @@ public class MarshalHashtable implements Marshal {
                     0,
                     null,
                     null,
-                    ElementType.OBJECT_TYPE);
+                    PropertyInfo.OBJECT_TYPE);
 
             parser.nextTag();
 
@@ -93,7 +92,7 @@ public class MarshalHashtable implements Marshal {
                     1,
                     null,
                     null,
-                    ElementType.OBJECT_TYPE);
+                    PropertyInfo.OBJECT_TYPE);
 
             parser.nextTag();
             if (value != null)

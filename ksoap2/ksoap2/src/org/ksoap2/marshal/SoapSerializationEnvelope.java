@@ -3,7 +3,6 @@ package org.ksoap2.marshal;
 import java.util.*;
 import java.io.*;
 import org.ksoap2.*;
-import org.kobjects.serialization.*;
 import org.xmlpull.v1.*;
 
 /**
@@ -34,7 +33,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     public SoapSerializationEnvelope(int version) {
         super(version);
-        addMapping(enc, "Array", ElementType.VECTOR_CLASS);
+        addMapping(enc, "Array", PropertyInfo.VECTOR_CLASS);
         DEFAULT_MARSHAL.register(this);
     }
 
@@ -64,7 +63,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                     -1,
                     parser.getNamespace(),
                     parser.getName(),
-                    ElementType.OBJECT_TYPE);
+                    PropertyInfo.OBJECT_TYPE);
 
             if ("1".equals(rootAttr) || bodyIn == null)
                 bodyIn = o;
@@ -141,7 +140,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                         so.getPropertyCount(),
                         null,
                         null,
-                        ElementType.OBJECT_TYPE));
+                        PropertyInfo.OBJECT_TYPE));
                 parser.next();
             }
             result = so;
@@ -166,7 +165,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     protected void readVector(
         XmlPullParser parser,
         Vector v,
-        ElementType elementType)
+        PropertyInfo elementType)
         throws IOException, XmlPullParserException {
 
         String namespace = null;
@@ -192,7 +191,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         }
 
         if (elementType == null)
-            elementType = ElementType.OBJECT_TYPE;
+            elementType = PropertyInfo.OBJECT_TYPE;
 
         parser.nextTag();
 
@@ -235,7 +234,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         int index,
         String namespace,
         String name,
-        ElementType expected)
+        PropertyInfo expected)
         throws IOException, XmlPullParserException {
 
         //  System.out.println ("in read");
@@ -350,7 +349,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         XmlPullParser parser,
         String namespace,
         String name,
-        ElementType expected)
+        PropertyInfo expected)
         throws IOException, XmlPullParserException {
 
         /*  if (xsdNamespace.equals (namespace)) {
@@ -430,7 +429,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 DEFAULT_MARSHAL };
         }
 
-        if ((type instanceof Class) && type != ElementType.OBJECT_CLASS) {
+        if ((type instanceof Class) && type != PropertyInfo.OBJECT_CLASS) {
 
             Object[] tmp =
                 (Object[]) classToQName.get(((Class) type).getName());
@@ -497,7 +496,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
         multiRef = new Vector();
         multiRef.addElement(bodyOut);
-        types.addElement(ElementType.OBJECT_TYPE);
+        types.addElement(PropertyInfo.OBJECT_TYPE);
 
         for (int i = 0; i < multiRef.size(); i++) {
 
@@ -522,7 +521,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 writeVectorBody(
                     writer,
                     (Vector) obj,
-                    ((ElementType) types.elementAt(i)).elementType);
+                    ((PropertyInfo) types.elementAt(i)).elementType);
             else
                 throw new RuntimeException("Cannot serialize: " + obj);
 
@@ -545,7 +544,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     
             //      Object value = obj.getProperty (i);
 
-            if (!info.nonpermanent) {
+            if ((info.flags & PropertyInfo.TRANSIENT) == 0) {
                 writer.startTag(null, info.name);
                 writeProperty(writer, obj.getProperty(i), info);
                 writer.endTag(null, info.name);
@@ -556,7 +555,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     protected void writeProperty(
         XmlSerializer writer,
         Object obj,
-        ElementType type)
+        PropertyInfo type)
         throws IOException {
 
         if (obj == null) {
@@ -606,11 +605,11 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     protected void writeVectorBody(
         XmlSerializer writer,
         Vector vector,
-        ElementType elementType)
+        PropertyInfo elementType)
         throws IOException {
 
         if (elementType == null)
-            elementType = ElementType.OBJECT_TYPE;
+            elementType = PropertyInfo.OBJECT_TYPE;
 
         int cnt = vector.size();
 

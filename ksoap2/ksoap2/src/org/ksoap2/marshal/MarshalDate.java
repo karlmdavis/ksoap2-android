@@ -16,7 +16,7 @@ public class MarshalDate implements Marshal {
         XmlPullParser parser,
         String namespace,
         String name,
-        ElementType expected)
+        PropertyInfo expected)
         throws IOException, XmlPullParserException {
 
         Object result =

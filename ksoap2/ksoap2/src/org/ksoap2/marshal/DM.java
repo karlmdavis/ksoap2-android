@@ -14,7 +14,7 @@ class DM implements Marshal {
         XmlPullParser parser,
         String namespace,
         String name,
-        ElementType expected)
+        PropertyInfo expected)
         throws IOException, XmlPullParserException {
 
         //parser.parser.read (); // read start tag;

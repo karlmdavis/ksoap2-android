@@ -8,7 +8,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.kobjects.serialization.*;
+//import org.kobjects.serialization.*;
 
 import org.ksoap2.*;
 import org.ksoap2.marshal.*;
@@ -62,9 +62,11 @@ public class SoapServlet extends HttpServlet {
                 Class[] types = methods[i].getParameterTypes();
                 PropertyInfo[] info = new PropertyInfo[types.length];
 
-                for (int j = 0; j < types.length; j++)
-                    info[j] = new PropertyInfo(null, types[j]);
-
+                for (int j = 0; j < types.length; j++) {
+                    info[j] = new PropertyInfo();
+                    info[j].type = types[j];
+                }
+                
                 publishMethod(service, namespace, methods[i].getName(), info);
             }
         }
@@ -118,8 +120,11 @@ public class SoapServlet extends HttpServlet {
 
                 Class[] types = methods[i].getParameterTypes();
                 PropertyInfo[] info = new PropertyInfo[types.length];
-                for (int j = 0; j < types.length; j++)
-                    info[j] = new PropertyInfo(parameterNames[j], types[j]);
+                for (int j = 0; j < types.length; j++){
+                    info[j] = new PropertyInfo();
+                    info[j].name = parameterNames[j];
+                    info[j].type = types[j];
+                }
 
                 publishMethod(service, namespace, name, info);
                 return;

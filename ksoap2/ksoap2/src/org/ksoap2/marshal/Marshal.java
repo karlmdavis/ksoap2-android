@@ -1,7 +1,6 @@
 package org.ksoap2.marshal;
 
 import java.io.*;
-import org.kobjects.serialization.*;
 import org.ksoap2.SoapEnvelope;
 import org.xmlpull.v1.*;
 
@@ -20,7 +19,7 @@ public interface Marshal {
         XmlPullParser parser,
         String namespace,
         String name,
-        ElementType expected)
+        PropertyInfo expected)
         throws IOException, XmlPullParserException;
 
     /** Write the instance to the given SoapWriter. In contrast to
