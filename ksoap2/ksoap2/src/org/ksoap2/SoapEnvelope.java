@@ -101,10 +101,10 @@ public class SoapEnvelope {
     public String encodingStyle;
     int version;    
 
-    protected String env;
-    protected String enc;
-    protected String xsi;   
-    protected String xsd;
+    public String env;
+    public String enc;
+    public String xsi;   
+    public String xsd;
 
     public SoapEnvelope (int version) {
                 this.version = version;

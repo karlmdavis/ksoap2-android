@@ -17,7 +17,6 @@ public interface Marshal {
         using parser.parser. */
 
     public Object readInstance(
-        SoapSerialization envelope,
         XmlPullParser parser,
         String namespace,
         String name,
@@ -31,12 +30,11 @@ public interface Marshal {
     writer is accessible using writer.writer. */
 
     public void writeInstance(
-        SoapSerialization envelope,
         XmlSerializer writer,
         Object instance)
         throws IOException;
 
     /** Register this Marshal with the given classMap */
 
-    public void register(ClassMap cm);
+    public void register(SoapSerialization cm);
 }
