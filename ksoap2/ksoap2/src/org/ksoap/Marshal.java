@@ -2,6 +2,7 @@ package org.ksoap;
 
 import java.io.*;
 import org.kobjects.serialization.*;
+import org.xmlpull.v1.*;
 
 /** Abstract class for custom (de)serialization. */
 
@@ -18,7 +19,7 @@ public interface Marshal {
 
     public Object readInstance (SoapParser parser, 
 				String namespace, String name,
-				ElementType expected) throws IOException;
+				ElementType expected) throws IOException, XmlPullParserException;
 
 
     /** Write the instance to the given SoapWriter. In contrast to
