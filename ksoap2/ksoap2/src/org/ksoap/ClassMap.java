@@ -26,16 +26,17 @@ import java.util.Hashtable;
 import org.kobjects.serialization.*;
 import org.xmlpull.v1.*;
 
-
-/** This class provides various soap properties relevant for
-    (de)serialization, including a method for defining mappings 
-    between java classes and XML element names.    */
+/**
+ * This class provides various soap properties relevant for
+ * (de)serialization, including a method for defining mappings 
+ * between java classes and XML element names.    */
 
 public class ClassMap {
 
-    /** Determines if type attributes are included for all objects
-    written. If true, the type attribute is only written if the
-    actual type differs from the declared type. */
+    /** 
+     * Determines if type attributes are included for all objects
+     * written. If true, the type attribute is only written if the
+     * actual type differs from the declared type. */
 
     public boolean implicitTypes;
     public int version;
@@ -49,26 +50,20 @@ public class ClassMap {
 
     static final Marshal DEFAULT_MARSHAL = new DM();
 
-    /** Map from XML qualified names to Java classes */
+    /** 
+     * Map from XML qualified names to Java classes */
 
     protected Hashtable qNameToClass = new Hashtable();
 
-    /** Map from Java class names to XML name and namespace pairs */
+    /** 
+     * Map from Java class names to XML name and namespace pairs */
 
     protected Hashtable classToQName = new Hashtable();
 
-    /** deprecated 
-    
-    Create a new class map using the 2001 version of the 
-    XML schema namespace. */
-
-    public ClassMap() {
-        this(Soap.VER11);
-    }
 
     public ClassMap(int version) {
         this.version = version;
-     //  prefixMap = Soap.prefixMap[version];
+        //  prefixMap = Soap.prefixMap[version];
 
         if (version == Soap.VER10) {
             xsi = Soap.XSI1999;
@@ -92,20 +87,12 @@ public class ClassMap {
         DEFAULT_MARSHAL.register(this);
     }
 
-    /** deprecated
-    
-    Creates a new Class map. If the legacy flag is set to true,
-    the 1999 version of the XML Schema namespace is used, otherwise
-    the 2001 version. */
 
-    public ClassMap(boolean legacy) {
-        this(legacy ? Soap.VER10 : Soap.VER11);
-    }
-
-    /** Returns a new object read from the given parser.  If no
-    mapping is found, null is returned.  This method is used by
-    the SoapParser in order to convert the XML code to Java
-    objects. */
+    /** 
+     * Returns a new object read from the given parser.  If no
+     * mapping is found, null is returned.  This method is used by
+     * the SoapParser in order to convert the XML code to Java
+     * objects. */
 
     public Object readInstance(
         SoapParser parser,
@@ -161,10 +148,11 @@ public class ClassMap {
         return obj;
     }
 
-    /** Returns a string array containing the namespace, name, id and
-        Marshal object for the given java object. This method is used
-        by the SoapWriter in order to map Java objects to the
-        corresponding SOAP section five XML code.*/
+    /** 
+     * Returns a string array containing the namespace, name, id and
+     * Marshal object for the given java object. This method is used
+     * by the SoapWriter in order to map Java objects to the
+     * corresponding SOAP section five XML code.*/
 
     public Object[] getInfo(Object type, Object instance) {
 
@@ -202,8 +190,9 @@ public class ClassMap {
         return new Object[] { xsd, "anyType", null, null };
     }
 
-    /** Defines a direct mapping from a namespace and name to a java
-        class (and vice versa), using the given marshal mechanism */
+    /** 
+     * Defines a direct mapping from a namespace and name to a java
+     * class (and vice versa), using the given marshal mechanism */
 
     public void addMapping(
         String namespace,
@@ -219,8 +208,8 @@ public class ClassMap {
             clazz.getName(),
             new Object[] { namespace, name, null, marshal });
 
-    //    if (prefixMap.getPrefix(namespace) == null)
-     //       prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), namespace);
+        //    if (prefixMap.getPrefix(namespace) == null)
+        //       prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), namespace);
     }
 
     /** Defines a direct mapping from a namespace and name to a java
@@ -231,17 +220,17 @@ public class ClassMap {
         addMapping(namespace, name, clazz, null);
     }
 
-    /** Adds a SoapObject to the class map. During parsing,
-    objects of the given type (namespace/name) will be
-    mapped to corresponding copies of the given SoapObject,
-    maintaining the structure of the template. */
+    /** 
+     * Adds a SoapObject to the class map. During parsing,
+     * objects of the given type (namespace/name) will be
+     * mapped to corresponding copies of the given SoapObject,
+     * maintaining the structure of the template. */
 
     public void addTemplate(SoapObject so) {
 
         qNameToClass.put(new SoapPrimitive(so.namespace, so.name, null), so);
 
-   //     if (prefixMap.getPrefix(so.namespace) == null)
-    //        prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), so.namespace);
+        //     if (prefixMap.getPrefix(so.namespace) == null)
+        //        prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), so.namespace);
     }
-
 }
