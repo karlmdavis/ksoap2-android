@@ -20,10 +20,12 @@
 
 package org.ksoap;
 
-import org.kobjects.serialization.*;
 import java.io.*;
 import java.util.Vector;
 import java.util.Hashtable;
+import org.kobjects.serialization.*;
+import org.xmlpull.v1.*;
+
 
 /** This class provides various soap properties relevant for
     (de)serialization, including a method for defining mappings 
@@ -110,7 +112,7 @@ public class ClassMap {
         String namespace,
         String name,
         ElementType expected)
-        throws IOException {
+        throws IOException, XmlPullParserException {
 
         /*	if (xsdNamespace.equals (namespace)) {
             if ("int".equals (name)) 
