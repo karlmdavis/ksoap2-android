@@ -7,7 +7,7 @@ import org.ksoap2.*;
 import org.ksoap2.serialization.*;
 import org.ksoap2.transport.*;
 
-public class StockQuoteDemo extends MIDlet implements CommandListener {
+public class StockQuoteDemo extends MIDlet implements CommandListener, Runnable {
 
     Form mainForm = new Form("StockQuotes");
     TextField symbolField = new TextField("Symbol", "IBM", 5, TextField.ANY);
@@ -31,43 +31,50 @@ public class StockQuoteDemo extends MIDlet implements CommandListener {
     public void destroyApp(boolean unconditional) {
     }
 
-    public void commandAction(Command c, Displayable d) {
-        try {
-            // build request string
-            String symbol = symbolField.getString();
+	
+	public void run(){
+		try {
+			// build request string
+			String symbol = symbolField.getString();
 
-            SoapObject rpc =
-                new SoapObject("urn:xmethods-delayed-quotes", "getQuote");
+			SoapObject rpc =
+				new SoapObject("urn:xmethods-delayed-quotes", "getQuote");
 
-            rpc.addProperty("symbol", symbol);
+			rpc.addProperty("symbol", symbol);
 
-            SoapSerializationEnvelope envelope =
-                new SoapSerializationEnvelope(SoapEnvelope.VER10);
+			SoapSerializationEnvelope envelope =
+				new SoapSerializationEnvelope(SoapEnvelope.VER10);
 
-            envelope.bodyOut = rpc;
+			envelope.bodyOut = rpc;
 
-            resultItem.setLabel(symbol);
+			resultItem.setLabel(symbol);
 
-            HttpTransport ht = new HttpTransport("http://services.xmethods.net/soap");
-             ht.debug = true;
+			HttpTransport ht = new HttpTransport("http://services.xmethods.net/soap");
+			 ht.debug = true;
              
-             try {
-                ht.call("urn:xmethods-delayed-quotes#getQuote", envelope);
-             }
-             catch (Exception e) {
-                e.printStackTrace();
-                System.err.println (ht.requestDump);  
-                System.err.println (ht.responseDump);  
-             }
+			 try {
+				ht.call("urn:xmethods-delayed-quotes#getQuote", envelope);
+			 }
+			 catch (Exception e) {
+				e.printStackTrace();
+				System.err.println (ht.requestDump);  
+				System.err.println (ht.responseDump);  
+			 }
 
-            resultItem.setText("" + envelope.getResult());
+			resultItem.setText("" + envelope.getResult());
 
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            resultItem.setLabel("Error:");
-            resultItem.setText(e.toString());
-        }
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			resultItem.setLabel("Error:");
+			resultItem.setText(e.toString());
+		}
+	
+	}
+
+
+    public void commandAction(Command c, Displayable d) {
+		new Thread(this).start();
     }
 
     /** for me4se */
