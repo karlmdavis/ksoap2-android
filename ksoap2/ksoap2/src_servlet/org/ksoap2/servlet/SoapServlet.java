@@ -27,7 +27,7 @@ import org.xmlpull.v1.*;
 
 public class SoapServlet extends HttpServlet {
 
-    SoapSerializationEnvelope envelope;
+    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapSerializationEnvelope.VER12);
 
     // ClassMap classMap = new ClassMap();
 
@@ -47,7 +47,7 @@ public class SoapServlet extends HttpServlet {
         if (request.getPathInfo() == null)
             return this;
         Object result = instanceMap.get(request.getPathInfo());
-        return (result == null) ? result : this;
+        return (result != null) ? result : this;
     }
 
     /** Publish all public methods of the given class */
@@ -155,6 +155,7 @@ public class SoapServlet extends HttpServlet {
 
             XmlPullParser parser = new KXmlParser();
             parser.setInput(req.getInputStream(), req.getCharacterEncoding());
+			parser.setFeature (parser.FEATURE_PROCESS_NAMESPACES, true);
 
             envelope.parse(parser);
             //logSOAP( req, reqEnv, true );

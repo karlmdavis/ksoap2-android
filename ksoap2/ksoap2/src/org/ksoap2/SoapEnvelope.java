@@ -1,22 +1,6 @@
 /* kSOAP
  *
- * The contents of this file are subject to the Enhydra Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License
- * on the Enhydra web site ( http://www.enhydra.org/ ).
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
- * the License for the specific terms governing rights and limitations
- * under the License.
- *
- * The Initial Developer of kSOAP is Stefan Haustein. Copyright (C)
- * 2000, 2001 Stefan Haustein, D-46045 Oberhausen (Rhld.),
- * Germany. All Rights Reserved.
- *
- * Contributor(s): John D. Beatty, F. Hunter, Renaud Tognelli
- *
- * */
+ */ 
 
 package org.ksoap2;
 
@@ -244,16 +228,16 @@ public class SoapEnvelope {
         writer.startTag(env, "Envelope");
 
         //  writer.attribute (Soap.ENV, "encodingStyle", encodingStyle); 
-        writer.startTag(env, "Body");
         
+        writer.startTag(env, "Header");
         writeHeader(writer);
+        writer.endTag(env, "Header");
 
-        if (encodingStyle != null) 
-           writer.attribute(env, "encodingStyle", encodingStyle);
-        
+        writer.startTag(env, "Body");
         writeBody(writer);
-
         writer.endTag(env, "Body");
+
+
         writer.endTag(env, "Envelope");
     }
 
@@ -281,7 +265,9 @@ public class SoapEnvelope {
            }
            else { */
 
-
+		if (encodingStyle != null) 
+           writer.attribute(env, "encodingStyle", encodingStyle);
+        
         ((Node) bodyOut).write(writer);
         //        }
     }

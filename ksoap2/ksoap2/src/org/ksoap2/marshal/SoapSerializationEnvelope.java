@@ -242,6 +242,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
         // determine wire element type
 
+		String elementName = parser.getName();
+
         String href = parser.getAttributeValue(null, "href");
         Object obj;
 
@@ -263,7 +265,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             }
 
             parser.nextTag(); // start tag
-            parser.require(parser.END_TAG, null, null);
+            parser.require(parser.END_TAG, null, elementName);
         }
         else {
             String nullAttr = parser.getAttributeValue(xsi, "nil");
@@ -274,7 +276,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             if (nullAttr != null && SoapEnvelope.stringToBoolean(nullAttr)) {
                 obj = null;
                 parser.nextTag();
-                parser.require(parser.END_TAG, null, null);
+                parser.require(parser.END_TAG, null, elementName);
             }
             else {
                 String type = parser.getAttributeValue(xsi, "type");
@@ -330,6 +332,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 idMap.put(id, obj);
             }
         }
+
+		parser.require(parser.END_TAG, null, elementName);
 
         //  System.out.println ("leaving read");
 
@@ -578,12 +582,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
             if (!implicitTypes || obj.getClass() != type.type) {
 
-                String prefix = writer.getPrefix((String) qName[0], false);
+                String prefix = writer.getPrefix((String) qName[0], true);
 
-                if (prefix == null)
+/*                if (prefix == null)
                     throw new RuntimeException(
                         "Prefix for namespace " + qName[0] + " undefined!");
-
+*/
                 writer.attribute(xsi, "type", prefix + ":" + qName[1]);
             }
 
