@@ -140,6 +140,11 @@ public class SoapServlet extends HttpServlet {
         this.envelope = envelope;
     }
 
+
+    /** 
+     * In order to filter requests, please overwrite doPost and
+     * call super for soap requests only */ 
+
     public void doPost(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
 
