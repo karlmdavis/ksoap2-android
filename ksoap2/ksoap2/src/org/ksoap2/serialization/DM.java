@@ -1,4 +1,4 @@
-package org.ksoap2.marshal;
+package org.ksoap2.serialization;
 
 import java.io.*;
 import org.xmlpull.v1.*;

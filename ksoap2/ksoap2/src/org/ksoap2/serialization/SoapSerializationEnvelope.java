@@ -1,4 +1,4 @@
-package org.ksoap2.marshal;
+package org.ksoap2.serialization;
 
 import java.util.*;
 import java.io.*;
@@ -8,18 +8,29 @@ import org.xmlpull.v1.*;
 /**
  * @author Stefan Haustein
  *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * This class extends the SoapEnvelope with 
+ * Soap Serialization functionality.
  */
 public class SoapSerializationEnvelope extends SoapEnvelope {
 
     static final Marshal DEFAULT_MARSHAL = new DM();
+
+    public Hashtable properties = new Hashtable();
 
     Hashtable idMap = new Hashtable();
     Vector multiRef;// = new Vector();
     Vector types = new Vector();
 
     public boolean implicitTypes;
+    
+    /** 
+     * Set this variable to true for compatibility with what seems to be
+     * the default encoding for .Net-Services. This feature is an extremely
+     * ugly hack. A much better
+     * option is to change the configuration of the .Net-Server to 
+     * standard Soap Serialization! */
+    
+    public boolean dotNet;
 
     /** 
      * Map from XML qualified names to Java classes */
@@ -96,12 +107,11 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 if (++testIndex >= cnt)
                     testIndex = 0;
 
-                obj.getPropertyInfo(testIndex, info);
+                obj.getPropertyInfo(testIndex, properties, info);
                 if (info.name == null
                     ? testIndex == sourceIndex
-                    : info.name.equals(name))
+                    : (info.name.equals(name) && info == null || info.namespace.equals(parser.getNamespace())))
                     break;
-
             }
 
             obj.setProperty(
@@ -223,10 +233,11 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         parser.require(parser.END_TAG, null, null);
     }
 
-    /** Builds an object from the XML stream. This method
-    is public for usage in conjuction with Marshal subclasses. 
-    Precondition: On the start tag of the object or property, 
-    so href can be read. */
+    /** 
+     * Builds an object from the XML stream. This method
+     * is public for usage in conjuction with Marshal subclasses. 
+     * Precondition: On the start tag of the object or property, 
+     * so href can be read. */
 
     protected Object read(
         XmlPullParser parser,
@@ -538,16 +549,22 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         PropertyInfo info = new PropertyInfo();
         int cnt = obj.getPropertyCount();
 
+        String namespace = dotNet ? writer.getNamespace() : "";
+
         for (int i = 0; i < cnt; i++) {
 
-            obj.getPropertyInfo(i, info);
+            obj.getPropertyInfo(i, properties, info);
     
             //      Object value = obj.getProperty (i);
 
+
             if ((info.flags & PropertyInfo.TRANSIENT) == 0) {
-                writer.startTag(null, info.name);
+                String nsp = info.namespace;
+                if (nsp == null) nsp = info.namespace;
+
+                writer.startTag(nsp, info.name);
                 writeProperty(writer, obj.getProperty(i), info);
-                writer.endTag(null, info.name);
+                writer.endTag(nsp, info.name);
             }
         }
     }

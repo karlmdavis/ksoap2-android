@@ -1,4 +1,4 @@
-package org.ksoap2.marshal;
+package org.ksoap2.serialization;
 
 import java.util.Date;
 import java.io.*;

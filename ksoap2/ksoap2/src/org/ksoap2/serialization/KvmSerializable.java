@@ -19,7 +19,9 @@
  * */
 
 
-package org.ksoap2.marshal;
+package org.ksoap2.serialization;
+
+import java.util.Hashtable;
 
 
 /** provides get and set methods for properties. Can be used to
@@ -56,9 +58,14 @@ public interface KvmSerializable {
 
 
  
-    /** Fills the given property info record */
+    /** 
+     * Fills the given property info record. 
+     * @param index the index to be queried 
+     * @param properties  information about the (de)serializer
+     * @param info  The return parameter, to be filled with information
+     *    about the property with the given index. */
     
-    void getPropertyInfo (int index, PropertyInfo info);
+    void getPropertyInfo (int index, Hashtable properties, PropertyInfo info);
 
     
 }

@@ -5,7 +5,7 @@ import java.io.*;
 import javax.microedition.io.*;
 
 import org.ksoap2.*;
-import org.ksoap2.marshal.*;
+import org.ksoap2.serialization.*;
 import org.ksoap2.transport.*;
 
 public class StockQuoteDemo extends MIDlet implements CommandListener {

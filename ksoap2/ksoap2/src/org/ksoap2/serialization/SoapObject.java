@@ -19,11 +19,9 @@
  *
  * */
 
-package org.ksoap2.marshal;
+package org.ksoap2.serialization;
 
-import java.util.Vector;
-/** A simple dynamic object that can be used to build
-    soap calls without implementing KvmSerializable */
+import java.util.*;
 
 /** 
  * A simple dynamic object that can be used to build soap calls without 
@@ -123,7 +121,7 @@ public class SoapObject implements KvmSerializable {
     * @param info designated retainer of desired property
     */
 
-    public void getPropertyInfo(int index, PropertyInfo pi) {
+    public void getPropertyInfo(int index, Hashtable properties, PropertyInfo pi) {
         PropertyInfo p = (PropertyInfo) info.elementAt(index);
         pi.name = p.name;
         pi.namespace = p.namespace;

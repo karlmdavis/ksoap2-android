@@ -1,7 +1,3 @@
-/* kSOAP
- *
- */ 
-
 package org.ksoap2;
 
 import java.io.*;
@@ -9,15 +5,28 @@ import java.util.*;
 
 import org.xmlpull.v1.*;
 import org.kxml2.kdom.*;
-import org.ksoap2.marshal.*;
+import org.ksoap2.serialization.*;
 
-/** The SOAP envelope. */
+/** 
+ * A SOAP envelope, holding head and body objects. While this 
+ * basic envelope supports literal encoding as content format 
+ * via KDom, The SoapSerializationEnvelope provides support
+ * for the SOAP Serialization format specification and 
+ * simple object serialization. */
 
 public class SoapEnvelope {
 
-    public static final int VER10 = 10;
-    public static final int VER11 = 11;
-    public static final int VER12 = 12;
+    /** SOAP Version 1.0 constant */
+
+    public static final int VER10 = 100;
+
+    /** SOAP Version 1.1 constant */
+
+    public static final int VER11 = 110;
+
+    /** SOAP Version 1.2 constant */
+
+    public static final int VER12 = 120;
 
     public static final String ENV2001 =
         "http://www.w3.org/2001/12/soap-envelope";
@@ -53,23 +62,10 @@ public class SoapEnvelope {
     public static final String XSI1999 =
         "http://www.w3.org/1999/XMLSchema-instance";
 
-    //    static final Class BYTE_ARRAY_CLASS = new byte [0].getClass (); 
-    // static final Class OBJECT_CLASS = new Object ().getClass ();
-
-    /** A default prefix map containing all relevant namespaces */
-
-    /*    static PrefixMap basePrefixMap = 
-        new PrefixMap (new PrefixMap 
-            (PrefixMap.DEFAULT, "SOAP-ENV", ENV), "SOAP-ENC", ENC);
-            
-        public static final PrefixMap [] prefixMap = {
-        new PrefixMap (new PrefixMap 
-            (basePrefixMap, "xsd", XSD1999), "xsi", XSI1999),
-        new PrefixMap (new PrefixMap 
-            (basePrefixMap, "xsd", XSD), "xsi", XSI),
-        new PrefixMap (new PrefixMap (new PrefixMap (new PrefixMap 
-            (basePrefixMap, "xsd", XSD), "xsi", XSI), "SOAP-ENV", ENV2001), "SOAP-ENC", ENC2001)};
-    */
+    
+    /** 
+     * Returns true for the string values "1" and "true", ignoring 
+     * upper/lower case and whitespace, false otherwise. */ 
 
     public static boolean stringToBoolean(String s) {
 
@@ -80,28 +76,59 @@ public class SoapEnvelope {
         return (s.equals("1") || s.equals("true"));
     }
 
+    /**
+     * The body object received with this envelope. Will be an
+     * KDom Node for literal encoding. For SOAP Serialization,
+     * please refer to SoapSerializationEnvelope. */
+
     public Object bodyIn;
+
+    /** 
+     * The body object to be sent with this envelope. Must be a KDom Node
+     * modelling the remote call including all parameters
+     * for literal encoding. For SOAP Serialization, please 
+     * refer to SoapSerializationEnvelope  */
+
     public Object bodyOut;
+
+
+    /** 
+     * Incoming header elements */
+    
     public Element [] headerIn;
+
+    /** 
+     * Outgoing header elements */
+
     public Element [] headerOut;
     public String encodingStyle;
+
+
+    /** 
+     * The SOAP version, set by the constructor */
+
     public int version;    
 
-    /** Envelope namespace */
+    /** Envelope namespace, set by the constructor */
 
     public String env;
 
-    /** Encoding namespace */
+    /** Encoding namespace, set by the constructor */
 
     public String enc;
 
-    /** Xml Schema instance namespace */
+    /** Xml Schema instance namespace, set by the constructor */
     
     public String xsi;   
 
-    /** Xml Schema data namespace */
+    /** Xml Schema data namespace, set by the constructor */
 
     public String xsd;
+
+
+    /** 
+     * Initializes a SOAP Envelope. The version parameter must
+     * be set to one of VER10, VER11 or VER12 */ 
 
     public SoapEnvelope (int version) {
                 this.version = version;
@@ -216,7 +243,9 @@ public class SoapEnvelope {
     }
 
 
-    /** Writes the envelope and body to the given XML writer. */
+    /** 
+     * Writes the complete envelope including header and body 
+     * elements to the given XML writer. */
 
     public void write(XmlSerializer writer) throws IOException {
 
@@ -240,8 +269,8 @@ public class SoapEnvelope {
         writer.endTag(env, "Envelope");
     }
 
-    /** Writes the head including the encoding style attribute and the 
-    body start tag */
+    /** 
+     * Writes the header elements contained in headerOut */
 
     public void writeHeader(XmlSerializer writer) throws IOException {
         if (headerOut != null) {
@@ -251,8 +280,10 @@ public class SoapEnvelope {
         }
     }
 
-    /** Overwrite this method for customized writing of
-    the soap message body. */
+    /** 
+     * Writes the SOAP body stored in the object variable bodyIn,
+     * Overwrite this method for customized writing of
+     * the soap message body. */
 
     public void writeBody(XmlSerializer writer) throws IOException {
 

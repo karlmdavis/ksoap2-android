@@ -5,12 +5,29 @@ import java.io.*;
 import org.xmlpull.v1.*;
 import org.kxml2.kdom.*;
 
-public class SoapFault extends IOException { //implements XmlIO {
+/** 
+ * Exception class encapsulating SOAP Faults */
+
+
+public class SoapFault extends IOException { 
+
+    /** The SOAP fault code */
 
     public String faultcode;
+
+    /** The SOAP fault code */
+
     public String faultstring;
+
+    /** The SOAP fault code */
+
     public String faultactor;
+
+    /** A KDom Node holding the details of the fault */
+
     public Node detail;
+
+    /** Fills the fault details from the given XML stream */
 
     public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(parser.START_TAG, SoapEnvelope.ENV, "Fault");
@@ -36,6 +53,8 @@ public class SoapFault extends IOException { //implements XmlIO {
         }
     }
 
+    /** Writes the fault to the given XML stream */
+
     public void write(XmlSerializer xw) throws IOException {
         xw.startTag(SoapEnvelope.ENV, "Fault");
         xw.startTag(null, "faultcode");
@@ -53,6 +72,9 @@ public class SoapFault extends IOException { //implements XmlIO {
         xw.endTag(null, "detail");
         xw.endTag(SoapEnvelope.ENV, "Fault");
     }
+
+    
+    /** Returns a simple string representation of the fault */
 
     public String toString() {
         return "SoapFault - faultcode: '"

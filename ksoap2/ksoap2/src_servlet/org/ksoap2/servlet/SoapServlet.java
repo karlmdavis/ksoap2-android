@@ -11,7 +11,7 @@ import javax.servlet.http.*;
 //import org.kobjects.serialization.*;
 
 import org.ksoap2.*;
-import org.ksoap2.marshal.*;
+import org.ksoap2.serialization.*;
 
 import org.kxml2.io.*;
 import org.xmlpull.v1.*;
@@ -218,8 +218,10 @@ public class SoapServlet extends HttpServlet {
         Object[] args = new Object[soapReq.getPropertyCount()];
         PropertyInfo arg = new PropertyInfo();
 
+        Hashtable properties = new Hashtable();
+
         for (int i = 0; i < types.length; i++) {
-            soapReq.getPropertyInfo(i, arg);
+            soapReq.getPropertyInfo(i, properties, arg);
             types[i] = (Class) arg.type;
             args[i] = soapReq.getProperty(i);
         }

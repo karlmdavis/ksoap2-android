@@ -18,7 +18,7 @@
  *
  * */
 
-package org.ksoap2.marshal;
+package org.ksoap2.serialization;
 
 /** This class is used to store information about each property
     an implementation of KvmSerializable exposes. */
