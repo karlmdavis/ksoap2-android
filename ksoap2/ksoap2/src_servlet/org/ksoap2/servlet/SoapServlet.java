@@ -191,7 +191,7 @@ public class SoapServlet extends HttpServlet {
 //            OutputStream os = res.getOutputStream();
             StringWriter sw = new StringWriter();
             XmlSerializer writer = new KXmlSerializer();
-            writer.setOutput(System.out, null);
+            writer.setOutput(sw);
             try {
                 envelope.write(writer);
             }
@@ -200,7 +200,9 @@ public class SoapServlet extends HttpServlet {
             }
             writer.flush();
             System.out.println("result xml: "+sw);
-            //sb.close();
+  			Writer w = res.getWriter();
+  			w.write(sw.toString());
+            w.close();
         }
         res.flushBuffer();
     }

@@ -191,4 +191,13 @@ public class SoapObject implements KvmSerializable {
         return this;
     }
 
+	public String toString() {
+		StringBuffer buf = new StringBuffer (""+name+"{");
+		for (int i = 0; i < getPropertyCount(); i++) {
+			buf.append (""+((PropertyInfo) info.elementAt(i)).name + "="+getProperty(i)+"; ");
+		}		
+		buf.append("}");
+		return buf.toString();
+	}
+
 }
