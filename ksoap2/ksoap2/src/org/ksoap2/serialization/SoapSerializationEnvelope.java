@@ -292,6 +292,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         }
         else {
             String nullAttr = parser.getAttributeValue(xsi, "nil");
+            String id = parser.getAttributeValue(null, "id");
 
             if (nullAttr == null)
                 nullAttr = parser.getAttributeValue(xsi, "null");
@@ -332,9 +333,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                     obj = readUnknown(parser, namespace, name);
             }
 
-            // finally, care about the id....
-            String id = parser.getAttributeValue(null, "id");
-
+           // finally, care about the id....
+ 
             if (id != null) {
                 Object hlp = idMap.get(id);
                 if (hlp instanceof FwdRef) {
