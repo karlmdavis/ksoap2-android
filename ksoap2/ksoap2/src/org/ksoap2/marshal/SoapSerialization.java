@@ -22,7 +22,6 @@ public class SoapSerialization extends SoapEnvelope {
 
     public boolean implicitTypes;
 
-
     /** 
      * Map from XML qualified names to Java classes */
 
@@ -42,7 +41,7 @@ public class SoapSerialization extends SoapEnvelope {
     public void parseBody(XmlPullParser parser)
         throws IOException, XmlPullParserException {
 
-        body = null;
+        bodyIn = null;
 
         //System.out.println ("start parsing....");
 
@@ -67,8 +66,8 @@ public class SoapSerialization extends SoapEnvelope {
                     parser.getName(),
                     ElementType.OBJECT_TYPE);
 
-            if ("1".equals(rootAttr) || body == null)
-                body = o;
+            if ("1".equals(rootAttr) || bodyIn == null)
+                bodyIn = o;
         }
 
         //System.out.println ("leaving root read");
@@ -126,8 +125,10 @@ public class SoapSerialization extends SoapEnvelope {
 
         Object result;
 
-        if (parser.getEventType() == parser.TEXT)
+        if (parser.getEventType() == parser.TEXT) {
             result = new SoapPrimitive(namespace, name, parser.getText());
+            parser.next();
+        }   
         else {
             SoapObject so = new SoapObject(namespace, name);
 
@@ -300,12 +301,7 @@ public class SoapSerialization extends SoapEnvelope {
                     }
                 }
 
-                obj =
-                    readInstance(
-                        parser,
-                        namespace,
-                        name,
-                        expected);
+                obj = readInstance(parser, namespace, name, expected);
 
                 if (obj == null)
                     obj = readUnknown(parser, namespace, name);
@@ -484,6 +480,162 @@ public class SoapSerialization extends SoapEnvelope {
 
         //     if (prefixMap.getPrefix(so.namespace) == null)
         //        prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), so.namespace);
+    }
+
+    public Object getResult() {
+        KvmSerializable ks = (KvmSerializable) bodyIn;
+        return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
+    }
+
+    /** Serializes the given object */
+
+    public void writeBody(XmlSerializer writer) throws IOException {
+
+        multiRef.addElement(bodyIn);
+        types.addElement(ElementType.OBJECT_TYPE);
+
+        for (int i = 0; i < multiRef.size(); i++) {
+
+            Object obj = multiRef.elementAt(i);
+
+            Object[] qName = getInfo(null, obj);
+
+            writer.startTag((String) qName[0], (String) qName[1]);
+            writer.attribute(
+                null,
+                "id",
+                qName[2] == null ? ("o" + i) : (String) qName[2]);
+
+            if (i == 0)
+                writer.attribute(enc, "root", "1");
+
+            if (qName[3] != null)
+                 ((Marshal) qName[3]).writeInstance(writer, obj);
+            else if (obj instanceof KvmSerializable)
+                writeObjectBody(writer, (KvmSerializable) obj);
+            else if (obj instanceof Vector)
+                writeVectorBody(
+                    writer,
+                    (Vector) obj,
+                    ((ElementType) types.elementAt(i)).elementType);
+            else
+                throw new RuntimeException("Cannot serialize: " + obj);
+
+            writer.endTag((String) qName[0], (String) qName[1]);
+        }
+    }
+
+    /** Writes the body of an KvmSerializable object. This
+    method is public for access from Marshal subclasses. */
+
+    public void writeObjectBody(XmlSerializer writer, KvmSerializable obj)
+        throws IOException {
+
+        PropertyInfo info = new PropertyInfo();
+        int cnt = obj.getPropertyCount();
+
+        for (int i = 0; i < cnt; i++) {
+
+            obj.getPropertyInfo(i, info);
+
+            //      Object value = obj.getProperty (i);
+
+            //      if (value != null) {
+            writer.startTag(null, info.name);
+            writeProperty(writer, obj.getProperty(i), info);
+            writer.endTag(null, info.name);
+            //}
+        }
+    }
+
+    protected void writeProperty(
+        XmlSerializer writer,
+        Object obj,
+        ElementType type)
+        throws IOException {
+
+        if (obj == null) {
+            writer.attribute(xsi, version >= VER12 ? "nil" : "null", "true");
+            return;
+        }
+
+        Object[] qName = getInfo(null, obj);
+
+        if (type.multiRef || qName[2] != null) {
+            int i = multiRef.indexOf(obj);
+            if (i == -1) {
+                i = multiRef.size();
+                multiRef.addElement(obj);
+                types.addElement(type);
+            }
+
+            writer.attribute(
+                null,
+                "href",
+                qName[2] == null ? ("#o" + i) : "#" + qName[2]);
+        }
+        else {
+
+            if (!implicitTypes || obj.getClass() != type.type) {
+
+                String prefix = writer.getPrefix((String) qName[0], false);
+
+                if (prefix == null)
+                    throw new RuntimeException(
+                        "Prefix for namespace " + qName[0] + " undefined!");
+
+                writer.attribute(xsi, "type", prefix + ":" + qName[1]);
+            }
+
+            if (qName[3] != null)
+                 ((Marshal) qName[3]).writeInstance(writer, obj);
+            else if (obj instanceof KvmSerializable)
+                writeObjectBody(writer, (KvmSerializable) obj);
+            else if (obj instanceof Vector)
+                writeVectorBody(writer, (Vector) obj, type.elementType);
+            else
+                throw new RuntimeException("Cannot serialize: " + obj);
+        }
+    }
+
+    protected void writeVectorBody(
+        XmlSerializer writer,
+        Vector vector,
+        ElementType elementType)
+        throws IOException {
+
+        if (elementType == null)
+            elementType = ElementType.OBJECT_TYPE;
+
+        int cnt = vector.size();
+
+        Object[] arrType = getInfo(elementType.type, null);
+
+        writer.attribute(
+            enc,
+            "arrayType",
+            writer.getPrefix((String) arrType[0], false)
+                + ":"
+                + arrType[1]
+                + "["
+                + cnt
+                + "]");
+
+        boolean skipped = false;
+        for (int i = 0; i < cnt; i++) {
+            if (vector.elementAt(i) == null)
+                skipped = true;
+            else {
+                writer.startTag(null, "item");
+                if (skipped) {
+                    writer.attribute(enc, "position", "[" + i + "]");
+                    skipped = false;
+                }
+
+                writeProperty(writer, vector.elementAt(i), elementType);
+                writer.endTag(null, "item");
+            }
+        }
     }
 
 }

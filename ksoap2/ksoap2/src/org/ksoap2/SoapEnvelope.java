@@ -97,13 +97,27 @@ public class SoapEnvelope {
         return (s.equals("1") || s.equals("true"));
     }
 
-    public Object body;
+    public Object bodyIn;
+    public Object bodyOut;
+    public Element [] headerIn;
+    public Element [] headerOut;
     public String encodingStyle;
-    int version;    
+    public int version;    
+
+    /** Envelope namespace */
 
     public String env;
+
+    /** Encoding namespace */
+
     public String enc;
+
+    /** Xml Schema instance namespace */
+    
     public String xsi;   
+
+    /** Xml Schema data namespace */
+
     public String xsd;
 
     public SoapEnvelope (int version) {
@@ -138,6 +152,12 @@ public class SoapEnvelope {
         throws IOException, XmlPullParserException {
 
         parser.nextTag();
+        
+   /*     System.out.println ("name-r: '"+parser.getName()+"'");
+        System.out.println ("name-x: 'Envelope'");
+        System.out.println ("namesp-r: '"+parser.getNamespace()+"'");
+        System.out.println ("namesp-x: '"+env+"'"); */
+        
         parser.require(parser.START_TAG, env, "Envelope");
         encodingStyle = parser.getAttributeValue(env, "encodingStyle");
 
@@ -198,12 +218,12 @@ public class SoapEnvelope {
             && parser.getName().equals("Fault")) {
             SoapFault fault = new SoapFault();
             fault.parse(parser);
-            body = fault;
+            bodyIn = fault;
         }
         else {
-            Node node = (body instanceof Node) ? (Node) body : new Node ();
+            Node node = (bodyIn instanceof Node) ? (Node) bodyIn : new Node ();
             node.parse(parser);
-            body = node;
+            bodyIn = node;
         }
     }
 
@@ -212,7 +232,10 @@ public class SoapEnvelope {
 
     public void write(XmlSerializer writer) throws IOException {
 
-        
+        writer.setPrefix("i", xsi);  
+        writer.setPrefix("d", xsd);  
+        writer.setPrefix("c", enc);      
+        writer.setPrefix("v", env);      
         writer.startTag(env, "Envelope");
 
         //  writer.attribute (Soap.ENV, "encodingStyle", encodingStyle); 
@@ -225,7 +248,8 @@ public class SoapEnvelope {
         
         writeBody(writer);
 
-
+        writer.endTag(env, "Body");
+        writer.endTag(env, "Envelope");
     }
 
     /** Writes the head including the encoding style attribute and the 
@@ -249,7 +273,7 @@ public class SoapEnvelope {
            else { */
 
 
-        ((Node) body).write(writer);
+        ((Node) bodyOut).write(writer);
         //        }
     }
 

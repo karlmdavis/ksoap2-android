@@ -100,12 +100,10 @@ import org.ksoap2.*;
 public class HttpTransport {
 
     String url;
-    String soapAction = "\"\"";
 
     HttpConnection connection;
     OutputStream os;
     InputStream is;
-    InputStreamReader reader;
 
     /** state info */
     private boolean connected = false;
@@ -127,9 +125,8 @@ public class HttpTransport {
      * @param soapAction the desired SOAP action (for HTTP headers)
      */
 
-    public HttpTransport(String url, String soapAction) {
+    public HttpTransport(String url) {
         this.url = url;
-        this.soapAction = soapAction;
     }
 
     /**
@@ -148,16 +145,16 @@ public class HttpTransport {
      * @param soapAction the desired soapAction
      */
 
-    public void setSoapAction(String soapAction) {
-        this.soapAction = soapAction;
-    }
 
-
-    public void call(SoapEnvelope envelope) throws IOException, XmlPullParserException {
-        call (null, envelope, envelope);
+    public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
+        call (soapAction, envelope, envelope);
     }
 
     public void call(String soapAction, SoapEnvelope requestEnvelope, SoapEnvelope responseEnvelope) throws IOException, XmlPullParserException  {
+
+        if (soapAction == null) 
+            soapAction = "\"\"";
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         XmlSerializer xw = new KXmlSerializer();
         xw.setOutput(bos, null);
@@ -186,7 +183,7 @@ public class HttpTransport {
                 "Content-Length",
                 "" + requestData.length);
 
-            connection.setRequestProperty("User-Agent", "kSOAP/1.0");
+            connection.setRequestProperty("User-Agent", "kSOAP/2.0");
 
             connection.setRequestMethod(HttpConnection.POST);
 
@@ -217,6 +214,7 @@ public class HttpTransport {
             }
 
             XmlPullParser xp = new KXmlParser();
+            xp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
             xp.setInput (is, null);
 
             responseEnvelope.parse(xp);
@@ -272,14 +270,6 @@ public class HttpTransport {
 
     public void reset() {
         connected = false;
-        if (reader != null) {
-            try {
-                reader.close();
-            }
-            catch (Throwable e) {
-            }
-            reader = null;
-        }
 
         if (is != null) {
             try {
