@@ -18,12 +18,13 @@
  *
  * */
 
-package org.ksoap2;
+package org.ksoap2.marshal;
 
 import java.io.*;
 import java.util.Vector;
 import java.util.Hashtable;
 import org.kobjects.serialization.*;
+import org.ksoap2.SoapEnvelope;
 import org.xmlpull.v1.*;
 
 /**
@@ -61,31 +62,12 @@ public class ClassMap {
     protected Hashtable classToQName = new Hashtable();
 
 
-    public ClassMap(int version) {
-        this.version = version;
-        //  prefixMap = Soap.prefixMap[version];
-
-        if (version == Soap.VER10) {
-            xsi = Soap.XSI1999;
-            xsd = Soap.XSD1999;
-        }
-        else {
-            xsi = Soap.XSI;
-            xsd = Soap.XSD;
-        }
-
-        if (version < Soap.VER12) {
-            enc = Soap.ENC;
-            env = Soap.ENV;
-        }
-        else {
-            enc = Soap.ENC2001;
-            env = Soap.ENV2001;
-        }
-
+    public ClassMap() {
         addMapping(enc, "Array", ElementType.VECTOR_CLASS);
         DEFAULT_MARSHAL.register(this);
-    }
+ 
+        
+   }
 
 
     /** 
@@ -95,7 +77,8 @@ public class ClassMap {
      * objects. */
 
     public Object readInstance(
-        SoapParser parser,
+        SoapSerialization envelope,
+        XmlPullParser parser,
         String namespace,
         String name,
         ElementType expected)
@@ -109,7 +92,7 @@ public class ClassMap {
             else if ("string".equals (name))
         	return readText (parser);
             else if ("boolean".equals (name)) 
-        	return new Boolean (Soap.stringToBoolean (readText (parser)));
+        	return new Boolean (SoapEnvelope.stringToBoolean (readText (parser)));
         	}*/
 
         Class clazz = null;
@@ -121,6 +104,7 @@ public class ClassMap {
 
         if (obj instanceof Marshal)
             return ((Marshal) obj).readInstance(
+                envelope,
                 parser,
                 namespace,
                 name,
@@ -139,9 +123,9 @@ public class ClassMap {
         // ok, obj is now the instance, fill it....
 
         if (obj instanceof KvmSerializable)
-            parser.readSerializable((KvmSerializable) obj);
+            envelope.readSerializable(parser, (KvmSerializable) obj);
         else if (obj instanceof Vector)
-            parser.readVector((Vector) obj, expected.elementType);
+            envelope.readVector(parser, (Vector) obj, expected.elementType);
         else
             throw new RuntimeException("no deserializer for " + obj.getClass());
 
@@ -233,4 +217,8 @@ public class ClassMap {
         //     if (prefixMap.getPrefix(so.namespace) == null)
         //        prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), so.namespace);
     }
+    
 }
+    
+    
+
