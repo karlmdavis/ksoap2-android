@@ -20,7 +20,7 @@ public interface Marshal {
         PropertyInfo expected)
         throws IOException, XmlPullParserException;
 
-    /** Write the instance to the given SoapWriter. In contrast to 
+    /** Write the instance to the given XmlSerializer. In contrast to 
         readInstance, it is not neccessary to care about the
         sorrounding start and end tags. Additional attributes must be
         writen before anything else is written. */
@@ -30,7 +30,7 @@ public interface Marshal {
         Object instance)
         throws IOException;
 
-    /** Register this Marshal with the given classMap */
+    /** Register this Marshal with Envelope */
 
     public void register(SoapSerializationEnvelope cm);
 }
