@@ -50,19 +50,10 @@ public class StockQuoteDemo extends MIDlet implements CommandListener, Runnable 
 			resultItem.setLabel(symbol);
 
 			HttpTransport ht = new HttpTransport("http://services.xmethods.net/soap");
-			 ht.debug = true;
+			//ht.debug = true;
              
-			 try {
-				ht.call("urn:xmethods-delayed-quotes#getQuote", envelope);
-			 }
-			 catch (Exception e) {
-				e.printStackTrace();
-				System.err.println (ht.requestDump);  
-				System.err.println (ht.responseDump);  
-			 }
-
+			ht.call("urn:xmethods-delayed-quotes#getQuote", envelope);
 			resultItem.setText("" + envelope.getResult());
-
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -9,6 +9,14 @@ import org.ksoap2.*;
 import org.ksoap2.serialization.*;
 import org.ksoap2.transport.*;
 
+/** 
+ * @author Stefan Haustein
+ *
+ * To try this demo, you need a developer tag from Amazon.com, see 
+ * http://www.amazon.com/gp/browse.html?node=3435361
+ * 
+ */
+
 public class AmazonDemo extends MIDlet implements CommandListener, Runnable {
 
 	Display display;
