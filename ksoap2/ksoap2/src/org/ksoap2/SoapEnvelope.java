@@ -193,18 +193,23 @@ public class SoapEnvelope {
         parser.nextTag();
 
         // look at all header entries
-        while (parser.getEventType() != parser.END_TAG) {
-            if ("1"
-                .equals(
-                    parser.getAttributeValue(env, "mustUnderstand")))
-                throw new RuntimeException("mU not supported");
 
-            throw new RuntimeException("Unknown header element; skipping NYI");
-
-            //                parser.ignoreTree();
-            //                parser.skip();
+        Node headers = new Node ();
+        headers.parse (parser);
+    
+        int count = 0;
+        for (int i = 0; i < headers.getChildCount(); i++) {
+            Element child = headers.getElement(i);
+            if (child != null) count++;
         }
-
+        
+        headerIn = new Element [count];
+        count = 0;
+        for (int i = 0; i < headers.getChildCount(); i++) {
+            Element child = headers.getElement(i);
+            if (child != null) 
+                headerIn [count++] = child;
+        }
     }
 
     public void parseBody(XmlPullParser parser)
@@ -256,7 +261,11 @@ public class SoapEnvelope {
     body start tag */
 
     public void writeHeader(XmlSerializer writer) throws IOException {
-
+        if (headerOut != null) {
+            for (int i = 0; i < headerOut.length; i++) {
+                headerOut[i].write (writer);
+            }   
+        }
     }
 
     /** Overwrite this method for customized writing of

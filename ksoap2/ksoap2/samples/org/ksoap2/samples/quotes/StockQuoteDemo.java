@@ -42,8 +42,8 @@ public class StockQuoteDemo extends MIDlet implements CommandListener {
 
             rpc.addProperty("symbol", symbol);
 
-            SoapSerialization envelope =
-                new SoapSerialization(SoapEnvelope.VER10);
+            SoapSerializationEnvelope envelope =
+                new SoapSerializationEnvelope(SoapEnvelope.VER10);
 
             envelope.bodyOut = rpc;
 

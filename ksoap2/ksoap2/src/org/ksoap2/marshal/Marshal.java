@@ -36,5 +36,5 @@ public interface Marshal {
 
     /** Register this Marshal with the given classMap */
 
-    public void register(SoapSerialization cm);
+    public void register(SoapSerializationEnvelope cm);
 }

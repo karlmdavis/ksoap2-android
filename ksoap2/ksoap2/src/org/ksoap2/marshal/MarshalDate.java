@@ -31,7 +31,7 @@ public class MarshalDate implements Marshal {
         writer.text(IsoDate.dateToString((Date) obj, IsoDate.DATE_TIME));
     }
 
-    public void register(SoapSerialization cm) {
+    public void register(SoapSerializationEnvelope cm) {
         cm.addMapping(cm.xsd, "dateTime", MarshalDate.DATE_CLASS, this);
     }
 

@@ -12,7 +12,7 @@ import org.xmlpull.v1.*;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class SoapSerialization extends SoapEnvelope {
+public class SoapSerializationEnvelope extends SoapEnvelope {
 
     static final Marshal DEFAULT_MARSHAL = new DM();
 
@@ -32,7 +32,7 @@ public class SoapSerialization extends SoapEnvelope {
 
     protected Hashtable classToQName = new Hashtable();
 
-    public SoapSerialization(int version) {
+    public SoapSerializationEnvelope(int version) {
         super(version);
         addMapping(enc, "Array", ElementType.VECTOR_CLASS);
         DEFAULT_MARSHAL.register(this);
@@ -491,7 +491,7 @@ public class SoapSerialization extends SoapEnvelope {
 
     public void writeBody(XmlSerializer writer) throws IOException {
 
-        multiRef.addElement(bodyIn);
+        multiRef.addElement(bodyOut);
         types.addElement(ElementType.OBJECT_TYPE);
 
         for (int i = 0; i < multiRef.size(); i++) {

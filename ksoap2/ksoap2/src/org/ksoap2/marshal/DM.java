@@ -40,7 +40,7 @@ class DM implements Marshal {
         writer.text(instance.toString());
     }
 
-    public void register(SoapSerialization cm) {
+    public void register(SoapSerializationEnvelope cm) {
         cm.addMapping(cm.xsd, "int", ElementType.INTEGER_CLASS, this);
         cm.addMapping(cm.xsd, "long", ElementType.LONG_CLASS, this);
         cm.addMapping(cm.xsd, "string", ElementType.STRING_CLASS, this);

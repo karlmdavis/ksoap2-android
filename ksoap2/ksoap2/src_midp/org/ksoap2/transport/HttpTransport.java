@@ -147,10 +147,6 @@ public class HttpTransport {
 
 
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
-        call (soapAction, envelope, envelope);
-    }
-
-    public void call(String soapAction, SoapEnvelope requestEnvelope, SoapEnvelope responseEnvelope) throws IOException, XmlPullParserException  {
 
         if (soapAction == null) 
             soapAction = "\"\"";
@@ -158,7 +154,7 @@ public class HttpTransport {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         XmlSerializer xw = new KXmlSerializer();
         xw.setOutput(bos, null);
-        requestEnvelope.write(xw);
+        envelope.write(xw);
         xw.flush();
         bos.write('\r');
         bos.write('\n');
@@ -217,7 +213,7 @@ public class HttpTransport {
             xp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
             xp.setInput (is, null);
 
-            responseEnvelope.parse(xp);
+            envelope.parse(xp);
 
         }
         finally {

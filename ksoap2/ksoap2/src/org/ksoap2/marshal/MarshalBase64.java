@@ -34,7 +34,7 @@ public class MarshalBase64 implements Marshal {
 	writer.text (Base64.encode ((byte[]) obj));
     }
 
-    public void register (SoapSerialization cm) {
+    public void register (SoapSerializationEnvelope cm) {
 	cm.addMapping 
 	    (cm.xsd, "base64Binary", 
 	     MarshalBase64.BYTE_ARRAY_CLASS, this);   
