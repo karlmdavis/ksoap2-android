@@ -37,9 +37,6 @@ import org.xmlpull.v1.*;
 
 /** copy-paste seans interop server orb here as needed....
 
-    does not run compile yet. checked in just for simplified
-    access
-
    some design issues:
     - path and soapaction are not considered. soapaction is
     deprecated; for multiple paths, please use multiple servlets. */

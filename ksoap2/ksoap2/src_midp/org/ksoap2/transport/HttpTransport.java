@@ -225,6 +225,11 @@ public class HttpTransport {
                 throw new InterruptedIOException();
             reset();
         }
+
+
+		if(envelope.bodyIn instanceof SoapFault)
+			throw ((SoapFault) envelope.bodyIn);
+
     }
 
     /*

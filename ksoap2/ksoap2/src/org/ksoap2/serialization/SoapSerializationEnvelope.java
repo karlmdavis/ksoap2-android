@@ -38,18 +38,18 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     public Hashtable properties = new Hashtable();
 
     Hashtable idMap = new Hashtable();
-    Vector multiRef;// = new Vector();
+    Vector multiRef; // = new Vector();
     Vector types = new Vector();
 
     public boolean implicitTypes;
-    
+
     /** 
      * Set this variable to true for compatibility with what seems to be
      * the default encoding for .Net-Services. This feature is an extremely
      * ugly hack. A much better
      * option is to change the configuration of the .Net-Server to 
      * standard Soap Serialization! */
-    
+
     public boolean dotNet;
 
     /** 
@@ -75,31 +75,41 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
         //System.out.println ("start parsing....");
 
-        while (true) {
-            parser.nextTag();
-            int type = parser.getEventType();
-
-            if (type == XmlPullParser.END_TAG || type == XmlPullParser.END_DOCUMENT)
-                break;
-
-            //  String name = namespaceMap.getPackage (start.getNamespace ())
-            //  + "." + start.getName ();
-
-            String rootAttr = parser.getAttributeValue(enc, "root");
-
-            Object o =
-                read(
-                    parser,
-                    null,
-                    -1,
-                    parser.getNamespace(),
-                    parser.getName(),
-                    PropertyInfo.OBJECT_TYPE);
-
-            if ("1".equals(rootAttr) || bodyIn == null)
-                bodyIn = o;
+        parser.nextTag();
+        if (parser.getEventType() == XmlPullParser.START_TAG
+            && parser.getNamespace().equals(env)
+            && parser.getName().equals("Fault")) {
+            SoapFault fault = new SoapFault();
+            fault.parse(parser);
+            bodyIn = fault;
         }
+        else {
+            while (parser.getEventType() == XmlPullParser.START_TAG) {
+                //            int type = parser.getEventType();
 
+                //          if (type == XmlPullParser.END_TAG || type == XmlPullParser.END_DOCUMENT)
+                //            break;
+
+                //  String name = namespaceMap.getPackage (start.getNamespace ())
+                //  + "." + start.getName ();
+
+                String rootAttr = parser.getAttributeValue(enc, "root");
+
+                Object o =
+                    read(
+                        parser,
+                        null,
+                        -1,
+                        parser.getNamespace(),
+                        parser.getName(),
+                        PropertyInfo.OBJECT_TYPE);
+
+                if ("1".equals(rootAttr) || bodyIn == null)
+                    bodyIn = o;
+
+                parser.nextTag();
+            }
+        }
         //System.out.println ("leaving root read");
     }
 
@@ -130,7 +140,9 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 obj.getPropertyInfo(testIndex, properties, info);
                 if (info.name == null
                     ? testIndex == sourceIndex
-                    : (info.name.equals(name) && info == null || info.namespace.equals(parser.getNamespace())))
+                    : (info.name.equals(name)
+                        && info == null
+                        || info.namespace.equals(parser.getNamespace())))
                     break;
             }
 
@@ -144,19 +156,18 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         parser.require(XmlPullParser.END_TAG, null, null);
     }
 
-
-	/** 
-	 * If the type of the object cannot be determined, and thus
-	 * no Marshal class can handle the object, this method is
-	 * called. It will build either a SoapPrimitive or a SoapObject
-	 * 
-	 * @param parser
-	 * @param typeNamespace
-	 * @param typeName
-	 * @return
-	 * @throws IOException
-	 * @throws XmlPullParserException
-	 */
+    /** 
+     * If the type of the object cannot be determined, and thus
+     * no Marshal class can handle the object, this method is
+     * called. It will build either a SoapPrimitive or a SoapObject
+     * 
+     * @param parser
+     * @param typeNamespace
+     * @param typeName
+     * @return
+     * @throws IOException
+     * @throws XmlPullParserException
+     */
 
     protected Object readUnknown(
         XmlPullParser parser,
@@ -164,30 +175,29 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         String typeName)
         throws IOException, XmlPullParserException {
 
-		String name = parser.getName ();
-		String namespace = parser.getNamespace();
+        String name = parser.getName();
+        String namespace = parser.getNamespace();
 
         parser.next(); // move to text, inner start tag or end tag
 
         Object result = null;
 
-		String text = null;
+        String text = null;
 
         if (parser.getEventType() == XmlPullParser.TEXT) {
-        	text = parser.getText();
+            text = parser.getText();
             result = new SoapPrimitive(typeNamespace, typeName, text);
             parser.next();
-        }   
-		else if(parser.getEventType() == XmlPullParser.END_TAG) {
-			result = new SoapObject(typeNamespace, typeName);
-		}
-		
-		
-		if (parser.getEventType() == XmlPullParser.START_TAG){
+        }
+        else if (parser.getEventType() == XmlPullParser.END_TAG) {
+            result = new SoapObject(typeNamespace, typeName);
+        }
 
-		 	if(text != null && text.trim().length() != 0) {
-				throw new RuntimeException("Malformed input: Mixed content");
-			}
+        if (parser.getEventType() == XmlPullParser.START_TAG) {
+
+            if (text != null && text.trim().length() != 0) {
+                throw new RuntimeException("Malformed input: Mixed content");
+            }
 
             SoapObject so = new SoapObject(typeNamespace, typeName);
 
@@ -304,7 +314,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
         // determine wire element type
 
-		String elementName = parser.getName();
+        String elementName = parser.getName();
 
         String href = parser.getAttributeValue(null, "href");
         Object obj;
@@ -372,8 +382,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                     obj = readUnknown(parser, namespace, name);
             }
 
-           // finally, care about the id....
- 
+            // finally, care about the id....
+
             if (id != null) {
                 Object hlp = idMap.get(id);
                 if (hlp instanceof FwdRef) {
@@ -395,7 +405,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             }
         }
 
-		parser.require(XmlPullParser.END_TAG, null, elementName);
+        parser.require(XmlPullParser.END_TAG, null, elementName);
 
         //  System.out.println ("leaving read");
 
@@ -606,13 +616,13 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         for (int i = 0; i < cnt; i++) {
 
             obj.getPropertyInfo(i, properties, info);
-    
-            //      Object value = obj.getProperty (i);
 
+            //      Object value = obj.getProperty (i);
 
             if ((info.flags & PropertyInfo.TRANSIENT) == 0) {
                 String nsp = info.namespace;
-                if (nsp == null) nsp = info.namespace;
+                if (nsp == null)
+                    nsp = info.namespace;
 
                 writer.startTag(nsp, info.name);
                 writeProperty(writer, obj.getProperty(i), info);
@@ -653,10 +663,10 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
                 String prefix = writer.getPrefix((String) qName[0], true);
 
-/*                if (prefix == null)
-                    throw new RuntimeException(
-                        "Prefix for namespace " + qName[0] + " undefined!");
-*/
+                /*                if (prefix == null)
+                                    throw new RuntimeException(
+                                        "Prefix for namespace " + qName[0] + " undefined!");
+                */
                 writer.attribute(xsi, "type", prefix + ":" + qName[1]);
             }
 

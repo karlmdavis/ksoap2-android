@@ -51,14 +51,14 @@ public class SoapFault extends IOException {
     public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV, "Fault");
 
-        parser.nextTag();
-        while (parser.getEventType() == XmlPullParser.START_TAG) {
+        while (parser.nextTag() == XmlPullParser.START_TAG) {
 
             String name = parser.getName();
 
             if (name.equals("detail")) {
                 detail = new Node();
                 detail.parse(parser);        
+                continue;
             }
             else if (name.equals("faultcode"))
                 faultcode = parser.nextText();
@@ -78,7 +78,7 @@ public class SoapFault extends IOException {
         xw.startTag(SoapEnvelope.ENV, "Fault");
         xw.startTag(null, "faultcode");
         xw.text("" + faultcode);
-        xw.endTag(null, "falutcode");
+        xw.endTag(null, "faultcode");
         xw.startTag(null, "faultstring");
         xw.text("" + faultstring);
         xw.endTag(null, "faultstring");
