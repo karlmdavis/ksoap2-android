@@ -301,7 +301,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * Precondition: On the start tag of the object or property, 
      * so href can be read. */
 
-    protected Object read(
+    public Object read(
         XmlPullParser parser,
         Object owner,
         int index,
