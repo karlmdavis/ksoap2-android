@@ -1,4 +1,5 @@
 package org.ksoap2.samples.quotes;
+
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 
