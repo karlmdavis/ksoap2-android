@@ -20,7 +20,7 @@
  * */
  
 
-package org.ksoap;
+package org.ksoap2;
 
 import java.util.Vector;
 import org.kobjects.serialization.*;

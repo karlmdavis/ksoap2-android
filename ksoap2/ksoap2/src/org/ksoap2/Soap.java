@@ -19,7 +19,7 @@
  * */
 
 
-package org.ksoap;
+package org.ksoap2;
 
 
 

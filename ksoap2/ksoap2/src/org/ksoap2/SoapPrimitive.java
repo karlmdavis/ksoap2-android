@@ -1,4 +1,4 @@
-package org.ksoap;
+package org.ksoap2;
 
 /** 
  * A class that is used to encapsulate primitive types

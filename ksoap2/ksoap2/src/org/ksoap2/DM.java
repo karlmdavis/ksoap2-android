@@ -1,4 +1,4 @@
-package org.ksoap;
+package org.ksoap2;
 
 import java.io.*;
 import org.kobjects.serialization.*;
