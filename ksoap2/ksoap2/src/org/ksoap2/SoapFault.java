@@ -1,6 +1,5 @@
 package org.ksoap2;
 
-import java.util.Vector;
 import java.io.*;
 import org.xmlpull.v1.*;
 import org.kxml2.kdom.*;
@@ -30,10 +29,10 @@ public class SoapFault extends IOException {
     /** Fills the fault details from the given XML stream */
 
     public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(parser.START_TAG, SoapEnvelope.ENV, "Fault");
+        parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV, "Fault");
 
         parser.nextTag();
-        while (parser.getEventType() == parser.START_TAG) {
+        while (parser.getEventType() == XmlPullParser.START_TAG) {
 
             String name = parser.getName();
 
@@ -49,7 +48,7 @@ public class SoapFault extends IOException {
                 faultactor = parser.nextText();
             else throw new RuntimeException ("unexpected tag:" +name);
 
-            parser.require(parser.END_TAG, null, name);
+            parser.require(XmlPullParser.END_TAG, null, name);
         }
     }
 

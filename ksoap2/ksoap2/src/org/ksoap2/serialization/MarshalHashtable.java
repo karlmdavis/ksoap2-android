@@ -22,7 +22,6 @@ package org.ksoap2.serialization;
 import java.io.*;
 import java.util.*;
 
-import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
 /**
@@ -64,11 +63,11 @@ public class MarshalHashtable implements Marshal {
 
       //  parser.require(parser.START_TAG, null, "map");
 
-        while (parser.nextTag() != parser.END_TAG) {
+        while (parser.nextTag() != XmlPullParser.END_TAG) {
             SoapObject item = new ItemSoapObject(instance);
 
             // advance <item>
-            parser.require(parser.START_TAG, null, "item");
+            parser.require(XmlPullParser.START_TAG, null, "item");
             parser.nextTag();
 
             Object key =
@@ -99,11 +98,11 @@ public class MarshalHashtable implements Marshal {
                 item.setProperty(1, value);
 
             // advance </item>
-            parser.require(parser.END_TAG, null, "item");
+            parser.require(XmlPullParser.END_TAG, null, "item");
         }
 
         // advance </apache-xml:map>
-        parser.require(parser.END_TAG, null, elementName);
+        parser.require(XmlPullParser.END_TAG, null, elementName);
         return instance;
     }
 

@@ -2,7 +2,6 @@ package org.ksoap2.servlet;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.math.BigDecimal;
 import java.util.*;
 
 import javax.servlet.*;
@@ -160,7 +159,7 @@ public class SoapServlet extends HttpServlet {
 
             XmlPullParser parser = new KXmlParser();
             parser.setInput(req.getInputStream(), req.getCharacterEncoding());
-			parser.setFeature (parser.FEATURE_PROCESS_NAMESPACES, true);
+			parser.setFeature (XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
 
             envelope.parse(parser);
             //logSOAP( req, reqEnv, true );
@@ -173,7 +172,7 @@ public class SoapServlet extends HttpServlet {
         catch (SoapFault f) {
             f.printStackTrace();
             envelope.bodyOut = f;
-            res.setStatus(res.SC_INTERNAL_SERVER_ERROR);
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         catch (Throwable t) {
             t.printStackTrace();
@@ -181,7 +180,7 @@ public class SoapServlet extends HttpServlet {
             fault.faultcode = "Server";
             fault.faultstring = t.getMessage();
             envelope.bodyOut = fault;
-            res.setStatus(res.SC_INTERNAL_SERVER_ERROR);
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         finally {
             //		logSOAP (req, resEnv, false);

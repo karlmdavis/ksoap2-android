@@ -1,7 +1,6 @@
 package org.ksoap2.serialization;
 
 import java.io.*;
-import org.ksoap2.SoapEnvelope;
 import org.xmlpull.v1.*;
 
 /** Abstract class for custom (de)serialization. */

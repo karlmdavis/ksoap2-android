@@ -59,7 +59,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             parser.nextTag();
             int type = parser.getEventType();
 
-            if (type == parser.END_TAG || type == parser.END_DOCUMENT)
+            if (type == XmlPullParser.END_TAG || type == XmlPullParser.END_DOCUMENT)
                 break;
 
             //  String name = namespaceMap.getPackage (start.getNamespace ())
@@ -92,7 +92,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         PropertyInfo info = new PropertyInfo();
 
         while (true) {
-            if (parser.nextTag() == parser.END_TAG)
+            if (parser.nextTag() == XmlPullParser.END_TAG)
                 break;
 
             String name = parser.getName();
@@ -121,7 +121,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             sourceIndex = 0;
         }
 
-        parser.require(parser.END_TAG, null, null);
+        parser.require(XmlPullParser.END_TAG, null, null);
     }
 
     protected Object readUnknown(
@@ -139,20 +139,20 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
 		String text = null;
 
-        if (parser.getEventType() == parser.TEXT) {
+        if (parser.getEventType() == XmlPullParser.TEXT) {
         	text = parser.getText();
             result = new SoapPrimitive(typeNamespace, typeName, text);
             parser.next();
         }   
 
-		if (parser.getEventType() == parser.START_TAG) {
+		if (parser.getEventType() == XmlPullParser.START_TAG) {
 
 			if (text != null && text.trim().length() != 0) 
 				throw new RuntimeException("Malformed input: Mixed content");
 
             SoapObject so = new SoapObject(typeNamespace, typeName);
 
-            while (parser.getEventType() != parser.END_TAG) {
+            while (parser.getEventType() != XmlPullParser.END_TAG) {
                 so.addProperty(
                     parser.getName(),
                     read(
@@ -169,7 +169,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             result = so;
         }
 
-        parser.require(parser.END_TAG, namespace, name);
+        parser.require(XmlPullParser.END_TAG, namespace, name);
 
         return result;
     }
@@ -220,7 +220,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
         int position = getIndex(parser.getAttributeValue(enc, "offset"), 0, 0);
 
-        while (parser.getEventType() != parser.END_TAG) {
+        while (parser.getEventType() != XmlPullParser.END_TAG) {
             // handle position
 
             position =
@@ -243,7 +243,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             parser.nextTag();
         }
 
-        parser.require(parser.END_TAG, null, null);
+        parser.require(XmlPullParser.END_TAG, null, null);
     }
 
     /** 
@@ -288,7 +288,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             }
 
             parser.nextTag(); // start tag
-            parser.require(parser.END_TAG, null, elementName);
+            parser.require(XmlPullParser.END_TAG, null, elementName);
         }
         else {
             String nullAttr = parser.getAttributeValue(xsi, "nil");
@@ -300,7 +300,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             if (nullAttr != null && SoapEnvelope.stringToBoolean(nullAttr)) {
                 obj = null;
                 parser.nextTag();
-                parser.require(parser.END_TAG, null, elementName);
+                parser.require(XmlPullParser.END_TAG, null, elementName);
             }
             else {
                 String type = parser.getAttributeValue(xsi, "type");
@@ -356,7 +356,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             }
         }
 
-		parser.require(parser.END_TAG, null, elementName);
+		parser.require(XmlPullParser.END_TAG, null, elementName);
 
         //  System.out.println ("leaving read");
 

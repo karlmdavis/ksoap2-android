@@ -1,11 +1,9 @@
 package org.ksoap2;
 
 import java.io.*;
-import java.util.*;
 
 import org.xmlpull.v1.*;
 import org.kxml2.kdom.*;
-import org.ksoap2.serialization.*;
 
 /** 
  * A SOAP envelope, holding head and body objects. While this 
@@ -168,30 +166,30 @@ public class SoapEnvelope {
         System.out.println ("namesp-r: '"+parser.getNamespace()+"'");
         System.out.println ("namesp-x: '"+env+"'"); */
         
-        parser.require(parser.START_TAG, env, "Envelope");
+        parser.require(XmlPullParser.START_TAG, env, "Envelope");
         encodingStyle = parser.getAttributeValue(env, "encodingStyle");
 
         parser.nextTag();
 
-        if (parser.getEventType() == parser.START_TAG
+        if (parser.getEventType() == XmlPullParser.START_TAG
             && parser.getNamespace().equals(env)
             && parser.getName().equals("Header")) {
 
             parseHeader(parser);
 
-            parser.require(parser.END_TAG, env, "Header");
+            parser.require(XmlPullParser.END_TAG, env, "Header");
             parser.nextTag();
         }
 
-        parser.require(parser.START_TAG, env, "Body");
+        parser.require(XmlPullParser.START_TAG, env, "Body");
         encodingStyle = parser.getAttributeValue(env, "encodingStyle");
 
         parseBody (parser);
 
-        parser.require(parser.END_TAG, env, "Body");
+        parser.require(XmlPullParser.END_TAG, env, "Body");
 
         parser.nextTag();
-        parser.require(parser.END_TAG, env, "Envelope");
+        parser.require(XmlPullParser.END_TAG, env, "Envelope");
     }
 
 
@@ -228,7 +226,7 @@ public class SoapEnvelope {
         parser.nextTag();
         // insert fault generation code here
 
-        if (parser.getEventType() == parser.START_TAG
+        if (parser.getEventType() == XmlPullParser.START_TAG
             && parser.getNamespace().equals(env)
             && parser.getName().equals("Fault")) {
             SoapFault fault = new SoapFault();
