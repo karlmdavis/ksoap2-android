@@ -3,7 +3,6 @@ package org.ksoap2.marshal;
 import java.io.*;
 import org.ksoap2.*;
 import org.kobjects.base64.*;
-import org.kobjects.serialization.*;
 import org.xmlpull.v1.*;
 
 /** Base64 (de)serializer */

@@ -9,7 +9,6 @@ import java.util.*;
 
 import org.xmlpull.v1.*;
 import org.kxml2.kdom.*;
-import org.kobjects.serialization.*;
 import org.ksoap2.marshal.*;
 
 /** The SOAP envelope. */

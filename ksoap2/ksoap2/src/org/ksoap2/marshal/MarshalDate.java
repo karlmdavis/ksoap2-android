@@ -4,8 +4,6 @@ import java.util.Date;
 import java.io.*;
 import org.xmlpull.v1.*;
 import org.kobjects.isodate.*;
-import org.kobjects.serialization.*;
-
 /** Marshal class for Dates. */
 
 public class MarshalDate implements Marshal {

@@ -22,8 +22,6 @@
 package org.ksoap2.marshal;
 
 import java.util.Vector;
-import org.kobjects.serialization.*;
-
 /** A simple dynamic object that can be used to build
     soap calls without implementing KvmSerializable */
 
