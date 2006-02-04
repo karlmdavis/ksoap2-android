@@ -22,54 +22,54 @@
  *
  * */
 
-
 package org.ksoap2.serialization;
 
 import java.util.Hashtable;
 
-
-/** provides get and set methods for properties. Can be used to
-    replace reflection (to some extend) for "serialization-aware"
-    classes. Currently used in kSOAP and the RMS based kobjects object
-    repository */
-
-
+/**
+ * Provides get and set methods for properties. Can be used to replace
+ * reflection (to some extend) for "serialization-aware" classes. Currently used
+ * in kSOAP and the RMS based kobjects object repository
+ */
 
 public interface KvmSerializable {
 
-
     /**
      * Returns the property at a specified index (for serialization)
-     *
-     * @param index the specified index 
+     * 
+     * @param index
+     *            the specified index
      * @return the serialized property
      */
- 
-   Object getProperty (int index);
+
+    Object getProperty(int index);
 
     /** returns the number of serializable properties */
 
-    int getPropertyCount (); 
-
-
+    int getPropertyCount();
 
     /**
      * sets the property with the given index to the given value.
-     * @param index the index to be set
-     * @param value the value of the property
+     * 
+     * @param index
+     *            the index to be set
+     * @param value
+     *            the value of the property
      */
-    void setProperty (int index, Object value);
+    void setProperty(int index, Object value);
 
+    /**
+     * Fills the given property info record.
+     * 
+     * @param index
+     *            the index to be queried
+     * @param properties
+     *            information about the (de)serializer
+     * @param info
+     *            The return parameter, to be filled with information about the
+     *            property with the given index.
+     */
 
- 
-    /** 
-     * Fills the given property info record. 
-     * @param index the index to be queried 
-     * @param properties  information about the (de)serializer
-     * @param info  The return parameter, to be filled with information
-     *    about the property with the given index. */
-    
-    void getPropertyInfo (int index, Hashtable properties, PropertyInfo info);
+    void getPropertyInfo(int index, Hashtable properties, PropertyInfo info);
 
-    
 }
