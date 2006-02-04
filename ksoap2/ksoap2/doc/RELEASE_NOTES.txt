@@ -5,6 +5,6 @@ History
 
 2.0.2	2006/02/04	Maintenance Release
 - Added new targets to the build to produce various  jar releases for different uses.  Provided a new jar that has just the classes that it needs to run.  This removes the problem some have had while pre-verifying the classes and receiving an error about a FileReader class not being found.
-- Moved the target class file creation from 1.1 to 1.2 to help those building with Java 1.5.
+- Moved the target class file creation from 1.1 to 1.2 to help those building with Java 1.5. SF BUG:1415810. Thanks to jozart
 - Small code formatting cleanup.
 - No bug fixes, API changes, or code flow has been modified in this release.
