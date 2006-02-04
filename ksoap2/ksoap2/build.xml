@@ -1,83 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <project name="ksoap2" default="build" basedir=".">
+	<property name="lib.dir" value="lib" />
+	<property name="src.dir" value="src" />
+	<property name="midp_src.dir" value="src_midp" />
+	<property name="j2se_src.dir" value="src_j2se" />
+	<property name="build.dir" value="build" />
+	<property name="lib.class.dir" value="libraryClasses" />
+	<property name="dist.dir" value="dist" />
 
-  
-  <target name="javadoc">
-    <delete dir="doc/api"/>
-    <mkdir dir="doc/api"/>    
-    <javadoc packagenames="org.ksoap2.*" classpath="lib/kxml2.jar;lib/kobjects-j2me.jar"
-             public="yes"
-             sourcepath="src"
-             destdir="doc/api"
-             author="true"
-             version="true"
-             use="true"
-             windowtitle="KSoap 2 API"
-             doctitle="KSoap 2 API"
-    />
-  </target>
-  
-    
-    <target name="build_src" depends="build_jar,javadoc">
-		<zip zipfile="dist/ksoap2-src.zip">
-		  <fileset dir=".">
-		    <include name="*/**" />
-		    <exclude name=".*" />
-		    <exclude name="classes/**" />
-		    <exclude name="tmpclasses/**" />
-		    <exclude name="dist/**"/>
-		   </fileset>
-		</zip>    
-    
-    </target>
+	<target name="init">
+		<mkdir dir="${dist.dir}" />
+	</target>
 
+	<target name="build" depends="build_src, build_j2me_full.jar, build_j2se_full.jar, build_j2me_nodeps.jar, build_j2me_light.jar" description="--> Builds all products." />
 
-    <target name="build_jar">
+	<target name="clean" description="--> Cleans up built products">
+		<delete dir="${dist.dir}" />
+		<delete dir="${build.dir}" />
+		<delete dir="${lib.class.dir}" />
+		<delete dir="doc/api" />
+	</target>
 
-    	<delete dir="tmpclasses"/>
-    	<mkdir dir="tmpclasses"/>
+	<target name="javadoc">
+		<delete dir="doc/api" />
+		<mkdir dir="doc/api" />
+		<javadoc packagenames="org.ksoap2.*" classpath="lib/kxml2.jar;lib/kobjects-j2me.jar" public="yes" sourcepath="src" destdir="doc/api" author="true" version="true" use="true" windowtitle="KSoap 2 API" doctitle="KSoap 2 API" />
+	</target>
 
-    	<unzip src="lib/kobjects-j2me.jar" dest="tmpclasses" overwrite="true"/>
-    	<unzip src="lib/kxml2.jar" dest="tmpclasses" overwrite="true"/>
-    	    
-    <!-- 	       debug="off" -->
-    	
-    	<javac srcdir="src;src_midp" verbose="true"
-    		   classpath="lib/me4se.jar"
-    	       destdir="tmpclasses"
-    	       optimize="true"
-    		   target="1.1"
-    	       debuglevel="none"/>
-	
-        <mkdir dir="dist"/>
-            
-		<jar jarfile="dist/ksoap2-j2me-full.jar">
-			<fileset dir="tmpclasses">
-				<include name="**/*.class"/>
-				<include name="META-INF/**"/>
+	<target name="build_src" depends="init,javadoc">
+		<delete file="${dist.dir}/ksoap2-src.zip" />
+		<zip zipfile="${dist.dir}/ksoap2-src.zip">
+			<fileset dir=".">
+				<include name="*/**" />
+				<exclude name=".*" />
+				<exclude name="${build.dir}/**" />
+				<exclude name="${dist.dir}/**" />
+				<exclude name="${lib.class.dir}/**" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build_classes" depends="init">
+		<delete dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+		<unzip src="lib/kobjects-j2me.jar" dest="${lib.class.dir}" overwrite="true" />
+		<unzip src="lib/kxml2.jar" dest="${lib.class.dir}" overwrite="true" />
+		<javac destdir="${build.dir}" optimize="true" target="1.1" debuglevel="none">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<src path="${src.dir}" />
+			<src path="${midp_src.dir}" />
+			<src path="${j2se_src.dir}" />
+		</javac>
+	</target>
+
+	<target name="build_j2me_full.jar" depends="build_classes">
+		<jar jarfile="${dist.dir}/ksoap2-j2me-full.jar">
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+				<exclude name="**/HttpTransportSE.class"/>
+				<include name="META-INF/**" />
+			</fileset>
+			<fileset dir="${lib.class.dir}">
+				<include name="**/*.class" />
 			</fileset>
 		</jar>
+	</target>
 
+	<target name="build_j2me_light.jar" depends="build_classes">
+		<jar jarfile="${dist.dir}/ksoap2-j2me-light.jar">
+			<fileset dir="${lib.class.dir}">
+				<include name="**/IsoDate.class" />
+				<include name="**/XmlPullParser.class" />
+				<include name="**/Base64.class" />
+				<include name="**/KXmlParser.class" />
+				<include name="**/KXmlSerializer.class" />
+				<include name="**/Node.class" />
+				<include name="**/KXmlSerializer.class" />
+				<include name="**/Element.class" />
+				<include name="**/XmlSerializer.class" />
+				<include name="**/XmlPullParserException.class" />
+			</fileset>
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+				<exclude name="**/HttpTransportSE.class"/>
+				<include name="META-INF/**" />
+			</fileset>
+		</jar>
+	</target>
 
-    	<delete dir="tmpclasses"/>
+	<target name="build_j2me_nodeps.jar" depends="build_classes">
+		<jar jarfile="${dist.dir}/ksoap2-j2me-nodeps.jar">
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+				<exclude name="**/HttpTransportSE.class"/>
+				<include name="META-INF/**" />
+			</fileset>
+		</jar>
+	</target>
 
-    	
-   </target>
+	<target name="build_j2se_full.jar" depends="build_classes">
+		<jar jarfile="${dist.dir}/ksoap2-j2se-full.jar">
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+				<exclude name="**/HttpTransport.class"/>
+				<include name="META-INF/**" />
+			</fileset>
+			<fileset dir="${lib.class.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</jar>
+	</target>
 
+	<target name="deploy" depends="build">
+		<ftp server="upload.sourceforge.net" userid="anonymous" remotedir="/incoming" password="sfdeploy@paddlethis.com">
+			<fileset dir="${dist.dir}" />
+		</ftp>
+	</target>
 
-    <target name="build" depends="build_src" />
-
-	<target name="deploy" depends="build" >
-      <ftp server="upload.sourceforge.net"
-         userid="anonymous"
-         remotedir="/incoming"
-         password="sf-deploy@kobjects.org">
-         <fileset dir="dist"/>
-      </ftp>
-    </target>
- 
-	
-    
 </project>
