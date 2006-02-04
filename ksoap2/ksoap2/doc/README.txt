@@ -6,7 +6,7 @@ ksoap2-j2se-full.jar -- J2SE compatible version including the kxml and kobjects 
 
 ksoap2-j2me-full.jar -- J2ME compatible version including the kxml and kobjects libraries same as previous release.
 
-ksoap2-j2me-light.jar -- J2ME compatible version which is fully self sufficient and has had extra files pruned. (This version corrects preverify problem some have seen with "Reader" classes)
+ksoap2-j2me-core.jar -- J2ME compatible version which is fully self sufficient and has had extra files pruned. (This version corrects preverify problem some have seen with "Reader" classes not being found)
 
 ksoap2-j2me-nodeps.jar -- J2ME version with only the ksoap classes.  Requires kxml and appropriate kobjects classes to operate.
 
