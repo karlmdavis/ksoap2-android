@@ -9,6 +9,8 @@
 	<property name="lib.class.dir" value="libraryClasses" />
 	<property name="dist.dir" value="dist" />
 	<property name="api.dir" value="doc/api" />
+	<property name="java.class.target.level" value="1.2" />
+
 	<path id="lib.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
@@ -44,7 +46,7 @@
 		<mkdir dir="${build.dir}" />
 		<unzip src="${lib.dir}/kobjects-j2me.jar" dest="${lib.class.dir}" overwrite="true" />
 		<unzip src="${lib.dir}/kxml2.jar" dest="${lib.class.dir}" overwrite="true" />
-		<javac destdir="${build.dir}" optimize="true" target="1.1" debuglevel="none">
+		<javac destdir="${build.dir}" optimize="true" target="${java.class.target.level}" debuglevel="none">
 			<classpath refid="lib.classpath" />
 			<src path="${src.dir}" />
 			<src path="${midp_src.dir}" />

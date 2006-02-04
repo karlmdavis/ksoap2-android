@@ -32,182 +32,127 @@ import org.kxml2.io.KXmlParser;
 import org.kxml2.io.KXmlSerializer;
 import org.xmlpull.v1.*;
 
-
-
 public class HttpTransportSE {
+    String url;
+    HttpURLConnection connection;
+    OutputStream os;
+    InputStream is;
+    /** Set to true if debugging */
+    public boolean debug;
+    /** String dump of request for debugging. */
+    public String requestDump;
+    /** String dump of response for debugging */
+    public String responseDump;
+    private boolean connected;
 
-	String url;
+    /**
+     * Creates instance of HttpTransport with set url and SoapAction
+     * 
+     * @param url
+     *            the destination to POST SOAP data
+     * @param soapAction
+     *            the desired SOAP action (for HTTP headers)
+     */
 
-	HttpURLConnection connection;
+    public HttpTransportSE(String url) {
+        this.url = url;
+    }
 
-	OutputStream os;
+    /**
+     * Set the target url.
+     * 
+     * @param url
+     *            the target url.
+     */
 
-	InputStream is;
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	/** state info */
-	private boolean connected = false;
+    /**
+     * set the desired soapAction header field
+     * 
+     * @param soapAction
+     *            the desired soapAction
+     */
 
-	/** Set to true if debugging */
-	public boolean debug;
+    public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
+        if (soapAction == null)
+            soapAction = "\"\"";
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        XmlSerializer xw = new KXmlSerializer();
+        xw.setOutput(bos, null);
+        envelope.write(xw);
+        xw.flush();
+        bos.write('\r');
+        bos.write('\n');
+        byte[] requestData = bos.toByteArray();
+        bos = null;
+        xw = null;
+        requestDump = debug ? new String(requestData) : null;
+        responseDump = null;
+        connected = true;
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setUseCaches(false);
+        connection.setDoOutput(true);
+        connection.setDoInput(true);
+        connection.setRequestProperty("User-Agent", "kSOAP/2.0");
+        connection.setRequestProperty("SOAPAction", soapAction);
+        connection.setRequestProperty("Content-Type", "text/xml");
+        connection.setRequestProperty("Connection", "close");
+        connection.setRequestProperty("Content-Length", "" + requestData.length);
+        connection.setRequestMethod("POST");
+        OutputStream os = connection.getOutputStream();
+        os.write(requestData, 0, requestData.length);
+        os.close();
+        requestData = null;
+        InputStream is;
+        try {
+            connection.connect();
+            is = connection.getInputStream();
+        } catch (IOException e) {
+            is = connection.getErrorStream();
+            if (is == null) {
+                connection.disconnect();
+                throw (e);
+            }
+        }
+        if (debug) {
+            bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[256];
+            while (true) {
+                int rd = is.read(buf, 0, 256);
+                if (rd == -1)
+                    break;
+                bos.write(buf, 0, rd);
+            }
+            buf = bos.toByteArray();
+            responseDump = new String(buf);
+            is.close();
+            is = new ByteArrayInputStream(buf);
+        }
+        XmlPullParser xp = new KXmlParser();
+        xp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        xp.setInput(is, null);
+        envelope.parse(xp);
+    }
 
-	/** String dump of request for debugging. */
-	public String requestDump;
-
-	/** String dump of response for debugging */
-	public String responseDump;
-
-	/**
-	 * Creates instance of HttpTransport with set url and SoapAction
-	 * 
-	 * @param url
-	 *            the destination to POST SOAP data
-	 * @param soapAction
-	 *            the desired SOAP action (for HTTP headers)
-	 */
-
-	public HttpTransportSE(String url) {
-		this.url = url;
-	}
-
-	/**
-	 * Set the target url.
-	 * 
-	 * @param url
-	 *            the target url.
-	 */
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	/**
-	 * set the desired soapAction header field
-	 * 
-	 * @param soapAction
-	 *            the desired soapAction
-	 */
-
-	public void call(String soapAction, SoapEnvelope envelope)
-			throws IOException, XmlPullParserException {
-
-		if (soapAction == null)
-			soapAction = "\"\"";
-
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		XmlSerializer xw = new KXmlSerializer();
-		xw.setOutput(bos, null);
-		envelope.write(xw);
-		xw.flush();
-		bos.write('\r');
-		bos.write('\n');
-		byte[] requestData = bos.toByteArray();
-		bos = null;
-		xw = null;
-
-		requestDump = debug ? new String(requestData) : null;
-		responseDump = null;
-
-		connected = true;
-		HttpURLConnection connection = (HttpURLConnection) new URL(url)
-				.openConnection();
-
-		connection.setUseCaches(false);
-		connection.setDoOutput(true);
-		connection.setDoInput(true);
-		connection.setRequestProperty("User-Agent", "kSOAP/2.0");
-		connection.setRequestProperty("SOAPAction", soapAction);
-		connection.setRequestProperty("Content-Type", "text/xml");
-		connection.setRequestProperty("Connection", "close");
-
-		connection
-				.setRequestProperty("Content-Length", "" + requestData.length);
-
-		connection.setRequestMethod("POST");
-
-		OutputStream os = connection.getOutputStream();
-		os.write(requestData, 0, requestData.length);
-		os.close();
-
-		requestData = null;
-
-		InputStream is;
-		try {
-			connection.connect();
-			is = connection.getInputStream();
-		} catch (IOException e) {
-			is = connection.getErrorStream();
-			if (is == null) {
-				connection.disconnect();
-				throw (e);
-			}
-		}
-
-		if (debug) {
-			bos = new ByteArrayOutputStream();
-			byte[] buf = new byte[256];
-
-			while (true) {
-				int rd = is.read(buf, 0, 256);
-				if (rd == -1)
-					break;
-				bos.write(buf, 0, rd);
-			}
-
-			buf = bos.toByteArray();
-			responseDump = new String(buf);
-			is.close();
-			is = new ByteArrayInputStream(buf);
-		}
-
-		XmlPullParser xp = new KXmlParser();
-		xp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-		xp.setInput(is, null);
-
-		envelope.parse(xp);
-
-	}
-
-	/*
-	 * Executes a SOAP Method and returns a response
-	 * 
-	 * @param method the remote soap method to be executed @return the result of
-	 * the soap method @exception IOException if an error occurs
-	 * 
-	 * public Object call(SoapObject method) throws IOException {
-	 * 
-	 * requestEnvelope.setBody(method); call();
-	 * 
-	 * if (responseEnvelope.getBody() instanceof SoapFault) throw ((SoapFault)
-	 * responseEnvelope.getBody());
-	 * 
-	 * return responseEnvelope.getResult(); }
-	 * 
-	 * public void call(XmlIO request, XmlIO result) throws IOException {
-	 * requestEnvelope.setBody(request); responseEnvelope.setBody(result);
-	 * 
-	 * if (responseEnvelope.getBody() instanceof SoapFault) throw ((SoapFault)
-	 * responseEnvelope.getBody()); }
-	 */
-
-	
-	public void reset() {
-		connected = false;
-
-		if (is != null) {
-			try {
-				is.close();
-			} catch (Throwable e) {
-			}
-			is = null;
-		}
-
-		if (connection != null) {
-			try {
-				connection.disconnect ();
-			} catch (Throwable e) {
-			}
-			connection = null;
-		}
-	}
+    public void reset() {
+        connected = false;
+        if (is != null) {
+            try {
+                is.close();
+            } catch (Throwable e) {
+            }
+            is = null;
+        }
+        if (connection != null) {
+            try {
+                connection.disconnect();
+            } catch (Throwable e) {
+            }
+            connection = null;
+        }
+    }
 
 }

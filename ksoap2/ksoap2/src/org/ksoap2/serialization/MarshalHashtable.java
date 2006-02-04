@@ -21,8 +21,7 @@
  * Contributor(s): Sean McDaniel
  *
  * */
- 
- 
+
 package org.ksoap2.serialization;
 
 import java.io.*;
@@ -31,99 +30,50 @@ import java.util.*;
 import org.xmlpull.v1.*;
 
 /**
- * serializes instances of hashtable to and from xml.
- * this implementation is based on the xml schema from
- * apache-soap, namely the type 'map' in the namespace
- * 'http://xml.apache.org/xml-soap'.  other soap
- * implementations including apache (obviously ) and
- * glue are also interoperable with the schema.
+ * Serializes instances of hashtable to and from xml. This implementation is
+ * based on the xml schema from apache-soap, namely the type 'map' in the
+ * namespace 'http://xml.apache.org/xml-soap'. Other soap implementations
+ * including apache (obviously) and glue are also interoperable with the
+ * schema.
  */
 public class MarshalHashtable implements Marshal {
 
     /** use then during registration */
-    public static final String NAMESPACE =
-        "http://xml.apache.org/xml-soap";
-
+    public static final String NAMESPACE = "http://xml.apache.org/xml-soap";
     /** use then during registration */
     public static final String NAME = "Map";
-
     /** CLDC does not support .class, so this helper is needed. */
-    public static final Class HASHTABLE_CLASS =
-        new Hashtable().getClass();
+    public static final Class HASHTABLE_CLASS = new Hashtable().getClass();
 
     SoapSerializationEnvelope envelope;
 
-    public Object readInstance(
-        XmlPullParser parser,
-        String namespace,
-        String name,
-        PropertyInfo expected)
-        throws IOException, XmlPullParserException {
-
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
         Hashtable instance = new Hashtable();
-
-		String elementName = parser.getName ();
-
-        // advance to <apache-xml:map>
-//		parser.nextTag();
-
-      //  parser.require(parser.START_TAG, null, "map");
-
+        String elementName = parser.getName();
         while (parser.nextTag() != XmlPullParser.END_TAG) {
             SoapObject item = new ItemSoapObject(instance);
-
-            // advance <item>
             parser.require(XmlPullParser.START_TAG, null, "item");
             parser.nextTag();
-
-            Object key =
-                envelope.read(
-                    parser,
-                    item,
-                    0,
-                    null,
-                    null,
-                    PropertyInfo.OBJECT_TYPE);
-
+            Object key = envelope.read(parser, item, 0, null, null, PropertyInfo.OBJECT_TYPE);
             parser.nextTag();
-
             if (key != null)
                 item.setProperty(0, key);
-
-            Object value =
-                envelope.read(
-                    parser,
-                    item,
-                    1,
-                    null,
-                    null,
-                    PropertyInfo.OBJECT_TYPE);
-
+            Object value = envelope.read(parser, item, 1, null, null, PropertyInfo.OBJECT_TYPE);
             parser.nextTag();
             if (value != null)
                 item.setProperty(1, value);
-
-            // advance </item>
             parser.require(XmlPullParser.END_TAG, null, "item");
         }
-
-        // advance </apache-xml:map>
         parser.require(XmlPullParser.END_TAG, null, elementName);
         return instance;
     }
 
-    public void writeInstance(
-        XmlSerializer writer,
-        Object instance)
-        throws IOException {
-
+    public void writeInstance(XmlSerializer writer, Object instance) throws IOException {
         Hashtable h = (Hashtable) instance;
         SoapObject item = new SoapObject(null, null);
         item.addProperty("key", null);
         item.addProperty("value", null);
-        for (Enumeration keys = h.keys();
-            keys.hasMoreElements();
-            ) {
+        for (Enumeration keys = h.keys(); keys.hasMoreElements();) {
             writer.startTag("", "item");
             Object key = keys.nextElement();
             item.setProperty(0, key);
@@ -133,15 +83,13 @@ public class MarshalHashtable implements Marshal {
         }
     }
 
-    //////////////////////////////////////////////
     class ItemSoapObject extends SoapObject {
         Hashtable h;
         int resolvedIndex = -1;
-
         ItemSoapObject(Hashtable h) {
             super(null, null);
             this.h = h;
-            addProperty("key",  null);
+            addProperty("key", null);
             addProperty("value", null);
         }
 
@@ -150,14 +98,9 @@ public class MarshalHashtable implements Marshal {
             if (resolvedIndex == -1) {
                 super.setProperty(index, value);
                 resolvedIndex = index;
-            }
-            else {
+            } else {
                 // already have a key or value
-                Object resolved =
-                    resolvedIndex == 0
-                        ? getProperty(0)
-                        : getProperty(1);
-
+                Object resolved = resolvedIndex == 0 ? getProperty(0) : getProperty(1);
                 if (index == 0)
                     h.put(value, resolved);
                 else
@@ -167,13 +110,7 @@ public class MarshalHashtable implements Marshal {
     }
 
     public void register(SoapSerializationEnvelope cm) {
-
         envelope = cm;
-        cm.addMapping(
-            MarshalHashtable.NAMESPACE,
-            MarshalHashtable.NAME,
-            HASHTABLE_CLASS,
-            this);
-
+        cm.addMapping(MarshalHashtable.NAMESPACE, MarshalHashtable.NAME, HASHTABLE_CLASS, this);
     }
 }

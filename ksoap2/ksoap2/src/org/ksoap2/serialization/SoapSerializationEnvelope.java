@@ -27,14 +27,11 @@ import org.xmlpull.v1.*;
 
 /**
  * @author Stefan Haustein
- *
- * This class extends the SoapEnvelope with 
- * Soap Serialization functionality.
+ * 
+ * This class extends the SoapEnvelope with Soap Serialization functionality.
  */
 public class SoapSerializationEnvelope extends SoapEnvelope {
-
     static final Marshal DEFAULT_MARSHAL = new DM();
-
     public Hashtable properties = new Hashtable();
 
     Hashtable idMap = new Hashtable();
@@ -43,22 +40,24 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     public boolean implicitTypes;
 
-    /** 
-     * Set this variable to true for compatibility with what seems to be
-     * the default encoding for .Net-Services. This feature is an extremely
-     * ugly hack. A much better
-     * option is to change the configuration of the .Net-Server to 
-     * standard Soap Serialization! */
+    /**
+     * Set this variable to true for compatibility with what seems to be the
+     * default encoding for .Net-Services. This feature is an extremely ugly
+     * hack. A much better option is to change the configuration of the
+     * .Net-Server to standard Soap Serialization!
+     */
 
     public boolean dotNet;
 
-    /** 
-     * Map from XML qualified names to Java classes */
+    /**
+     * Map from XML qualified names to Java classes
+     */
 
     protected Hashtable qNameToClass = new Hashtable();
 
-    /** 
-     * Map from Java class names to XML name and namespace pairs */
+    /**
+     * Map from Java class names to XML name and namespace pairs
+     */
 
     protected Hashtable classToQName = new Hashtable();
 
@@ -68,54 +67,25 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         DEFAULT_MARSHAL.register(this);
     }
 
-    public void parseBody(XmlPullParser parser)
-        throws IOException, XmlPullParserException {
-
+    public void parseBody(XmlPullParser parser) throws IOException, XmlPullParserException {
         bodyIn = null;
-
-        //System.out.println ("start parsing....");
-
         parser.nextTag();
-        if (parser.getEventType() == XmlPullParser.START_TAG
-            && parser.getNamespace().equals(env)
-            && parser.getName().equals("Fault")) {
+        if (parser.getEventType() == XmlPullParser.START_TAG && parser.getNamespace().equals(env) && parser.getName().equals("Fault")) {
             SoapFault fault = new SoapFault();
             fault.parse(parser);
             bodyIn = fault;
-        }
-        else {
+        } else {
             while (parser.getEventType() == XmlPullParser.START_TAG) {
-                //            int type = parser.getEventType();
-
-                //          if (type == XmlPullParser.END_TAG || type == XmlPullParser.END_DOCUMENT)
-                //            break;
-
-                //  String name = namespaceMap.getPackage (start.getNamespace ())
-                //  + "." + start.getName ();
-
                 String rootAttr = parser.getAttributeValue(enc, "root");
-
-                Object o =
-                    read(
-                        parser,
-                        null,
-                        -1,
-                        parser.getNamespace(),
-                        parser.getName(),
-                        PropertyInfo.OBJECT_TYPE);
-
+                Object o = read(parser, null, -1, parser.getNamespace(), parser.getName(), PropertyInfo.OBJECT_TYPE);
                 if ("1".equals(rootAttr) || bodyIn == null)
                     bodyIn = o;
-
                 parser.nextTag();
             }
         }
-        //System.out.println ("leaving root read");
     }
 
-    protected void readSerializable(XmlPullParser parser, KvmSerializable obj)
-        throws IOException, XmlPullParserException {
-
+    protected void readSerializable(XmlPullParser parser, KvmSerializable obj) throws IOException, XmlPullParserException {
         int testIndex = -1; // inc at beg. of loop for perf. reasons
         int sourceIndex = 0;
         int cnt = obj.getPropertyCount();
@@ -124,42 +94,27 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         while (true) {
             if (parser.nextTag() == XmlPullParser.END_TAG)
                 break;
-
             String name = parser.getName();
-            //      System.out.println ("tagname:"+name);
-
             int countdown = cnt;
-
             while (true) {
                 if (countdown-- == 0)
                     throw new RuntimeException("Unknwon Property: " + name);
-
                 if (++testIndex >= cnt)
                     testIndex = 0;
-
                 obj.getPropertyInfo(testIndex, properties, info);
-                if (info.name == null
-                    ? testIndex == sourceIndex
-                    : (info.name.equals(name)
-                        && info == null
-                        || info.namespace.equals(parser.getNamespace())))
+                if (info.name == null ? testIndex == sourceIndex : (info.name.equals(name) && info == null || info.namespace.equals(parser.getNamespace())))
                     break;
             }
-
-            obj.setProperty(
-                testIndex,
-                read(parser, obj, testIndex, null, null, info));
-
+            obj.setProperty(testIndex, read(parser, obj, testIndex, null, null, info));
             sourceIndex = 0;
         }
-
         parser.require(XmlPullParser.END_TAG, null, null);
     }
 
-    /** 
-     * If the type of the object cannot be determined, and thus
-     * no Marshal class can handle the object, this method is
-     * called. It will build either a SoapPrimitive or a SoapObject
+    /**
+     * If the type of the object cannot be determined, and thus no Marshal class
+     * can handle the object, this method is called. It will build either a
+     * SoapPrimitive or a SoapObject
      * 
      * @param parser
      * @param typeNamespace
@@ -169,165 +124,95 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * @throws XmlPullParserException
      */
 
-    protected Object readUnknown(
-        XmlPullParser parser,
-        String typeNamespace,
-        String typeName)
-        throws IOException, XmlPullParserException {
-
+    protected Object readUnknown(XmlPullParser parser, String typeNamespace, String typeName) throws IOException, XmlPullParserException {
         String name = parser.getName();
         String namespace = parser.getNamespace();
-
         parser.next(); // move to text, inner start tag or end tag
-
         Object result = null;
-
         String text = null;
-
         if (parser.getEventType() == XmlPullParser.TEXT) {
             text = parser.getText();
             result = new SoapPrimitive(typeNamespace, typeName, text);
             parser.next();
-        }
-        else if (parser.getEventType() == XmlPullParser.END_TAG) {
+        } else if (parser.getEventType() == XmlPullParser.END_TAG) {
             result = new SoapObject(typeNamespace, typeName);
         }
 
         if (parser.getEventType() == XmlPullParser.START_TAG) {
-
             if (text != null && text.trim().length() != 0) {
                 throw new RuntimeException("Malformed input: Mixed content");
             }
-
             SoapObject so = new SoapObject(typeNamespace, typeName);
-
             while (parser.getEventType() != XmlPullParser.END_TAG) {
-                so.addProperty(
-                    parser.getName(),
-                    read(
-                        parser,
-                        so,
-                        so.getPropertyCount(),
-                        null,
-                        null,
-                        PropertyInfo.OBJECT_TYPE));
-
+                so.addProperty(parser.getName(), read(parser, so, so.getPropertyCount(), null, null, PropertyInfo.OBJECT_TYPE));
                 parser.nextTag();
             }
-
             result = so;
         }
-
         parser.require(XmlPullParser.END_TAG, namespace, name);
-
         return result;
     }
 
     private int getIndex(String value, int start, int dflt) {
         if (value == null)
             return dflt;
-
-        return value.length() - start < 3
-            ? dflt
-            : Integer.parseInt(value.substring(start + 1, value.length() - 1));
+        return value.length() - start < 3 ? dflt : Integer.parseInt(value.substring(start + 1, value.length() - 1));
     }
 
-    /** Reads a vector. Precondition: on "outer" start tag! */
 
-    protected void readVector(
-        XmlPullParser parser,
-        Vector v,
-        PropertyInfo elementType)
-        throws IOException, XmlPullParserException {
-
+    protected void readVector(XmlPullParser parser, Vector v, PropertyInfo elementType) throws IOException, XmlPullParserException {
         String namespace = null;
         String name = null;
         int size = v.size();
         boolean dynamic = true;
-
         String type = parser.getAttributeValue(enc, "arrayType");
         if (type != null) {
-
             int cut0 = type.indexOf(':');
             int cut1 = type.indexOf("[", cut0);
             name = type.substring(cut0 + 1, cut1);
             String prefix = cut0 == -1 ? "" : type.substring(0, cut0);
             namespace = parser.getNamespace(prefix);
-
             size = getIndex(type, cut1, -1);
-
             if (size != -1) {
                 v.setSize(size);
                 dynamic = false;
             }
         }
-
         if (elementType == null)
             elementType = PropertyInfo.OBJECT_TYPE;
-
         parser.nextTag();
-
         int position = getIndex(parser.getAttributeValue(enc, "offset"), 0, 0);
-
         while (parser.getEventType() != XmlPullParser.END_TAG) {
             // handle position
-
-            position =
-                getIndex(
-                    parser.getAttributeValue(enc, "position"),
-                    0,
-                    position);
-
+            position = getIndex(parser.getAttributeValue(enc, "position"), 0, position);
             if (dynamic && position >= size) {
                 size = position + 1;
                 v.setSize(size);
             }
-
             // implicit handling of position exceeding specified size
-            v.setElementAt(
-                read(parser, v, position, namespace, name, elementType),
-                position);
-
+            v.setElementAt(read(parser, v, position, namespace, name, elementType), position);
             position++;
             parser.nextTag();
         }
-
         parser.require(XmlPullParser.END_TAG, null, null);
     }
 
-    /** 
-     * Builds an object from the XML stream. This method
-     * is public for usage in conjuction with Marshal subclasses. 
-     * Precondition: On the start tag of the object or property, 
-     * so href can be read. */
+    /**
+     * Builds an object from the XML stream. This method is public for usage in
+     * conjuction with Marshal subclasses. Precondition: On the start tag of the
+     * object or property, so href can be read.
+     */
 
-    public Object read(
-        XmlPullParser parser,
-        Object owner,
-        int index,
-        String namespace,
-        String name,
-        PropertyInfo expected)
-        throws IOException, XmlPullParserException {
-
-        //  System.out.println ("in read");
-
-        // determine wire element type
-
+    public Object read(XmlPullParser parser, Object owner, int index, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
         String elementName = parser.getName();
-
         String href = parser.getAttributeValue(null, "href");
         Object obj;
-
         if (href != null) {
             if (owner == null)
                 throw new RuntimeException("href at root level?!?");
-
             href = href.substring(1);
             obj = idMap.get(href);
-
             if (obj == null || obj instanceof FwdRef) {
-
                 FwdRef f = new FwdRef();
                 f.next = (FwdRef) obj;
                 f.obj = owner;
@@ -335,55 +220,39 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 idMap.put(href, f);
                 obj = null;
             }
-
             parser.nextTag(); // start tag
             parser.require(XmlPullParser.END_TAG, null, elementName);
-        }
-        else {
+        } else {
             String nullAttr = parser.getAttributeValue(xsi, "nil");
             String id = parser.getAttributeValue(null, "id");
-
             if (nullAttr == null)
                 nullAttr = parser.getAttributeValue(xsi, "null");
-
             if (nullAttr != null && SoapEnvelope.stringToBoolean(nullAttr)) {
                 obj = null;
                 parser.nextTag();
                 parser.require(XmlPullParser.END_TAG, null, elementName);
-            }
-            else {
+            } else {
                 String type = parser.getAttributeValue(xsi, "type");
-
                 if (type != null) {
                     int cut = type.indexOf(':');
-
                     name = type.substring(cut + 1);
                     String prefix = cut == -1 ? "" : type.substring(0, cut);
                     namespace = parser.getNamespace(prefix);
-                }
-                else if (name == null && namespace == null) {
+                } else if (name == null && namespace == null) {
                     if (parser.getAttributeValue(enc, "arrayType") != null) {
                         namespace = enc;
                         name = "Array";
-                    }
-                    else {
+                    } else {
                         Object[] names = getInfo(expected.type, null);
-
                         namespace = (String) names[0];
                         name = (String) names[1];
-
-                        //  System.out.println ("getInfo for "+expected.type+": {"+namespace+"}"+name);
                     }
                 }
-
                 obj = readInstance(parser, namespace, name, expected);
-
                 if (obj == null)
                     obj = readUnknown(parser, namespace, name);
             }
-
             // finally, care about the id....
-
             if (id != null) {
                 Object hlp = idMap.get(id);
                 if (hlp instanceof FwdRef) {
@@ -392,170 +261,106 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                         if (f.obj instanceof KvmSerializable)
                             ((KvmSerializable) f.obj).setProperty(f.index, obj);
                         else
-                             ((Vector) f.obj).setElementAt(obj, f.index);
-
+                            ((Vector) f.obj).setElementAt(obj, f.index);
                         f = f.next;
-                    }
-                    while (f != null);
-                }
-                else if (hlp != null)
+                    } while (f != null);
+                } else if (hlp != null)
                     throw new RuntimeException("double ID");
-
                 idMap.put(id, obj);
             }
         }
 
         parser.require(XmlPullParser.END_TAG, null, elementName);
-
-        //  System.out.println ("leaving read");
-
         return obj;
     }
 
-    /** 
-     * Returns a new object read from the given parser.  If no
-     * mapping is found, null is returned.  This method is used by
-     * the SoapParser in order to convert the XML code to Java
-     * objects. */
+    /**
+     * Returns a new object read from the given parser. If no mapping is found,
+     * null is returned. This method is used by the SoapParser in order to
+     * convert the XML code to Java objects.
+     */
 
-    public Object readInstance(
-        XmlPullParser parser,
-        String namespace,
-        String name,
-        PropertyInfo expected)
-        throws IOException, XmlPullParserException {
-
-        /*  if (xsdNamespace.equals (namespace)) {
-            if ("int".equals (name)) 
-            return new Integer (Integer.parseInt (readText (parser)));
-            else if ("long".equals (name))
-            return new Long (Long.parseLong (readText (parser)));
-            else if ("string".equals (name))
-            return readText (parser);
-            else if ("boolean".equals (name)) 
-            return new Boolean (SoapEnvelope.stringToBoolean (readText (parser)));
-            }*/
-
-        Class clazz = null;
-
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
         Object obj = qNameToClass.get(new SoapPrimitive(namespace, name, null));
-
         if (obj == null)
             return null;
-
         if (obj instanceof Marshal)
-            return ((Marshal) obj).readInstance(
-                parser,
-                namespace,
-                name,
-                expected);
-
+            return ((Marshal) obj).readInstance(parser, namespace, name, expected);
         if (obj instanceof SoapObject)
             obj = ((SoapObject) obj).newInstance();
         else
             try {
                 obj = ((Class) obj).newInstance();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e.toString());
             }
-
         // ok, obj is now the instance, fill it....
-
         if (obj instanceof KvmSerializable)
             readSerializable(parser, (KvmSerializable) obj);
         else if (obj instanceof Vector)
             readVector(parser, (Vector) obj, expected.elementType);
         else
             throw new RuntimeException("no deserializer for " + obj.getClass());
-
         return obj;
     }
 
-    /** 
-     * Returns a string array containing the namespace, name, id and
-     * Marshal object for the given java object. This method is used
-     * by the SoapWriter in order to map Java objects to the
-     * corresponding SOAP section five XML code.*/
+    /**
+     * Returns a string array containing the namespace, name, id and Marshal
+     * object for the given java object. This method is used by the SoapWriter
+     * in order to map Java objects to the corresponding SOAP section five XML
+     * code.
+     */
 
     public Object[] getInfo(Object type, Object instance) {
-
         if (type == null) {
-            if (instance instanceof SoapObject
-                || instance instanceof SoapPrimitive)
+            if (instance instanceof SoapObject || instance instanceof SoapPrimitive)
                 type = instance;
             else
                 type = instance.getClass();
         }
-
         if (type instanceof SoapObject) {
             SoapObject so = (SoapObject) type;
             return new Object[] { so.getNamespace(), so.getName(), null, null };
         }
-
         if (type instanceof SoapPrimitive) {
             SoapPrimitive sp = (SoapPrimitive) type;
-            return new Object[] {
-                sp.getNamespace(),
-                sp.getName(),
-                null,
-                DEFAULT_MARSHAL };
+            return new Object[] { sp.getNamespace(), sp.getName(), null, DEFAULT_MARSHAL };
         }
-
         if ((type instanceof Class) && type != PropertyInfo.OBJECT_CLASS) {
-
-            Object[] tmp =
-                (Object[]) classToQName.get(((Class) type).getName());
-
+            Object[] tmp = (Object[]) classToQName.get(((Class) type).getName());
             if (tmp != null)
                 return tmp;
         }
-
         return new Object[] { xsd, "anyType", null, null };
     }
 
-    /** 
-     * Defines a direct mapping from a namespace and name to a java
-     * class (and vice versa), using the given marshal mechanism */
+    /**
+     * Defines a direct mapping from a namespace and name to a java class (and
+     * vice versa), using the given marshal mechanism
+     */
 
-    public void addMapping(
-        String namespace,
-        String name,
-        Class clazz,
-        Marshal marshal) {
-
-        qNameToClass.put(
-            new SoapPrimitive(namespace, name, null),
-            marshal == null ? (Object) clazz : marshal);
-
-        classToQName.put(
-            clazz.getName(),
-            new Object[] { namespace, name, null, marshal });
-
-        //    if (prefixMap.getPrefix(namespace) == null)
-        //       prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), namespace);
+    public void addMapping(String namespace, String name, Class clazz, Marshal marshal) {
+        qNameToClass.put(new SoapPrimitive(namespace, name, null), marshal == null ? (Object) clazz : marshal);
+        classToQName.put(clazz.getName(), new Object[] { namespace, name, null, marshal });
     }
 
-    /** Defines a direct mapping from a namespace and name to a java
-        class (and vice versa) */
+    /**
+     * Defines a direct mapping from a namespace and name to a java class (and
+     * vice versa)
+     */
 
     public void addMapping(String namespace, String name, Class clazz) {
-
         addMapping(namespace, name, clazz, null);
     }
 
-    /** 
-     * Adds a SoapObject to the class map. During parsing,
-     * objects of the given type (namespace/name) will be
-     * mapped to corresponding copies of the given SoapObject,
-     * maintaining the structure of the template. */
+    /**
+     * Adds a SoapObject to the class map. During parsing, objects of the given
+     * type (namespace/name) will be mapped to corresponding copies of the given
+     * SoapObject, maintaining the structure of the template.
+     */
 
     public void addTemplate(SoapObject so) {
-
         qNameToClass.put(new SoapPrimitive(so.namespace, so.name, null), so);
-
-        //     if (prefixMap.getPrefix(so.namespace) == null)
-        //        prefixMap = new PrefixMap(prefixMap, "n" + (cnt++), so.namespace);
     }
 
     public Object getResult() {
@@ -566,64 +371,44 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     /** Serializes the given object */
 
     public void writeBody(XmlSerializer writer) throws IOException {
-
         multiRef = new Vector();
         multiRef.addElement(bodyOut);
         types.addElement(PropertyInfo.OBJECT_TYPE);
-
         for (int i = 0; i < multiRef.size(); i++) {
-
             Object obj = multiRef.elementAt(i);
-
             Object[] qName = getInfo(null, obj);
-
             writer.startTag((String) qName[0], (String) qName[1]);
-            writer.attribute(
-                null,
-                "id",
-                qName[2] == null ? ("o" + i) : (String) qName[2]);
-
+            writer.attribute(null, "id", qName[2] == null ? ("o" + i) : (String) qName[2]);
             if (i == 0)
                 writer.attribute(enc, "root", "1");
-
             if (qName[3] != null)
-                 ((Marshal) qName[3]).writeInstance(writer, obj);
+                ((Marshal) qName[3]).writeInstance(writer, obj);
             else if (obj instanceof KvmSerializable)
                 writeObjectBody(writer, (KvmSerializable) obj);
             else if (obj instanceof Vector)
-                writeVectorBody(
-                    writer,
-                    (Vector) obj,
-                    ((PropertyInfo) types.elementAt(i)).elementType);
+                writeVectorBody(writer, (Vector) obj, ((PropertyInfo) types.elementAt(i)).elementType);
             else
                 throw new RuntimeException("Cannot serialize: " + obj);
-
             writer.endTag((String) qName[0], (String) qName[1]);
         }
     }
 
-    /** Writes the body of an KvmSerializable object. This
-    method is public for access from Marshal subclasses. */
+    /**
+     * Writes the body of an KvmSerializable object. This method is public for
+     * access from Marshal subclasses.
+     */
 
-    public void writeObjectBody(XmlSerializer writer, KvmSerializable obj)
-        throws IOException {
-
+    public void writeObjectBody(XmlSerializer writer, KvmSerializable obj) throws IOException {
         PropertyInfo info = new PropertyInfo();
         int cnt = obj.getPropertyCount();
-
         String namespace = dotNet ? writer.getNamespace() : "";
-
         for (int i = 0; i < cnt; i++) {
-
             obj.getPropertyInfo(i, properties, info);
-
-            //      Object value = obj.getProperty (i);
-
             if ((info.flags & PropertyInfo.TRANSIENT) == 0) {
+                // TODO: looks broken here
                 String nsp = info.namespace;
                 if (nsp == null)
                     nsp = info.namespace;
-
                 writer.startTag(nsp, info.name);
                 writeProperty(writer, obj.getProperty(i), info);
                 writer.endTag(nsp, info.name);
@@ -631,19 +416,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         }
     }
 
-    protected void writeProperty(
-        XmlSerializer writer,
-        Object obj,
-        PropertyInfo type)
-        throws IOException {
-
+    protected void writeProperty(XmlSerializer writer, Object obj, PropertyInfo type) throws IOException {
         if (obj == null) {
             writer.attribute(xsi, version >= VER12 ? "nil" : "null", "true");
             return;
         }
-
         Object[] qName = getInfo(null, obj);
-
         if (type.multiRef || qName[2] != null) {
             int i = multiRef.indexOf(obj);
             if (i == -1) {
@@ -651,27 +429,14 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 multiRef.addElement(obj);
                 types.addElement(type);
             }
-
-            writer.attribute(
-                null,
-                "href",
-                qName[2] == null ? ("#o" + i) : "#" + qName[2]);
-        }
-        else {
-
+            writer.attribute(null, "href", qName[2] == null ? ("#o" + i) : "#" + qName[2]);
+        } else {
             if (!implicitTypes || obj.getClass() != type.type) {
-
                 String prefix = writer.getPrefix((String) qName[0], true);
-
-                /*                if (prefix == null)
-                                    throw new RuntimeException(
-                                        "Prefix for namespace " + qName[0] + " undefined!");
-                */
                 writer.attribute(xsi, "type", prefix + ":" + qName[1]);
             }
-
             if (qName[3] != null)
-                 ((Marshal) qName[3]).writeInstance(writer, obj);
+                ((Marshal) qName[3]).writeInstance(writer, obj);
             else if (obj instanceof KvmSerializable)
                 writeObjectBody(writer, (KvmSerializable) obj);
             else if (obj instanceof Vector)
@@ -681,29 +446,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         }
     }
 
-    protected void writeVectorBody(
-        XmlSerializer writer,
-        Vector vector,
-        PropertyInfo elementType)
-        throws IOException {
-
+    protected void writeVectorBody(XmlSerializer writer, Vector vector, PropertyInfo elementType) throws IOException {
         if (elementType == null)
             elementType = PropertyInfo.OBJECT_TYPE;
-
         int cnt = vector.size();
-
         Object[] arrType = getInfo(elementType.type, null);
-
-        writer.attribute(
-            enc,
-            "arrayType",
-            writer.getPrefix((String) arrType[0], false)
-                + ":"
-                + arrType[1]
-                + "["
-                + cnt
-                + "]");
-
+        writer.attribute(enc, "arrayType", writer.getPrefix((String) arrType[0], false) + ":" + arrType[1] + "[" + cnt + "]");
         boolean skipped = false;
         for (int i = 0; i < cnt; i++) {
             if (vector.elementAt(i) == null)
@@ -714,7 +462,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                     writer.attribute(enc, "position", "[" + i + "]");
                     skipped = false;
                 }
-
                 writeProperty(writer, vector.elementAt(i), elementType);
                 writer.endTag(null, "item");
             }

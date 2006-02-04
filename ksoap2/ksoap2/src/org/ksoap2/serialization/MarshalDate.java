@@ -24,28 +24,17 @@ import java.util.Date;
 import java.io.*;
 import org.xmlpull.v1.*;
 import org.kobjects.isodate.*;
+
+
 /** Marshal class for Dates. */
-
 public class MarshalDate implements Marshal {
-
     public static Class DATE_CLASS = new Date().getClass();
 
-    public Object readInstance(
-        XmlPullParser parser,
-        String namespace,
-        String name,
-        PropertyInfo expected)
-        throws IOException, XmlPullParserException {
-
-        Object result =
-            IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME);
-
-        return result;
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
+        return IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME);
     }
 
-    public void writeInstance(XmlSerializer writer, Object obj)
-        throws IOException {
-
+    public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
         writer.text(IsoDate.dateToString((Date) obj, IsoDate.DATE_TIME));
     }
 

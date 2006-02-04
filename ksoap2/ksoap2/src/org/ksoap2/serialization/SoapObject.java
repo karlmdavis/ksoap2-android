@@ -99,12 +99,10 @@ public class SoapObject implements KvmSerializable {
     }
 
     public Object getProperty(String name) {
-
         for (int i = 0; i < data.size(); i++) {
             if (name.equals(((PropertyInfo) info.elementAt(i)).name))
                 return data.elementAt(i);
         }
-
         throw new RuntimeException("illegal property: " + name);
     }
 
@@ -176,7 +174,6 @@ public class SoapObject implements KvmSerializable {
      *            the value of the property
      */
     public SoapObject addProperty(String name, Object value) {
-
         PropertyInfo propertyInfo = new PropertyInfo();
         propertyInfo.name = name;
         propertyInfo.type = value == null ? PropertyInfo.OBJECT_CLASS : value.getClass();
