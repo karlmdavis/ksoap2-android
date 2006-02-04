@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="ksoap2" default="build" basedir=".">
+	<property name="version" value="2.0.2" />
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="src" />
 	<property name="midp_src.dir" value="src_midp" />
@@ -55,7 +56,7 @@
 	</target>
 
 	<target name="build_j2me_full.jar" depends="build.classes" description="--> Builds a J2ME jar with full kXML and kobjects libraries contained within.">
-		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-full.jar">
+		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-full-${version}.jar">
 			<fileset dir="${build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
@@ -68,7 +69,7 @@
 	</target>
 
 	<target name="build_j2me_core.jar" depends="build.classes" description="--> Builds a J2ME jar with minimal kXML and kobjects libraries included.">
-		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-core.jar">
+		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-core-${version}.jar">
 			<fileset dir="${lib.class.dir}">
 				<include name="**/IsoDate.class" />
 				<include name="**/XmlPullParser.class" />
@@ -90,7 +91,7 @@
 	</target>
 
 	<target name="build_j2me_nodeps.jar" depends="build.classes" description="--> Builds a J2ME jar with no outside libraries contained.">
-		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-nodeps.jar">
+		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-nodeps-${version}.jar">
 			<fileset dir="${build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
@@ -100,7 +101,7 @@
 	</target>
 
 	<target name="build_j2se_full.jar" depends="build.classes" description="--> Builds a J2SE jar with full kXML and kobjects libraries contained within.">
-		<jar jarfile="${dist.dir}/${ant.project.name}-j2se-full.jar">
+		<jar jarfile="${dist.dir}/${ant.project.name}-j2se-full-${version}.jar">
 			<fileset dir="${build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransport.class" />
@@ -113,8 +114,8 @@
 	</target>
 
 	<target name="build_src" depends="init,javadoc">
-		<delete file="${dist.dir}/${ant.project.name}-src.zip" />
-		<zip zipfile="${dist.dir}/${ant.project.name}-src.zip">
+		<delete file="${dist.dir}/${ant.project.name}-src*.zip" />
+		<zip zipfile="${dist.dir}/${ant.project.name}-src-${version}.zip">
 			<fileset dir=".">
 				<include name="*/**" />
 				<exclude name=".*" />
