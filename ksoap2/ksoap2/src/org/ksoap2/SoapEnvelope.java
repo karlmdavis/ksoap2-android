@@ -23,6 +23,7 @@ package org.ksoap2;
 import java.io.*;
 
 import org.xmlpull.v1.*;
+import org.ksoap2.serialization.*;
 import org.kxml2.kdom.*;
 
 /**
@@ -222,6 +223,10 @@ public class SoapEnvelope {
         if (encodingStyle != null)
             writer.attribute(env, "encodingStyle", encodingStyle);
         ((Node) bodyOut).write(writer);
+    }
+
+    public void setOutputSoapObject(Object soapObject) {
+        bodyOut = soapObject;
     }
 
 }

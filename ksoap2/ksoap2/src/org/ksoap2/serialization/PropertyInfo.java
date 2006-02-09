@@ -36,29 +36,21 @@ public class PropertyInfo {
     public static final Class LONG_CLASS = new Long(0).getClass();
     public static final Class BOOLEAN_CLASS = new Boolean(true).getClass();
     public static final Class VECTOR_CLASS = new java.util.Vector().getClass();
-
     public static final PropertyInfo OBJECT_TYPE = new PropertyInfo();
-
     public static final int TRANSIENT = 1;
     public static final int MULTI_REF = 2;
     public static final int REF_ONLY = 4;
-
     /** Name of the property */
     public String name;
-
     /** Namespace of this property */
     public String namespace;
-
     public int flags;
-
     /**
      * Type of the property/elements. Should usually be an instance of Class.
      */
     public Object type = OBJECT_CLASS;
-
     /** if a property is multi-referenced, set this flag to true. */
     public boolean multiRef;
-
     /** Element type for array properties, null if not array prop. */
     public PropertyInfo elementType;
 

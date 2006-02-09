@@ -44,7 +44,9 @@ public interface KvmSerializable {
 
     Object getProperty(int index);
 
-    /** returns the number of serializable properties */
+    /** 
+     * @return the number of serializable properties 
+     */
 
     int getPropertyCount();
 

@@ -1,5 +1,6 @@
 /* Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
- *
+ * Copyright (c) 2006, James Seigel, Calgary, AB., Canada
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -18,30 +19,48 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package org.ksoap2.transport;
 
-import java.util.Date;
 import java.io.*;
-import org.xmlpull.v1.*;
-import org.kobjects.isodate.*;
+import java.net.*;
 
+public class ServiceConnectionSE implements ServiceConnection {
 
-/** 
- * Marshal class for Dates. 
- */
-public class MarshalDate implements Marshal {
-    public static Class DATE_CLASS = new Date().getClass();
+    private HttpURLConnection connection;
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
-        return IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME);
+    public ServiceConnectionSE(String url) throws IOException {
+        connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setUseCaches(false);
+        connection.setDoOutput(true);
+        connection.setDoInput(true);
     }
 
-    public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
-        writer.text(IsoDate.dateToString((Date) obj, IsoDate.DATE_TIME));
+    public void connect() throws IOException {
+        connection.connect();
     }
 
-    public void register(SoapSerializationEnvelope cm) {
-        cm.addMapping(cm.xsd, "dateTime", MarshalDate.DATE_CLASS, this);
+    public void disconnect() {
+        connection.disconnect();
+    }
+
+    public void setRequestProperty(String string, String soapAction) {
+        connection.setRequestProperty(string, soapAction);
+    }
+
+    public void setRequestMethod(String post) throws ProtocolException {
+        connection.setRequestMethod(post);
+    }
+
+    public OutputStream openOutputStream() throws IOException {
+        return connection.getOutputStream();
+    }
+
+    public InputStream openInputStream() throws IOException {
+        return connection.getInputStream();
+    }
+
+    public InputStream getErrorStream() {
+        return connection.getErrorStream();
     }
 
 }

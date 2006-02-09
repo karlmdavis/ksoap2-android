@@ -44,7 +44,6 @@ public class MarshalHashtable implements Marshal {
     public static final String NAME = "Map";
     /** CLDC does not support .class, so this helper is needed. */
     public static final Class HASHTABLE_CLASS = new Hashtable().getClass();
-
     SoapSerializationEnvelope envelope;
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {

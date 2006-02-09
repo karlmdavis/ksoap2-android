@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="ksoap2" default="build" basedir=".">
+	<property name="build.dir" value="build" />
 	<property name="version" value="2.0.2" />
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="src" />
+	<property name="test.dir" value="test" />
 	<property name="midp_src.dir" value="src_midp" />
 	<property name="j2se_src.dir" value="src_j2se" />
-	<property name="build.dir" value="build" />
+	<property name="src.build.dir" value="${build.dir}/src" />
+	<property name="test.build.dir" value="${build.dir}/test" />
 	<property name="lib.class.dir" value="libraryClasses" />
 	<property name="dist.dir" value="dist" />
 	<property name="api.dir" value="doc/api" />
@@ -15,6 +18,12 @@
 	<path id="lib.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
+			<exclude name="**/junit.jar" />
+		</fileset>
+	</path>
+	<path id="junit.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/junit.jar" />
 		</fileset>
 	</path>
 
@@ -24,11 +33,30 @@
 
 	<target name="build" depends="build_src, build_j2me_full.jar, build_j2se_full.jar, build_j2me_nodeps.jar, build_j2me_core.jar" description="--> Builds all products." />
 
+	<target name="release" depends="test,build" description="--> Builds all products and runs the tests." />
+	
+	<target name="test" depends="build.test.classes" description="--> Run the unit tests">
+		<junit>
+			<classpath refid="lib.classpath" />
+			<classpath refid="junit.classpath" />
+			<classpath path="${src.build.dir}" />
+			<classpath path="${test.build.dir}" />
+			<formatter type="brief" usefile="false" />
+			<batchtest fork="yes" todir=".">
+				<fileset dir="${test.dir}">
+					<include name="**/*Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
 	<target name="clean" description="--> Cleans up built products">
 		<delete dir="${dist.dir}" />
 		<delete dir="${build.dir}" />
 		<delete dir="${lib.class.dir}" />
 		<delete dir="${api.dir}" />
+		<delete file="tagdiff.xml" />
+		<delete file="tagdiff.html" />
 	</target>
 
 	<target name="javadoc" description="--> Creates the javadoc for the ksoap2 source.">
@@ -37,17 +65,28 @@
 		<javadoc public="yes" destdir="${api.dir}" author="true" version="true" use="true" windowtitle="KSoap 2 API">
 			<classpath refid="lib.classpath" />
 			<doctitle>KSoap 2 API</doctitle>
-			<sourcepath location="${src.dir}"/>
-			<package name="org.ksoap2.*"/>
+			<sourcepath location="${src.dir}" />
+			<package name="org.ksoap2.*" />
 		</javadoc>
 	</target>
 
+	<target name="build.test.classes" depends="build.classes">
+		<mkdir dir="${test.build.dir}" />
+		<javac destdir="${test.build.dir}" optimize="true" target="${java.class.target.level}" debuglevel="true">
+			<classpath refid="lib.classpath" />
+			<classpath refid="junit.classpath" />
+			<classpath path="${src.build.dir}" />
+			<src path="${test.dir}" />
+			<src path="${midp_src.dir}" />
+			<src path="${j2se_src.dir}" />
+		</javac>
+	</target>
+
 	<target name="build.classes" depends="init">
-		<delete dir="${build.dir}" />
-		<mkdir dir="${build.dir}" />
+		<mkdir dir="${src.build.dir}" />
 		<unzip src="${lib.dir}/kobjects-j2me.jar" dest="${lib.class.dir}" overwrite="true" />
 		<unzip src="${lib.dir}/kxml2.jar" dest="${lib.class.dir}" overwrite="true" />
-		<javac destdir="${build.dir}" optimize="true" target="${java.class.target.level}" debuglevel="none">
+		<javac destdir="${src.build.dir}" optimize="true" target="${java.class.target.level}" debuglevel="none">
 			<classpath refid="lib.classpath" />
 			<src path="${src.dir}" />
 			<src path="${midp_src.dir}" />
@@ -57,7 +96,7 @@
 
 	<target name="build_j2me_full.jar" depends="build.classes" description="--> Builds a J2ME jar with full kXML and kobjects libraries contained within.">
 		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-full-${version}.jar">
-			<fileset dir="${build.dir}">
+			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
 				<include name="META-INF/**" />
@@ -82,9 +121,11 @@
 				<include name="**/XmlSerializer.class" />
 				<include name="**/XmlPullParserException.class" />
 			</fileset>
-			<fileset dir="${build.dir}">
+			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
+				<exclude name="**/ServiceConnectionSE.class" />
+				<exclude name="**/MarshalFloat.class" />
 				<include name="META-INF/**" />
 			</fileset>
 		</jar>
@@ -92,9 +133,11 @@
 
 	<target name="build_j2me_nodeps.jar" depends="build.classes" description="--> Builds a J2ME jar with no outside libraries contained.">
 		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-nodeps-${version}.jar">
-			<fileset dir="${build.dir}">
+			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
+				<exclude name="**/ServiceConnectionSE.class" />
+				<exclude name="**/MarshalFloat.class" />
 				<include name="META-INF/**" />
 			</fileset>
 		</jar>
@@ -102,9 +145,10 @@
 
 	<target name="build_j2se_full.jar" depends="build.classes" description="--> Builds a J2SE jar with full kXML and kobjects libraries contained within.">
 		<jar jarfile="${dist.dir}/${ant.project.name}-j2se-full-${version}.jar">
-			<fileset dir="${build.dir}">
+			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransport.class" />
+				<exclude name="**/ServiceConnectionMidp.class" />
 				<include name="META-INF/**" />
 			</fileset>
 			<fileset dir="${lib.class.dir}">
@@ -125,7 +169,7 @@
 			</fileset>
 		</zip>
 	</target>
-	
+
 	<target name="deploy.to.sf" depends="build">
 		<ftp server="upload.sourceforge.net" userid="anonymous" remotedir="/incoming" password="sfdeploy@paddlethis.com">
 			<fileset dir="${dist.dir}" />

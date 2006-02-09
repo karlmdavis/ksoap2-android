@@ -24,25 +24,13 @@
 package org.ksoap2.transport;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
-import org.ksoap2.SoapEnvelope;
-import org.kxml2.io.KXmlParser;
-import org.kxml2.io.KXmlSerializer;
+import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
-public class HttpTransportSE {
-    String url;
-    HttpURLConnection connection;
+public class HttpTransportSE extends Transport {
     OutputStream os;
     InputStream is;
-    /** Set to true if debugging */
-    public boolean debug;
-    /** String dump of request for debugging. */
-    public String requestDump;
-    /** String dump of response for debugging */
-    public String responseDump;
     private boolean connected;
 
     /**
@@ -59,17 +47,6 @@ public class HttpTransportSE {
     }
 
     /**
-     * Set the target url.
-     * 
-     * @param url
-     *            the target url.
-     */
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    /**
      * set the desired soapAction header field
      * 
      * @param soapAction
@@ -79,37 +56,25 @@ public class HttpTransportSE {
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
         if (soapAction == null)
             soapAction = "\"\"";
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        XmlSerializer xw = new KXmlSerializer();
-        xw.setOutput(bos, null);
-        envelope.write(xw);
-        xw.flush();
-        bos.write('\r');
-        bos.write('\n');
-        byte[] requestData = bos.toByteArray();
-        bos = null;
-        xw = null;
+        byte[] requestData = createRequestData(envelope);
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
         connected = true;
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.setUseCaches(false);
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
+        ServiceConnection connection = getServiceConnection();
         connection.setRequestProperty("User-Agent", "kSOAP/2.0");
         connection.setRequestProperty("SOAPAction", soapAction);
         connection.setRequestProperty("Content-Type", "text/xml");
         connection.setRequestProperty("Connection", "close");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
         connection.setRequestMethod("POST");
-        OutputStream os = connection.getOutputStream();
+        OutputStream os = connection.openOutputStream();
         os.write(requestData, 0, requestData.length);
         os.close();
         requestData = null;
         InputStream is;
         try {
             connection.connect();
-            is = connection.getInputStream();
+            is = connection.openInputStream();
         } catch (IOException e) {
             is = connection.getErrorStream();
             if (is == null) {
@@ -118,7 +83,7 @@ public class HttpTransportSE {
             }
         }
         if (debug) {
-            bos = new ByteArrayOutputStream();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             byte[] buf = new byte[256];
             while (true) {
                 int rd = is.read(buf, 0, 256);
@@ -131,28 +96,10 @@ public class HttpTransportSE {
             is.close();
             is = new ByteArrayInputStream(buf);
         }
-        XmlPullParser xp = new KXmlParser();
-        xp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-        xp.setInput(is, null);
-        envelope.parse(xp);
+        parseResponse(envelope, is);
     }
 
-    public void reset() {
-        connected = false;
-        if (is != null) {
-            try {
-                is.close();
-            } catch (Throwable e) {
-            }
-            is = null;
-        }
-        if (connection != null) {
-            try {
-                connection.disconnect();
-            } catch (Throwable e) {
-            }
-            connection = null;
-        }
+    protected ServiceConnection getServiceConnection() throws IOException {
+        return new ServiceConnectionSE(url);
     }
-
 }

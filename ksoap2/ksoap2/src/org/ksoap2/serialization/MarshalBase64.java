@@ -25,11 +25,11 @@ import org.ksoap2.*;
 import org.kobjects.base64.*;
 import org.xmlpull.v1.*;
 
-/** Base64 (de)serializer */
-
+/** 
+ * Base64 (de)serializer 
+ */
 public class MarshalBase64 implements Marshal {
-    static byte[] BA_WORKAROUND = new byte[0];
-    public static Class BYTE_ARRAY_CLASS = BA_WORKAROUND.getClass();
+    public static Class BYTE_ARRAY_CLASS = new byte[0].getClass();
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
         return Base64.decode(parser.nextText());

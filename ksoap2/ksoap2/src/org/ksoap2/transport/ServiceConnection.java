@@ -1,5 +1,6 @@
 /* Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
- *
+ * Copyright (c) 2006, James Seigel, Calgary, AB., Canada
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -18,38 +19,24 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package org.ksoap2.transport;
 
 import java.io.*;
-import org.xmlpull.v1.*;
+import java.net.*;
 
-/** 
- * Interface for custom (de)serialization. 
- */
+public interface ServiceConnection {
+    public void connect() throws IOException;
 
-public interface Marshal {
+    public void disconnect() throws IOException;
 
-    /**
-     * This methods reads an instance from the given parser. For implementation,
-     * please note that the start and and tag must be consumed. This is not
-     * symmetric to writeInstance, but otherwise it would not be possible to
-     * access the attributes of the start tag here.
-     */
+    public void setRequestProperty(String string, String soapAction) throws IOException;
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException;
+    public void setRequestMethod(String post) throws ProtocolException, IOException;
 
-    /**
-     * Write the instance to the given XmlSerializer. In contrast to
-     * readInstance, it is not neccessary to care about the sorrounding start
-     * and end tags. Additional attributes must be writen before anything else
-     * is written.
-     */
+    public OutputStream openOutputStream() throws IOException;
 
-    public void writeInstance(XmlSerializer writer, Object instance) throws IOException;
+    public InputStream openInputStream() throws IOException;
 
-    /** 
-     * Register this Marshal with Envelope 
-     */
+    public InputStream getErrorStream();
 
-    public void register(SoapSerializationEnvelope cm);
 }

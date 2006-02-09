@@ -25,10 +25,11 @@
 package org.ksoap2.transport;
 
 import java.io.*;
+
 import javax.microedition.io.*;
-import org.xmlpull.v1.*;
-import org.kxml2.io.*;
+
 import org.ksoap2.*;
+import org.xmlpull.v1.*;
 
 /**
  * Methods to facilitate SOAP calls over HTTP using the J2ME generic connection
@@ -64,22 +65,22 @@ import org.ksoap2.*;
  * look:<br>
  * 
  * <pre>
- *  private HttpTransport soap;
- *  ...
- *  TimerTask task =
- *  new TimerTask( ) { public void run( ) { soap.close( ); } };
- * 
- *  try {
- *  new Timer( ).schedule( task, TIMEOUT );
- *  soap.call( soapobject );  // invoke method
- *  task.cancel( );           // cancel the timeout
- * 
- *  } catch ( InterruptedIOException e ) {
- *  // handle timeout here...
- * 
- *  } catch ( IOException e ) {
- *  // some other io problem...
- *  }
+ *   private HttpTransport soap;
+ *   ...
+ *   TimerTask task =
+ *   new TimerTask( ) { public void run( ) { soap.close( ); } };
+ *  
+ *   try {
+ *   new Timer( ).schedule( task, TIMEOUT );
+ *   soap.call( soapobject );  // invoke method
+ *   task.cancel( );           // cancel the timeout
+ *  
+ *   } catch ( InterruptedIOException e ) {
+ *   // handle timeout here...
+ *  
+ *   } catch ( IOException e ) {
+ *   // some other io problem...
+ *   }
  * </pre>
  * 
  * <br>
@@ -101,20 +102,12 @@ import org.ksoap2.*;
  * outputstream will never return.
  */
 
-public class HttpTransport {
-    String url;
-    HttpConnection connection;
+public class HttpTransport extends Transport {
+    ServiceConnection connection;
     OutputStream os;
     InputStream is;
     /** state info */
     private boolean connected = false;
-    /** Set to true if debugging */
-    public boolean debug;
-    /** String dump of request for debugging. */
-    public String requestDump;
-    /** String dump of response for debugging */
-    public String responseDump;
-
     /**
      * Creates instance of HttpTransport with set url and SoapAction
      * 
@@ -128,16 +121,6 @@ public class HttpTransport {
     }
 
     /**
-     * Set the target url.
-     * 
-     * @param url
-     *            the target url.
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    /**
      * set the desired soapAction header field
      * 
      * @param soapAction
@@ -146,21 +129,12 @@ public class HttpTransport {
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
         if (soapAction == null)
             soapAction = "\"\"";
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        XmlSerializer xw = new KXmlSerializer();
-        xw.setOutput(bos, null);
-        envelope.write(xw);
-        xw.flush();
-        bos.write('\r');
-        bos.write('\n');
-        byte[] requestData = bos.toByteArray();
-        bos = null;
-        xw = null;
+        byte[] requestData = createRequestData(envelope);
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
         try {
             connected = true;
-            connection = (HttpConnection) Connector.open(url, Connector.READ_WRITE, true);
+            connection = getServiceConnection();
             connection.setRequestProperty("SOAPAction", soapAction);
             connection.setRequestProperty("Content-Type", "text/xml");
             connection.setRequestProperty("Content-Length", "" + requestData.length);
@@ -172,7 +146,7 @@ public class HttpTransport {
             requestData = null;
             is = connection.openInputStream();
             if (debug) {
-                bos = new ByteArrayOutputStream();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 byte[] buf = new byte[256];
                 while (true) {
                     int rd = is.read(buf, 0, 256);
@@ -185,10 +159,7 @@ public class HttpTransport {
                 is.close();
                 is = new ByteArrayInputStream(buf);
             }
-            XmlPullParser xp = new KXmlParser();
-            xp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-            xp.setInput(is, null);
-            envelope.parse(xp);
+            parseResponse(envelope, is);
         } finally {
             if (!connected)
                 throw new InterruptedIOException();
@@ -219,11 +190,15 @@ public class HttpTransport {
         }
         if (connection != null) {
             try {
-                connection.close();
+                connection.disconnect();
             } catch (Throwable e) {
             }
             connection = null;
         }
+    }
+
+    protected ServiceConnection getServiceConnection() throws IOException {
+        return new ServiceConnectionMidp(url);
     }
 
 }

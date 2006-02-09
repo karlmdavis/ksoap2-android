@@ -1,5 +1,5 @@
-/* Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
- *
+/* Copyright (c) 2006, James Seigel, Calgary, AB., Canada
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -18,30 +18,18 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package org.ksoap2;
 
-import java.util.Date;
-import java.io.*;
-import org.xmlpull.v1.*;
-import org.kobjects.isodate.*;
+import junit.framework.*;
 
+public class SoapFault_OutboundTest extends TestCase {
 
-/** 
- * Marshal class for Dates. 
- */
-public class MarshalDate implements Marshal {
-    public static Class DATE_CLASS = new Date().getClass();
-
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
-        return IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME);
+    protected void setUp() throws Exception {
+        super.setUp();
     }
 
-    public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
-        writer.text(IsoDate.dateToString((Date) obj, IsoDate.DATE_TIME));
-    }
 
-    public void register(SoapSerializationEnvelope cm) {
-        cm.addMapping(cm.xsd, "dateTime", MarshalDate.DATE_CLASS, this);
+    public void testToString() {
     }
 
 }
