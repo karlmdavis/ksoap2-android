@@ -90,7 +90,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         int sourceIndex = 0;
         int cnt = obj.getPropertyCount();
         PropertyInfo info = new PropertyInfo();
-
         while (true) {
             if (parser.nextTag() == XmlPullParser.END_TAG)
                 break;
@@ -98,12 +97,15 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             int countdown = cnt;
             while (true) {
                 if (countdown-- == 0)
-                    throw new RuntimeException("Unknwon Property: " + name);
+                    throw new RuntimeException("Unknown Property: " + name);
                 if (++testIndex >= cnt)
                     testIndex = 0;
                 obj.getPropertyInfo(testIndex, properties, info);
-                if (info.name == null ? testIndex == sourceIndex : (info.name.equals(name) && info == null || info.namespace.equals(parser.getNamespace())))
+                if (info.name == null && testIndex == sourceIndex) {
                     break;
+                } else if (info.name.equals(name) && info.namespace.equals(parser.getNamespace())) {
+                    break;
+                }
             }
             obj.setProperty(testIndex, read(parser, obj, testIndex, null, null, info));
             sourceIndex = 0;
@@ -119,7 +121,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * @param parser
      * @param typeNamespace
      * @param typeName
-     * @return
+     * @return unknownObject wrapped as a SoapPrimitive or SoapObject
      * @throws IOException
      * @throws XmlPullParserException
      */
@@ -158,7 +160,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             return dflt;
         return value.length() - start < 3 ? dflt : Integer.parseInt(value.substring(start + 1, value.length() - 1));
     }
-
 
     protected void readVector(XmlPullParser parser, Vector v, PropertyInfo elementType) throws IOException, XmlPullParserException {
         String namespace = null;
@@ -401,7 +402,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     public void writeObjectBody(XmlSerializer writer, KvmSerializable obj) throws IOException {
         PropertyInfo info = new PropertyInfo();
         int cnt = obj.getPropertyCount();
-        String namespace = dotNet ? writer.getNamespace() : "";
+        String namespace = dotNet ? writer.getNamespace() : ""; // unused...curious
         for (int i = 0; i < cnt; i++) {
             obj.getPropertyInfo(i, properties, info);
             if ((info.flags & PropertyInfo.TRANSIENT) == 0) {
