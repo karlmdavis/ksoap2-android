@@ -21,10 +21,8 @@
 package org.ksoap2;
 
 import java.io.*;
-
-import org.xmlpull.v1.*;
-import org.ksoap2.serialization.*;
 import org.kxml2.kdom.*;
+import org.xmlpull.v1.*;
 
 /**
  * A SOAP envelope, holding head and body objects. While this basic envelope
@@ -60,11 +58,11 @@ public class SoapEnvelope {
      * Returns true for the string values "1" and "true", ignoring upper/lower
      * case and whitespace, false otherwise.
      */
-    public static boolean stringToBoolean(String s) {
-        if (s == null)
+    public static boolean stringToBoolean(String booleanAsString) {
+        if (booleanAsString == null)
             return false;
-        s = s.trim().toLowerCase();
-        return (s.equals("1") || s.equals("true"));
+        booleanAsString = booleanAsString.trim().toLowerCase();
+        return (booleanAsString.equals("1") || booleanAsString.equals("true"));
     }
 
     /**
@@ -73,39 +71,31 @@ public class SoapEnvelope {
      * SoapSerializationEnvelope.
      */
     public Object bodyIn;
-
     /**
      * The body object to be sent with this envelope. Must be a KDom Node
      * modelling the remote call including all parameters for literal encoding.
      * For SOAP Serialization, please refer to SoapSerializationEnvelope
      */
     public Object bodyOut;
-
     /**
      * Incoming header elements
      */
     public Element[] headerIn;
-
     /**
      * Outgoing header elements
      */
     public Element[] headerOut;
     public String encodingStyle;
-
     /**
      * The SOAP version, set by the constructor
      */
     public int version;
-
     /** Envelope namespace, set by the constructor */
     public String env;
-
     /** Encoding namespace, set by the constructor */
     public String enc;
-
     /** Xml Schema instance namespace, set by the constructor */
     public String xsi;
-
     /** Xml Schema data namespace, set by the constructor */
     public String xsd;
 

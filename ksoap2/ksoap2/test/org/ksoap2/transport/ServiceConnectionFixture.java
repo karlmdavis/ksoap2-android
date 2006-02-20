@@ -23,20 +23,28 @@ package org.ksoap2.transport;
 import java.io.*;
 import java.net.*;
 
+import junit.framework.*;
+
 import org.ksoap2.transport.mock.*;
 
-public class MockServiceConnection implements ServiceConnection {
+public class ServiceConnectionFixture implements ServiceConnection {
+    public static final Class RESPONSE_CLASS = new ComplexResponse().getClass();
+    public static final String RESPONSE_CLASS_NAME = "ComplexFunctionResponse";
+    public static final String NAMESPACE = "http://namespace.com/";
+    public static String theStringResponse = "theStringResponse";
+    public static long theLongResponse = 1234567890;
+    
     public static final String BROKEN_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + 
     "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
     "      <soapenv:Body>" + "\n" +
     "         <ComplexFunctionResponse soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "\n" + 
     "            <ComplexFunctionReturn href=\"#id0\"/>" + "\n" + 
     "         </ComplexFunctionResponse>" + "\n" + 
-    "         <multiRef id=\"id0\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"ns1:DeviceRegistrationResponse\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:ns1=\"http://namespace.com\">" + "\n" + 
+    "         <multiRef id=\"id0\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"ns1:ComplexFunctionResponse\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
     "            <longResponse href=\"#id1\"/>" + "\n" + 
-    "            <stringResponse xsi:type=\"xsd:string\">theStringResponse</stringResponse>" + "\n" + 
+    "            <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
     "         </multiRef>" + "\n" + 
-    "         <multiRef id=\"id1\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"xsd:long\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">1234567890</multiRef>" + "\n" + 
+    "         <multiRef id=\"id1\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"xsd:long\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">"+theLongResponse+"</multiRef>" + "\n" + 
     "      </soapenv:Body>" + "\n" + 
     "   </soapenv:Envelope>";
     public static final String WORKING_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + 
@@ -45,9 +53,9 @@ public class MockServiceConnection implements ServiceConnection {
     "         <ComplexFunctionResponse soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "\n" + 
     "            <ComplexFunctionReturn href=\"#id0\"/>" + "\n" + 
     "         </ComplexFunctionResponse>" + "\n" + 
-    "         <multiRef id=\"id0\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"ns1:DeviceRegistrationResponse\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:ns1=\"http://namespace.com\">" + "\n" + 
-    "            <longResponse xsi:type=\"xsd:long\">1234567890</longResponse>" + "\n" + 
-    "            <stringResponse xsi:type=\"xsd:string\">theStringResponse</stringResponse>" + "\n" + 
+    "         <multiRef id=\"id0\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"ns1:ComplexFunctionResponse\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
+    "            <longResponse xsi:type=\"xsd:long\">"+theLongResponse+"</longResponse>" + "\n" + 
+    "            <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
     "         </multiRef>" + "\n" + 
     "         <multiRef id=\"id1\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"xsd:long\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">10</multiRef>" + "\n" + 
     "      </soapenv:Body>" + "\n" + 
@@ -56,9 +64,9 @@ public class MockServiceConnection implements ServiceConnection {
     "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
     "    <soapenv:Body>" + "\n" + 
     "       <ComplexFunctionResponse soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "\n" + 
-    "          <ComplexFunctionReturn xsi:type=\"ns1:ComplexFunctionResponse\" xmlns:ns1=\"http://namespace.com\">" + "\n" + 
-    "             <longResponse xsi:type=\"xsd:long\">1234567890</longResponse>" + "\n" + 
-    "             <stringResponse xsi:type=\"xsd:string\">theStringResponse</stringResponse>" + "\n" + 
+    "          <ComplexFunctionReturn xsi:type=\"ns1:ComplexFunctionResponse\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
+    "             <longResponse xsi:type=\"xsd:long\">"+theLongResponse+"</longResponse>" + "\n" + 
+    "             <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
     "          </ComplexFunctionReturn>" + "\n" + 
     "       </ComplexFunctionResponse>" + "\n" + 
     "    </soapenv:Body>" + "\n" + 
@@ -67,25 +75,35 @@ public class MockServiceConnection implements ServiceConnection {
     "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
     "    <soapenv:Body>" + "\n" + 
     "       <ComplexFunctionResponse soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "\n" + 
-    "          <ComplexFunctionReturn xsi:type=\"ns1:ComplexFunctionResponse\" xmlns:ns1=\"http://namespace.com\">" + "\n" + 
-    "             <stringResponse xsi:type=\"xsd:string\">theStringResponse</stringResponse>" + "\n" + 
-    "             <longResponse xsi:type=\"xsd:long\">1234567890</longResponse>" + "\n" + 
+    "          <ComplexFunctionReturn xsi:type=\"ns1:ComplexFunctionResponse\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
+    "             <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
+    "             <longResponse xsi:type=\"xsd:long\">"+theLongResponse+"</longResponse>" + "\n" + 
     "          </ComplexFunctionReturn>" + "\n" + 
     "       </ComplexFunctionResponse>" + "\n" + 
     "    </soapenv:Body>" + "\n" + 
     "</soapenv:Envelope>";
-    public static final Class RESPONSE_CLASS = new ComplexResponse().getClass();
-    public static final String RESPONSE_NAME = "ComplexFunctionReturn";
-    public static final String NAMESPACE = "http://namespace.com";
-    
+
     private ByteArrayInputStream inputStream;
     public ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+    public static InputStream createWorkingAsStream() {
+        return messsageAsStream(WORKING_STRING);
+    }
     
     public static InputStream createWorkingNoMultirefAsStream() {
-        return new ByteArrayInputStream(WORKING_NOMULTIREF.getBytes());
+        return messsageAsStream(WORKING_NOMULTIREF);
     }
+    
     public static InputStream createWorkingNoMultirefAsStream_reversedResponseParameters() {
-        return new ByteArrayInputStream(WORKING_NOMULTIREF_REVERSED_RESPONSE_PARAMETERS.getBytes());
+        return messsageAsStream(WORKING_NOMULTIREF_REVERSED_RESPONSE_PARAMETERS);
+    }
+    
+    public static InputStream createMultirefAsStream() {
+        return messsageAsStream(BROKEN_STRING);
+    }
+
+    private static InputStream messsageAsStream(String message) {
+        return new ByteArrayInputStream(message.getBytes());
     }
         
     public void setInputSring(String inputString) {
@@ -116,6 +134,11 @@ public class MockServiceConnection implements ServiceConnection {
 
     public InputStream getErrorStream() {
         throw new RuntimeException("MockServiceConnection.getErrorStream is not implemented yet");
+    }
+    
+    public static void assertComplexResponseCorrect(ComplexResponse complexResponse) {
+        Assert.assertEquals("theStringResponse", complexResponse.stringResponse);
+        Assert.assertEquals(1234567890, complexResponse.longResponse);
     }
 
 }

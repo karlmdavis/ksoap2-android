@@ -42,7 +42,7 @@
 			<classpath path="${src.build.dir}" />
 			<classpath path="${test.build.dir}" />
 			<formatter type="brief" usefile="false" />
-			<batchtest fork="yes" todir=".">
+			<batchtest fork="yes" todir="." >
 				<fileset dir="${test.dir}">
 					<include name="**/*Test*.java" />
 				</fileset>
@@ -85,7 +85,7 @@
 	<target name="build.classes" depends="init">
 		<mkdir dir="${src.build.dir}" />
 		<unzip src="${lib.dir}/kobjects-j2me.jar" dest="${lib.class.dir}" overwrite="true" />
-		<unzip src="${lib.dir}/kxml2.jar" dest="${lib.class.dir}" overwrite="true" />
+		<unzip src="${lib.dir}/kxml2-2.2.2.jar" dest="${lib.class.dir}" overwrite="true" />
 		<javac destdir="${src.build.dir}" optimize="true" target="${java.class.target.level}" debuglevel="none">
 			<classpath refid="lib.classpath" />
 			<src path="${src.dir}" />

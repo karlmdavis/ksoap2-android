@@ -28,6 +28,7 @@ public class ComplexResponse implements KvmSerializable {
 
     public String stringResponse;
     public long longResponse;
+    public static String namespace ="";
 
     public Object getProperty(int index) {
         if (index == 0)
@@ -43,7 +44,6 @@ public class ComplexResponse implements KvmSerializable {
     }
 
     public void setProperty(int index, Object value) {
-//        System.out.println(value.getClass().getName() + " " + value.toString() + " : " +index);
         if (index == 0 && value instanceof String)
             stringResponse = (String) value;
         else if (index == 1 && value instanceof Long)
@@ -53,7 +53,6 @@ public class ComplexResponse implements KvmSerializable {
     }
 
     public void getPropertyInfo(int index, Hashtable properties, PropertyInfo info) {
-//        System.out.println("index: " + index);
         if (index == 0) {
             info.name = "stringResponse";
             info.type = PropertyInfo.STRING_CLASS;
@@ -63,7 +62,7 @@ public class ComplexResponse implements KvmSerializable {
         } else {
             throw new RuntimeException("invalid parameter");
         }
-        info.namespace = "";
+        info.namespace = namespace;
     }
 
 }

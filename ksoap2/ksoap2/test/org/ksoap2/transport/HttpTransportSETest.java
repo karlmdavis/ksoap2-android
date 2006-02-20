@@ -27,17 +27,18 @@ import junit.framework.*;
 import org.ksoap2.*;
 import org.ksoap2.serialization.*;
 import org.ksoap2.transport.mock.*;
+import org.xmlpull.v1.*;
 
 public class HttpTransportSETest extends TestCase {
-    MockServiceConnection serviceConnection;
+    ServiceConnectionFixture serviceConnection;
     private SoapSerializationEnvelope envelope;
-    static final String containerNameSpaceURI = "http://namespace.com";
+    static final String containerNameSpaceURI = ServiceConnectionFixture.NAMESPACE;
     private SoapObject soapObject;
 
     protected void setUp() throws Exception {
         super.setUp();
-        serviceConnection = new MockServiceConnection();
-        serviceConnection.setInputSring(MockServiceConnection.WORKING_NOMULTIREF);
+        serviceConnection = new ServiceConnectionFixture();
+        serviceConnection.setInputSring(ServiceConnectionFixture.WORKING_NOMULTIREF);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapObject = new SoapObject(containerNameSpaceURI, "performComplexFunctionService");
     }
@@ -47,13 +48,20 @@ public class HttpTransportSETest extends TestCase {
         complexParameter.name = "Serenity";
         complexParameter.count = 56;
         envelope.addMapping(containerNameSpaceURI, "ComplexParameter", complexParameter.getClass());
-        envelope.addMapping(containerNameSpaceURI, "ComplexFunctionResponse", new ComplexResponse().getClass());
+        envelope.addMapping(containerNameSpaceURI, ServiceConnectionFixture.RESPONSE_CLASS_NAME, ServiceConnectionFixture.RESPONSE_CLASS);
         
         soapObject.addProperty("complexFunction", complexParameter);
         envelope.setOutputSoapObject(soapObject);
 
         MyTransport ht = new MyTransport("a url");
-        ht.call(containerNameSpaceURI, envelope);
+        ht.debug = true;
+        try {
+            ht.call(containerNameSpaceURI, envelope);
+        } catch (XmlPullParserException e) {
+            ht.os.flush();
+            byte[] output = serviceConnection.outputStream.toByteArray();
+            System.out.println("output " +output.length+" "+output[0] +" "+ output[1]);
+        }
         Object resultObject = envelope.getResult();
         assertTrue(resultObject instanceof ComplexResponse);
     }
@@ -67,5 +75,6 @@ public class HttpTransportSETest extends TestCase {
             return serviceConnection;
         }
     }
+    
 
 }

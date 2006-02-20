@@ -87,28 +87,22 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     protected void readSerializable(XmlPullParser parser, KvmSerializable obj) throws IOException, XmlPullParserException {
         int testIndex = -1; // inc at beg. of loop for perf. reasons
-        int sourceIndex = 0;
-        int cnt = obj.getPropertyCount();
+        int propertyCount = obj.getPropertyCount();
         PropertyInfo info = new PropertyInfo();
-        while (true) {
-            if (parser.nextTag() == XmlPullParser.END_TAG)
-                break;
+        while (parser.nextTag() != XmlPullParser.END_TAG) {
             String name = parser.getName();
-            int countdown = cnt;
+            int countdown = propertyCount;
             while (true) {
                 if (countdown-- == 0)
                     throw new RuntimeException("Unknown Property: " + name);
-                if (++testIndex >= cnt)
+                if (++testIndex >= propertyCount)
                     testIndex = 0;
                 obj.getPropertyInfo(testIndex, properties, info);
-                if (info.name == null && testIndex == sourceIndex) {
-                    break;
-                } else if (info.name.equals(name) && info.namespace.equals(parser.getNamespace())) {
+                if (info.name == null && testIndex == 0 || info.name.equals(name) && info.namespace.equals(parser.getNamespace())) {
                     break;
                 }
             }
             obj.setProperty(testIndex, read(parser, obj, testIndex, null, null, info));
-            sourceIndex = 0;
         }
         parser.require(XmlPullParser.END_TAG, null, null);
     }

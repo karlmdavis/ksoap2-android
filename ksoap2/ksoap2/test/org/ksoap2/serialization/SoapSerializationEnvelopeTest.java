@@ -32,7 +32,7 @@ import org.xmlpull.v1.*;
 public class SoapSerializationEnvelopeTest extends TestCase {
     private static final String PARAMETER_NAME = "aParameter";
     private static String FUNCTION_NAME = "FunctionName";
-    private static String NAMESPACE_NAME = "namespace";
+    private static String NAMESPACE_NAME = ServiceConnectionFixture.NAMESPACE;
     private static final String BODY_XML_STRING = "<n0:" + FUNCTION_NAME + " id=\"o0\" n1:root=\"1\" xmlns:n0=\"" + NAMESPACE_NAME + "\" xmlns:n1=\"http://schemas.xmlsoap.org/soap/encoding/\"";
     private static final String END_XML_STRING = " />";
     private static final String END_XML_FUNCTION_STRING = "</n0:" + FUNCTION_NAME + ">";
@@ -47,23 +47,71 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         outputStream = new ByteArrayOutputStream();
         xmlWriter.setOutput(outputStream, "UTF-8");
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.addMapping(MockServiceConnection.NAMESPACE, MockServiceConnection.RESPONSE_NAME, MockServiceConnection.RESPONSE_CLASS);
+        envelope.addMapping(NAMESPACE_NAME, ServiceConnectionFixture.RESPONSE_CLASS_NAME, ServiceConnectionFixture.RESPONSE_CLASS);
         soapObject = new SoapObject(NAMESPACE_NAME, FUNCTION_NAME);
+    }
+
+    public void testInbound() throws Throwable {
+        MyTransport myTransport = new MyTransport();
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
+        Object result = envelope.getResult();
+        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingAsStream());
+        result = envelope.getResult();
+        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream_reversedResponseParameters());
+        result = envelope.getResult();
+        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+ 
+        // Can't handle multirefs yet
+        //
+        // myTransport.parseResponse(envelope,
+        // ServiceConnectionFixture.createMultirefAsStream());
+        // result = envelope.getResult();
+        // ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse)
+        // result);
+
+    }
+
+    class MyTransport extends Transport {
+        public void parseResponse(SoapEnvelope envelope, InputStream is) throws XmlPullParserException, IOException {
+            super.parseResponse(envelope, is);
+        }
+    }
+
+    public void testReadInstance_SoapObject_Reversed() throws Throwable {
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture.createWorkingNoMultirefAsStream_reversedResponseParameters());
+        SoapSerializationEnvelope localEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapObject aSoapObject = (SoapObject) localEnvelope.readUnknown(parser, NAMESPACE_NAME, ServiceConnectionFixture.RESPONSE_CLASS_NAME);
+        assertEquals(ServiceConnectionFixture.theStringResponse, aSoapObject.getProperty(0));
+        assertEquals("" + ServiceConnectionFixture.theLongResponse, aSoapObject.getProperty(1).toString());
+    }
+
+    public void testReadInstance_SoapObject() throws Throwable {
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture.createWorkingNoMultirefAsStream());
+        SoapSerializationEnvelope localEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapObject aSoapObject = (SoapObject) localEnvelope.readUnknown(parser, NAMESPACE_NAME, ServiceConnectionFixture.RESPONSE_CLASS_NAME);
+        assertEquals(ServiceConnectionFixture.theStringResponse, aSoapObject.getProperty(1));
+        assertEquals("" + ServiceConnectionFixture.theLongResponse, aSoapObject.getProperty(0).toString());
     }
 
     public void testReadSerializable_ParameterOrderReverse() throws Throwable {
         ComplexResponse complexResponse = new ComplexResponse();
-        KXmlParser parser = primedParserForSerializableTest(MockServiceConnection.createWorkingNoMultirefAsStream_reversedResponseParameters());
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture.createWorkingNoMultirefAsStream_reversedResponseParameters());
         envelope.readSerializable(parser, complexResponse);
+        ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
     }
 
     public void testReadSerializable_ParameterOrderNormal() throws Throwable {
         ComplexResponse complexResponse = new ComplexResponse();
-        KXmlParser parser = primedParserForSerializableTest(MockServiceConnection.createWorkingNoMultirefAsStream());
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture.createWorkingNoMultirefAsStream());
         envelope.readSerializable(parser, complexResponse);
+        ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
     }
 
-    private KXmlParser primedParserForSerializableTest(InputStream inputStream) throws Throwable {
+    private KXmlParser primedParserForSerializableParameterTest(InputStream inputStream) throws Throwable {
         KXmlParser parser = new KXmlParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         parser.setInput(inputStream, null);

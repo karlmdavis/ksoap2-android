@@ -27,9 +27,8 @@ import org.ksoap2.*;
 import org.kxml2.io.*;
 import org.xmlpull.v1.*;
 
-
 abstract public class Transport {
-    
+
     protected String url;
     /** Set to true if debugging */
     public boolean debug;
@@ -67,4 +66,6 @@ abstract public class Transport {
      */
     public void setUrl(String url) {
         this.url = url;
-    }}
+    }
+    
+}

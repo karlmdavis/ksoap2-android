@@ -7,8 +7,8 @@
 	<classpathentry kind="src" path="src_j2se"/>
 	<classpathentry kind="src" path="src_midp"/>
 	<classpathentry kind="lib" path="lib/kobjects-j2me.jar"/>
-	<classpathentry kind="lib" path="lib/kxml2.jar"/>
 	<classpathentry kind="lib" path="lib/me4se.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/kxml2-2.2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
