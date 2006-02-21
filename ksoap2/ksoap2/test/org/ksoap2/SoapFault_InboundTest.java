@@ -20,16 +20,36 @@
 
 package org.ksoap2;
 
+import java.io.*;
+
+import org.ksoap2.serialization.*;
+import org.ksoap2.transport.*;
+import org.xmlpull.v1.*;
+
 import junit.framework.*;
 
-public class SoapFault_OutboundTest extends TestCase {
+public class SoapFault_InboundTest extends TestCase {
+
+    private MyTransport transport;
+    private SoapSerializationEnvelope envelope;
 
     protected void setUp() throws Exception {
-        
+        super.setUp();
+        transport = new MyTransport();
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     }
 
+    public void testFaultSerialize() throws Throwable {
+        transport.parseResponse(envelope, ServiceConnectionFixture.faultStringAsStream());
+        SoapFault fault = (SoapFault) envelope.bodyIn;
+        assertTrue(fault instanceof SoapFault);
+        assertEquals(ServiceConnectionFixture.FAULT_MESSAGE_STRING, fault.faultstring);
+    }
 
-    public void testToString() {
+    public class MyTransport extends Transport {
+        protected void parseResponse(SoapEnvelope envelope, InputStream is) throws XmlPullParserException, IOException {
+            super.parseResponse(envelope, is);
+        }
     }
 
 }
