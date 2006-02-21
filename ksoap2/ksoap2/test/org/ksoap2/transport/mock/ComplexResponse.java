@@ -28,7 +28,7 @@ public class ComplexResponse implements KvmSerializable {
 
     public String stringResponse;
     public long longResponse;
-    public static String namespace ="";
+    public String namespace ="";
 
     public Object getProperty(int index) {
         if (index == 0)

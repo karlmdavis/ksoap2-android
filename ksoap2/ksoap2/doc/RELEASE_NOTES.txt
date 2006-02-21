@@ -2,6 +2,8 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
+2.x.x	2006/??/??	Release
+- Bug SF # 1267551 Null pointer exception when providing a KVMSerializable object with a null namespace.  Added unit test and fixed the problem.
 
 2.0.2	2006/02/04	Maintenance Release
 - Added new targets to the build to produce various  jar releases for different uses.  Provided a new jar that has just the classes that it needs to run.  This removes the problem some have had while pre-verifying the classes and receiving an error about a FileReader class not being found.

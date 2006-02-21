@@ -104,6 +104,14 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         envelope.readSerializable(parser, complexResponse);
         ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
     }
+    
+    public void testReadSerializable_ParameterOrderNormal_NullNamespace() throws Throwable {
+        ComplexResponse complexResponse = new ComplexResponse();
+        complexResponse.namespace = null;
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture.createWorkingNoMultirefAsStream());
+        envelope.readSerializable(parser, complexResponse);
+        ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
+    }
 
     private KXmlParser primedParserForSerializableParameterTest(InputStream inputStream) throws Throwable {
         KXmlParser parser = new KXmlParser();

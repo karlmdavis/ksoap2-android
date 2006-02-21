@@ -98,7 +98,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 if (++testIndex >= propertyCount)
                     testIndex = 0;
                 obj.getPropertyInfo(testIndex, properties, info);
-                if (info.name == null && testIndex == 0 || info.name.equals(name) && info.namespace.equals(parser.getNamespace())) {
+                if (info.namespace == null && info.name.equals(name) || info.name == null && testIndex == 0 || info.name.equals(name) && info.namespace.equals(parser.getNamespace())) {
                     break;
                 }
             }
