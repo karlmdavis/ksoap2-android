@@ -26,14 +26,33 @@ import java.net.*;
 import junit.framework.*;
 
 import org.ksoap2.*;
-import org.ksoap2.SoapFault_InboundTest.*;
+import org.ksoap2.SoapFaultTest.*;
 import org.ksoap2.serialization.*;
 import org.ksoap2.transport.mock.*;
 import org.xmlpull.v1.*;
 
 public class ServiceConnectionFixture implements ServiceConnection {
     public static final String FAULT_MESSAGE_STRING = "The ISBN value contains invalid characters";
-    public static String FAULT_STRING = "" + "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "    <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:mh=\"http://www.Monson-Haefel.com/jwsbook/BookQuote\" >" + "    <soap:Body>" + "        <soap:Fault>" + "            <faultcode>soap:Client</faultcode>" + "            <faultstring>" + FAULT_MESSAGE_STRING + "</faultstring>" + "            <faultactor>http://www.xyzcorp.com</faultactor>" + "            <detail>" + "                <mh:InvalidIsbnFaultDetail>" + "                <offending-value>19318224-D</offending-value>" + "                <conformance-rules>" + "                    The first nine characters must be digits. The last" + "                    character may be a digit or the letter 'X'. Case is" + "                    not important." + "                </conformance-rules>" + "                </mh:InvalidIsbnFaultDetail>" + "            </detail>" + "        </soap:Fault>" + "     </soap:Body>" + "    </soap:Envelope>";
+    public static String FAULT_STRING = "" + "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+    "    <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:mh=\"http://www.Monson-Haefel.com/jwsbook/BookQuote\" >" + 
+    "    <soap:Body>" + 
+    "        <soap:Fault>" + 
+    "            <faultcode>soap:Client</faultcode>" + 
+    "            <faultstring>" + FAULT_MESSAGE_STRING + "</faultstring>" + 
+    "            <faultactor>http://www.xyzcorp.com</faultactor>" + 
+    "            <detail>" + 
+    "                <mh:InvalidIsbnFaultDetail>" + 
+    "                <offending-value>19318224-D</offending-value>" + 
+    "                <conformance-rules>" + 
+    "                    The first nine characters must be digits. The last" + 
+    "                    character may be a digit or the letter 'X'. Case is" + 
+    "                    not important." + 
+    "                </conformance-rules>" + 
+    "                </mh:InvalidIsbnFaultDetail>" + 
+    "            </detail>" + 
+    "        </soap:Fault>" + 
+    "     </soap:Body>" + 
+    "    </soap:Envelope>";
     public static final Class RESPONSE_CLASS = new ComplexResponse().getClass();
     public static final String RESPONSE_CLASS_NAME = "ComplexFunctionResponse";
     public static final String NAMESPACE = "http://namespace.com/";
