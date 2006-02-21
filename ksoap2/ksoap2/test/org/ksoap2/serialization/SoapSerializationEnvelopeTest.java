@@ -52,7 +52,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     }
 
     public void testInbound() throws Throwable {
-        MyTransport myTransport = new MyTransport();
+        MockTransport myTransport = new MockTransport();
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
         Object result = envelope.getResult();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
@@ -73,12 +73,6 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         // ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse)
         // result);
 
-    }
-
-    class MyTransport extends Transport {
-        public void parseResponse(SoapEnvelope envelope, InputStream is) throws XmlPullParserException, IOException {
-            super.parseResponse(envelope, is);
-        }
     }
 
     public void testReadInstance_SoapObject_Reversed() throws Throwable {

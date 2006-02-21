@@ -33,6 +33,12 @@ import org.xmlpull.v1.*;
 
 public class ServiceConnectionFixture implements ServiceConnection {
     public static final String FAULT_MESSAGE_STRING = "The ISBN value contains invalid characters";
+    public static final Class RESPONSE_CLASS = new ComplexResponse().getClass();
+    public static final String RESPONSE_CLASS_NAME = "ComplexFunctionResponse";
+    public static final String NAMESPACE = "http://namespace.com/";
+    public static String theStringResponse = "theStringResponse";
+    public static long theLongResponse = 1234567890;
+    
     public static String FAULT_STRING = "" + "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
     "    <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:mh=\"http://www.Monson-Haefel.com/jwsbook/BookQuote\" >" + 
     "    <soap:Body>" + 
@@ -53,12 +59,7 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "        </soap:Fault>" + 
     "     </soap:Body>" + 
     "    </soap:Envelope>";
-    public static final Class RESPONSE_CLASS = new ComplexResponse().getClass();
-    public static final String RESPONSE_CLASS_NAME = "ComplexFunctionResponse";
-    public static final String NAMESPACE = "http://namespace.com/";
-    public static String theStringResponse = "theStringResponse";
-    public static long theLongResponse = 1234567890;
-    
+
     public static final String BROKEN_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + 
     "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
     "      <soapenv:Body>" + "\n" +
