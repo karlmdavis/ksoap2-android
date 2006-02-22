@@ -34,12 +34,10 @@ public class HttpTransportSE extends Transport {
     private boolean connected;
 
     /**
-     * Creates instance of HttpTransport with set url and SoapAction
+     * Creates instance of HttpTransport with set url
      * 
      * @param url
      *            the destination to POST SOAP data
-     * @param soapAction
-     *            the desired SOAP action (for HTTP headers)
      */
 
     public HttpTransportSE(String url) {

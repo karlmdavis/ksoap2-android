@@ -40,6 +40,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     private SoapSerializationEnvelope envelope;
     private ByteArrayOutputStream outputStream;
     private SoapObject soapObject;
+    private MockTransport myTransport;
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -49,10 +50,16 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.addMapping(NAMESPACE_NAME, ServiceConnectionFixture.RESPONSE_CLASS_NAME, ServiceConnectionFixture.RESPONSE_CLASS);
         soapObject = new SoapObject(NAMESPACE_NAME, FUNCTION_NAME);
+        myTransport = new MockTransport();
     }
 
+    public void xx_testTwoDimensionalStringArrays() throws Throwable {
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createTwoDimensionalStringArrayResponseAsStream());
+        Object result = envelope.getResult();
+        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+    }
+    
     public void testInbound() throws Throwable {
-        MockTransport myTransport = new MockTransport();
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
         Object result = envelope.getResult();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);

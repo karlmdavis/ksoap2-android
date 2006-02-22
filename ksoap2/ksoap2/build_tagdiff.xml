@@ -3,8 +3,8 @@
          <cvstagdiff cvsRoot=":ext:cgul@cvs.sourceforge.net:/cvsroot/ksoap2"
                 destfile="tagdiff.xml"
                 package="ksoap2"
-                startTag="v2_0_1"
-                endTag="RELEASE_2_0_2" />
+                startTag="RELEASE_2_0_2"
+                endTag="HEAD" />
         <style in="tagdiff.xml" 
                out="tagdiff.html" 
                style="${ant.home}/etc/tagdiff.xsl">

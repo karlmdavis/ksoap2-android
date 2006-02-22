@@ -66,6 +66,8 @@
 			<classpath refid="lib.classpath" />
 			<doctitle>KSoap 2 API</doctitle>
 			<sourcepath location="${src.dir}" />
+			<sourcepath location="${j2se_src.dir}" />
+			<sourcepath location="${midp_src.dir}" />
 			<package name="org.ksoap2.*" />
 		</javadoc>
 	</target>
@@ -99,6 +101,8 @@
 			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
+				<exclude name="**/ServiceConnectionSE.class" />
+				<exclude name="**/MarshalFloat.class" />
 				<include name="META-INF/**" />
 			</fileset>
 			<fileset dir="${lib.class.dir}">

@@ -36,8 +36,47 @@ public class ServiceConnectionFixture implements ServiceConnection {
     public static final Class RESPONSE_CLASS = new ComplexResponse().getClass();
     public static final String RESPONSE_CLASS_NAME = "ComplexFunctionResponse";
     public static final String NAMESPACE = "http://namespace.com/";
+    static public final String AXIS_FAULT_MESSAGE = "java.io.FileNotFoundException: /WebService.jws";
     public static String theStringResponse = "theStringResponse";
     public static long theLongResponse = 1234567890;
+    
+    public static String TWO_DIMENSIONAL_STRING_ARRAY = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
+    "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"+
+    "      <soapenv:Body>"+
+    "         <getStringResponse soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"+
+    "            <getStringReturn soapenc:arrayType=\"xsd:string[][2]\" xsi:type=\"soapenc:Array\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">"+
+    "               <getStringReturn soapenc:arrayType=\"xsd:string[2]\" xsi:type=\"soapenc:Array\">"+
+    "                  <getStringReturn xsi:type=\"xsd:string\">1</getStringReturn>"+
+    "                  <getStringReturn xsi:type=\"xsd:string\">test1</getStringReturn>"+
+    "               </getStringReturn>"+
+    "               <getStringReturn soapenc:arrayType=\"xsd:string[2]\" xsi:type=\"soapenc:Array\">"+
+    "                  <getStringReturn xsi:type=\"xsd:string\">2</getStringReturn>"+
+    "                  <getStringReturn xsi:type=\"xsd:string\">test2</getStringReturn>"+
+    "               </getStringReturn>"+
+    "            </getStringReturn>"+
+    "         </getStringResponse>"+
+    "      </soapenv:Body>"+
+    "   </soapenv:Envelope>";
+    
+    
+    public static String STRING_ARRAY_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
+        "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"+
+        "      <soapenv:Body>"+
+        "         <listResponse soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"+
+        "            <listReturn soapenc:arrayType=\"xsd:string[9]\" xsi:type=\"soapenc:Array\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">"+
+        "               <listReturn xsi:type=\"xsd:string\">user-agent:kSOAP/2.0</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">soapaction:&quot;&quot;</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">content-type:text/xml</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">connection:close</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">content-length:282</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">cache-control:no-cache</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">pragma:no-cache</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">host:127.0.0.1:8081</listReturn>"+
+        "               <listReturn xsi:type=\"xsd:string\">accept:text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2</listReturn>"+
+        "            </listReturn>"+
+        "         </listResponse>" +
+        "       </soapenv:Body>"+
+        "   </soapenv:Envelope>";
     
     public static String FAULT_STRING = "" + "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
     "    <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:mh=\"http://www.Monson-Haefel.com/jwsbook/BookQuote\" >" + 
@@ -59,6 +98,21 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "        </soap:Fault>" + 
     "     </soap:Body>" + 
     "    </soap:Envelope>";
+    
+    // have to see how this one works
+    public static String AXIS_FAULT_STRING ="    <?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
+    "    <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> "+
+    "       <soapenv:Body>  "+
+    "          <soapenv:Fault>   "+
+    "             <faultcode>soapenv:Server.userException</faultcode>   "+
+    "             <faultstring>"+AXIS_FAULT_MESSAGE+"</faultstring>   "+
+    "             <detail>    "+
+    "                <ns1:hostname xmlns:ns1=\"http://xml.apache.org/axis/\">widebook.local</ns1:hostname>   "+
+    "             </detail>  "+
+    "          </soapenv:Fault> "+
+    "       </soapenv:Body>"+
+    "    </soapenv:Envelope>";
+ 
 
     public static final String BROKEN_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + 
     "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
@@ -170,6 +224,10 @@ public class ServiceConnectionFixture implements ServiceConnection {
     public static void assertComplexResponseCorrect(ComplexResponse complexResponse) {
         Assert.assertEquals("theStringResponse", complexResponse.stringResponse);
         Assert.assertEquals(1234567890, complexResponse.longResponse);
+    }
+
+    public static InputStream createTwoDimensionalStringArrayResponseAsStream() {
+        return messsageAsStream(TWO_DIMENSIONAL_STRING_ARRAY);
     }
 
 }

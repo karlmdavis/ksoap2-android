@@ -109,12 +109,10 @@ public class HttpTransport extends Transport {
     /** state info */
     private boolean connected = false;
     /**
-     * Creates instance of HttpTransport with set url and SoapAction
+     * Creates instance of HttpTransport with set url
      * 
      * @param url
      *            the destination to POST SOAP data
-     * @param soapAction
-     *            the desired SOAP action (for HTTP headers)
      */
     public HttpTransport(String url) {
         this.url = url;
