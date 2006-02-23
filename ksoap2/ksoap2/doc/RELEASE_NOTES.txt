@@ -6,7 +6,11 @@ History
 - SF BUG # 1267551 Null pointer exception when providing a KVMSerializable object with a null
 namespace.  Added unit test and fixed the problem. (reported by hakkikt). This change
 allows KVMSerializable objects to not have to initialize the namespace.
+- SF BUG # 1425810 Deserialization of objects when the xml messsage's order of 
+parameters changes can fail due to a logic hole in the readSerializable
+method. 
 - Refactorings to make the transport layer more configurable and testable.
+
 
 2.0.2	2006/02/04	Maintenance Release
 - Added new targets to the build to produce various  jar releases for different uses.  Provided a new
