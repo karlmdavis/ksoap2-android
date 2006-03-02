@@ -3,6 +3,10 @@ kSOAP a lightweight SOAP library for java.
 History
 =======
 2.x.x	2006/??/??	Release
+- SF BUG # 1442028 Null pointer exception when providing a KVMSerializable object with
+a null name for the PropertyInfo object.  This change protects the library from misconfigured
+registered objects but provides the user with the much more informative RuntimeException
+indicating "Unknown Property".
 - SF BUG # 1267551 Null pointer exception when providing a KVMSerializable object with a null
 namespace.  Added unit test and fixed the problem. (reported by hakkikt). This change
 allows KVMSerializable objects to not have to initialize the namespace.

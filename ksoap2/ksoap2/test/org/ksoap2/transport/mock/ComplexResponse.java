@@ -25,10 +25,11 @@ import java.util.*;
 import org.ksoap2.serialization.*;
 
 public class ComplexResponse implements KvmSerializable {
-
     public String stringResponse;
     public long longResponse;
     public String namespace ="";
+    public String responseOne_Name = "longResponse";
+    public int parameterCount = 2;
 
     public Object getProperty(int index) {
         if (index == 0)
@@ -40,7 +41,7 @@ public class ComplexResponse implements KvmSerializable {
     }
 
     public int getPropertyCount() {
-        return 2;
+        return parameterCount;
     }
 
     public void setProperty(int index, Object value) {
@@ -57,7 +58,7 @@ public class ComplexResponse implements KvmSerializable {
             info.name = "stringResponse";
             info.type = PropertyInfo.STRING_CLASS;
         } else if (index == 1) {
-            info.name = "longResponse";
+            info.name = responseOne_Name;
             info.type = PropertyInfo.LONG_CLASS;
         } else {
             throw new RuntimeException("invalid parameter");

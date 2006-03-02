@@ -54,11 +54,12 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     }
 
     public void xx_testTwoDimensionalStringArrays() throws Throwable {
+        // can't handle two dimensional arrays.
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createTwoDimensionalStringArrayResponseAsStream());
         Object result = envelope.getResult();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
     }
-    
+
     public void testInbound() throws Throwable {
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
         Object result = envelope.getResult();
@@ -71,7 +72,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream_reversedResponseParameters());
         result = envelope.getResult();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
- 
+
         // Can't handle multirefs yet
         //
         // myTransport.parseResponse(envelope,
@@ -111,13 +112,28 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         envelope.readSerializable(parser, complexResponse);
         ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
     }
-    
+
     public void testReadSerializable_ParameterOrderNormal_NullNamespace() throws Throwable {
         ComplexResponse complexResponse = new ComplexResponse();
         complexResponse.namespace = null;
         KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture.createWorkingNoMultirefAsStream());
         envelope.readSerializable(parser, complexResponse);
         ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
+    }
+
+    public void testReadSerializable_ParameterOrderNormal_NullNamespace_NullName() {
+        // SF Bug # 1442028 
+        try {
+            ComplexResponse complexResponse = new ComplexResponse();
+            complexResponse.namespace = null;
+            complexResponse.parameterCount = 2;
+            complexResponse.responseOne_Name = null;
+            KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture.createWorkingNoMultirefAsStream());
+            envelope.readSerializable(parser, complexResponse);
+            ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
+        } catch (Throwable e) {
+            assertFalse(e instanceof NullPointerException);
+        }
     }
 
     private KXmlParser primedParserForSerializableParameterTest(InputStream inputStream) throws Throwable {
