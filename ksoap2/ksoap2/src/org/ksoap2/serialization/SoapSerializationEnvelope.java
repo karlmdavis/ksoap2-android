@@ -358,11 +358,19 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         qNameToClass.put(new SoapPrimitive(so.namespace, so.name, null), so);
     }
 
+    public Object getResponse() throws SoapFault {
+        if (bodyIn instanceof SoapFault) {
+            throw (SoapFault) bodyIn;
+        }
+        KvmSerializable ks = (KvmSerializable) bodyIn;
+        return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
+    }
+    
     public Object getResult() {
         KvmSerializable ks = (KvmSerializable) bodyIn;
         return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
     }
-
+    
     /** Serializes the given object */
 
     public void writeBody(XmlSerializer writer) throws IOException {

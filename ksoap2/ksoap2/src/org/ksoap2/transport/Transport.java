@@ -36,6 +36,7 @@ abstract public class Transport {
     public String requestDump;
     /** String dump of response for debugging */
     public String responseDump;
+    private String xmlVersionTag = "";
 
     protected void parseResponse(SoapEnvelope envelope, InputStream is) throws XmlPullParserException, IOException {
         XmlPullParser xp = new KXmlParser();
@@ -46,6 +47,7 @@ abstract public class Transport {
 
     protected byte[] createRequestData(SoapEnvelope envelope) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bos.write(xmlVersionTag.getBytes());
         XmlSerializer xw = new KXmlSerializer();
         xw.setOutput(bos, null);
         envelope.write(xw);
@@ -66,6 +68,10 @@ abstract public class Transport {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+    
+    public void setXmlVersionTag(String tag) {
+        xmlVersionTag = tag;
     }
     
 }
