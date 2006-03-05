@@ -393,6 +393,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         types.addElement(PropertyInfo.OBJECT_TYPE);
         // For loop not needed as the size of the array is always the
         // same size... extra code.
+        // TODO: looks broken here
         for (int i = 0; i < multiRef.size(); i++) {
             Object obj = multiRef.elementAt(i);
             Object[] qName = getInfo(null, obj);
