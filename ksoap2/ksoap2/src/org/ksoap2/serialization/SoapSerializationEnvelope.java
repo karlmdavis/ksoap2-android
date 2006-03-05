@@ -25,6 +25,8 @@ import java.io.*;
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
+import com.sun.tools.javac.comp.*;
+
 /**
  * @author Stefan Haustein
  * 
@@ -343,7 +345,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * Defines a direct mapping from a namespace and name to a java class (and
      * vice versa)
      */
-
     public void addMapping(String namespace, String name, Class clazz) {
         addMapping(namespace, name, clazz, null);
     }
@@ -353,11 +354,18 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * type (namespace/name) will be mapped to corresponding copies of the given
      * SoapObject, maintaining the structure of the template.
      */
-
     public void addTemplate(SoapObject so) {
         qNameToClass.put(new SoapPrimitive(so.namespace, so.name, null), so);
     }
 
+    /**
+     * Response from the soap call.  Pulls the object from the wrapper object and 
+     * returns it.
+     * 
+     * @since 2.0.3
+     * @return response from the soap call.
+     * @throws SoapFault 
+     */
     public Object getResponse() throws SoapFault {
         if (bodyIn instanceof SoapFault) {
             throw (SoapFault) bodyIn;
@@ -365,18 +373,26 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         KvmSerializable ks = (KvmSerializable) bodyIn;
         return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
     }
-    
+
+    /**
+     * @deprecated Please use the getResponse going forward
+     * @see getResponse
+     */
     public Object getResult() {
         KvmSerializable ks = (KvmSerializable) bodyIn;
         return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
     }
-    
-    /** Serializes the given object */
 
+    /** 
+     * Serializes the request object to the given XmlSerliazer object
+     * @param writer XmlSerializer object to write the body into 
+     */
     public void writeBody(XmlSerializer writer) throws IOException {
         multiRef = new Vector();
         multiRef.addElement(bodyOut);
         types.addElement(PropertyInfo.OBJECT_TYPE);
+        // For loop not needed as the size of the array is always the
+        // same size... extra code.
         for (int i = 0; i < multiRef.size(); i++) {
             Object obj = multiRef.elementAt(i);
             Object[] qName = getInfo(null, obj);
