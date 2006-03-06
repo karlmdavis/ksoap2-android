@@ -2,12 +2,14 @@
 
 <project name="ksoap2" default="build" basedir=".">
 	<property name="build.dir" value="build" />
-	<property name="version" value="2.0.2" />
+	<property name="version" value="2.1.0" />
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="src" />
 	<property name="test.dir" value="test" />
 	<property name="midp_src.dir" value="src_midp" />
 	<property name="j2se_src.dir" value="src_j2se" />
+	<property name="servlet_src.dir" value="src_servlet" />
+	<property name="extras_src.dir" value="src_extras" />
 	<property name="src.build.dir" value="${build.dir}/src" />
 	<property name="test.build.dir" value="${build.dir}/test" />
 	<property name="lib.class.dir" value="libraryClasses" />
@@ -32,7 +34,7 @@
 		<mkdir dir="${dist.dir}" />
 	</target>
 
-	<target name="build" depends="build_src, build_j2me_full.jar, build_j2se_full.jar, build_j2me_nodeps.jar, build_j2me_core.jar" description="--> Builds all products." />
+	<target name="build" depends="build_src, build_j2me_full.jar, build_j2se_full.jar, build_j2me_nodeps.jar, build_j2me_core.jar, build_extras.jar" description="--> Builds all products." />
 
 	<target name="release" depends="test,build" description="--> Builds all products and runs the tests." />
 	
@@ -45,7 +47,7 @@
 			<formatter type="brief" usefile="false" />
 			<batchtest fork="yes" todir="." >
 				<fileset dir="${test.dir}">
-					<include name="**/*Test*.java" />
+					<include name="**/*Test.java" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -69,6 +71,8 @@
 			<sourcepath location="${src.dir}" />
 			<sourcepath location="${j2se_src.dir}" />
 			<sourcepath location="${midp_src.dir}" />
+			<sourcepath location="${servlet_src.dir}"/>
+			<sourcepath location="${extras_src.dir}"/>
 			<package name="org.ksoap2.*" />
 		</javadoc>
 	</target>
@@ -82,6 +86,8 @@
 			<src path="${test.dir}" />
 			<src path="${midp_src.dir}" />
 			<src path="${j2se_src.dir}" />
+			<src path="${servlet_src.dir}"/>
+			<src path="${extras_src.dir}"/>
 		</javac>
 	</target>
 
@@ -94,6 +100,8 @@
 			<src path="${src.dir}" />
 			<src path="${midp_src.dir}" />
 			<src path="${j2se_src.dir}" />
+			<src path="${servlet_src.dir}"/>
+			<src path="${extras_src.dir}"/>
 		</javac>
 	</target>
 
@@ -102,6 +110,8 @@
 			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
+				<exclude name="**/HttpTransportBasicAuth.class" />
+				<exclude name="**/SoapServlet.class" />
 				<exclude name="**/ServiceConnectionSE.class" />
 				<exclude name="**/MarshalFloat.class" />
 				<include name="META-INF/**" />
@@ -129,6 +139,8 @@
 			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
+				<exclude name="**/HttpTransportBasicAuth.class" />
+				<exclude name="**/SoapServlet.class" />
 				<exclude name="**/ServiceConnectionSE.class" />
 				<exclude name="**/MarshalFloat.class" />
 				<include name="META-INF/**" />
@@ -142,6 +154,8 @@
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransportSE.class" />
 				<exclude name="**/ServiceConnectionSE.class" />
+				<exclude name="**/HttpTransportBasicAuth.class" />
+				<exclude name="**/SoapServlet.class" />
 				<exclude name="**/MarshalFloat.class" />
 				<include name="META-INF/**" />
 			</fileset>
@@ -153,11 +167,21 @@
 			<fileset dir="${src.build.dir}">
 				<include name="**/*.class" />
 				<exclude name="**/HttpTransport.class" />
+				<exclude name="**/HttpTransportBasicAuth.class" />
 				<exclude name="**/ServiceConnectionMidp.class" />
 				<include name="META-INF/**" />
 			</fileset>
 			<fileset dir="${lib.class.dir}">
 				<include name="**/*.class" />
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="build_extras.jar" depends="build.classes" description="--> Builds a J2ME jar with extras included (eg. HttpTransportBasicAuth).">
+		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-extras-${version}.jar">
+			<fileset dir="${src.build.dir}">
+				<include name="**/HttpTransportBasicAuth.class" />
+				<include name="META-INF/**" />
 			</fileset>
 		</jar>
 	</target>

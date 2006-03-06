@@ -1,4 +1,5 @@
-/* Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
+/**
+ *  Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,17 +32,16 @@ import org.xmlpull.v1.*;
 public class HttpTransportSE extends Transport {
     OutputStream os;
     InputStream is;
-    private boolean connected;
+//    private boolean connected;
 
-    /**
-     * Creates instance of HttpTransport with set url
+  /**
+     * Creates instance of HttpTransportSE with set url
      * 
      * @param url
      *            the destination to POST SOAP data
      */
-
     public HttpTransportSE(String url) {
-        this.url = url;
+        super(url);
     }
 
     /**
@@ -57,7 +57,7 @@ public class HttpTransportSE extends Transport {
         byte[] requestData = createRequestData(envelope);
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
-        connected = true;
+//        connected = true;
         ServiceConnection connection = getServiceConnection();
         connection.setRequestProperty("User-Agent", "kSOAP/2.0");
         connection.setRequestProperty("SOAPAction", soapAction);

@@ -22,24 +22,35 @@ package org.ksoap2.transport;
 
 import java.io.*;
 
+import org.kobjects.base64.*;
 import org.ksoap2.transport.mock.*;
 
-public class HttpTransportSETest extends TransportTestCase {
+public class HttpTransportBasicAuthTest extends TransportTestCase {
 
-    public void testOutbound() throws Throwable {
-        MyTransport ht = new MyTransport("a url");
+    public void testSimpleMessage() throws Throwable {
+        String username = "username";
+        String password = "password";
+        MyTransport ht = new MyTransport("a url", username, password);
         ht.call(soapAction, envelope);
+        
         String outputString = new String(serviceConnection.outputStream.toByteArray());
         assertTrue(outputString.indexOf(complexParameter.name) > 0);
         assertTrue(outputString.indexOf(""+complexParameter.count) > 0);
-        assertTrue(envelope.getResponse() instanceof ComplexResponse);
         
+        String authorizationProperty = (String) serviceConnection.requestPropertyMap.get("Authorization");
+        assertEquals(basicAuthenticationStringFor(username, password), authorizationProperty);
+        
+        assertTrue(envelope.getResponse() instanceof ComplexResponse);
         assertHeaderCorrect(serviceConnection,soapAction);
     }
 
-    class MyTransport extends HttpTransport {
-        public MyTransport(String url) {
-            super(url);
+    private String basicAuthenticationStringFor(String username, String password) {
+        return "Basic " + Base64.encode((username+":"+password).getBytes());
+    }
+
+    class MyTransport extends HttpTransportBasicAuth {
+        public MyTransport(String url, String username, String password) {
+            super(url, username, password);
         }
 
         protected ServiceConnection getServiceConnection() throws IOException {

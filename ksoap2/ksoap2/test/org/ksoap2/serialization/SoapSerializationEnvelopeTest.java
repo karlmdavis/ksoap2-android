@@ -56,21 +56,21 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     public void xx_testTwoDimensionalStringArrays() throws Throwable {
         // can't handle two dimensional arrays.
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createTwoDimensionalStringArrayResponseAsStream());
-        Object result = envelope.getResult();
+        Object result = envelope.getResponse();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
     }
 
     public void testInbound() throws Throwable {
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
-        Object result = envelope.getResult();
+        Object result = envelope.getResponse();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
 
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingAsStream());
-        result = envelope.getResult();
+        result = envelope.getResponse();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
 
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream_reversedResponseParameters());
-        result = envelope.getResult();
+        result = envelope.getResponse();
         ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
 
         // Can't handle multirefs yet

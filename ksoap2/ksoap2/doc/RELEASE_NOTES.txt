@@ -2,7 +2,9 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
-2.x.x	2006/??/??	Release
+2.1.0	2006/03/??	Release
+
+- SF FEATURE # 1428588 Added a HttpTransport layer for use with webservices with Basic Authentication.
 - SF BUG # 1442028 Null pointer exception when providing a KVMSerializable object with
 a null name for the PropertyInfo object.  This change protects the library from misconfigured
 registered objects but provides the user with the much more informative RuntimeException
@@ -13,6 +15,8 @@ allows KVMSerializable objects to not have to initialize the namespace.
 - SF BUG # 1425810 Deserialization of objects when the xml messsage's order of 
 parameters changes can fail due to a logic hole in the readSerializable
 method. 
+- Upgraded to the latest kxml2 library version 2.2.2.  Unfortunately this causes approximately 
+a 2k increase in size of our library on the stripped down version and 4k on the "Full" ones.
 - Refactorings to make the transport layer more configurable and testable.
 
 

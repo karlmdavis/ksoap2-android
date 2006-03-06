@@ -22,14 +22,11 @@ package org.ksoap2.transport;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 import junit.framework.*;
 
-import org.ksoap2.*;
-import org.ksoap2.SoapFaultTest.*;
-import org.ksoap2.serialization.*;
 import org.ksoap2.transport.mock.*;
-import org.xmlpull.v1.*;
 
 public class ServiceConnectionFixture implements ServiceConnection {
     public static final String FAULT_MESSAGE_STRING = "The ISBN value contains invalid characters";
@@ -39,6 +36,7 @@ public class ServiceConnectionFixture implements ServiceConnection {
     static public final String AXIS_FAULT_MESSAGE = "java.io.FileNotFoundException: /WebService.jws";
     public static String theStringResponse = "theStringResponse";
     public static long theLongResponse = 1234567890;
+    public HashMap requestPropertyMap = new HashMap();
     
     public static String TWO_DIMENSIONAL_STRING_ARRAY = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
     "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"+
@@ -203,7 +201,8 @@ public class ServiceConnectionFixture implements ServiceConnection {
         throw new RuntimeException("MockServiceConnection.disconnect is not implemented yet");
     }
 
-    public void setRequestProperty(String string, String soapAction) throws IOException {
+    public void setRequestProperty(String propertyName, String value) throws IOException {
+        requestPropertyMap.put(propertyName, value);
     }
 
     public void setRequestMethod(String post) throws ProtocolException, IOException {

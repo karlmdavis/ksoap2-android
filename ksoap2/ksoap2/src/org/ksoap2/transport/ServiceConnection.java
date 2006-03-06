@@ -29,7 +29,7 @@ public interface ServiceConnection {
 
     public void disconnect() throws IOException;
 
-    public void setRequestProperty(String string, String soapAction) throws IOException;
+    public void setRequestProperty(String propertyName, String value) throws IOException;
 
     public void setRequestMethod(String post) throws ProtocolException, IOException;
 

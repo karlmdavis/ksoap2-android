@@ -20,12 +20,11 @@
 
 package org.ksoap2.serialization;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
+
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
-
-import com.sun.tools.javac.comp.*;
 
 /**
  * @author Stefan Haustein
@@ -386,7 +385,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     /**
      * @deprecated Please use the getResponse going forward
-     * @see getResponse
+     * @see #getResponse()
      */
     public Object getResult() {
         KvmSerializable ks = (KvmSerializable) bodyIn;
