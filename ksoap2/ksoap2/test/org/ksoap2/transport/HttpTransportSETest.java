@@ -22,19 +22,12 @@ package org.ksoap2.transport;
 
 import java.io.*;
 
-import org.ksoap2.transport.mock.*;
-
 public class HttpTransportSETest extends TransportTestCase {
 
     public void testOutbound() throws Throwable {
         MyTransport ht = new MyTransport("a url");
         ht.call(soapAction, envelope);
-        String outputString = new String(serviceConnection.outputStream.toByteArray());
-        assertTrue(outputString.indexOf(complexParameter.name) > 0);
-        assertTrue(outputString.indexOf(""+complexParameter.count) > 0);
-        assertTrue(envelope.getResponse() instanceof ComplexResponse);
-        
-        assertHeaderCorrect(serviceConnection,soapAction);
+        assertSerializationDeserialization();
     }
 
     class MyTransport extends HttpTransport {
