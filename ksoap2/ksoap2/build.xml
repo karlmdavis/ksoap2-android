@@ -14,7 +14,8 @@
 	<property name="dist.dir" value="dist" />
 	<property name="api.dir" value="doc/api" />
 	<property name="java.class.target.level" value="1.2" />
-
+ 	<property name="java.class.source.level" value="1.2" />
+	
 	<path id="lib.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
@@ -74,7 +75,7 @@
 
 	<target name="build.test.classes" depends="build.classes">
 		<mkdir dir="${test.build.dir}" />
-		<javac destdir="${test.build.dir}" optimize="true" target="${java.class.target.level}" debuglevel="true">
+		<javac destdir="${test.build.dir}" optimize="true" target="${java.class.target.level}" source="${java.class.source.level}" debuglevel="true">
 			<classpath refid="lib.classpath" />
 			<classpath refid="junit.classpath" />
 			<classpath path="${src.build.dir}" />
@@ -88,7 +89,7 @@
 		<mkdir dir="${src.build.dir}" />
 		<unzip src="${lib.dir}/kobjects-j2me.jar" dest="${lib.class.dir}" overwrite="true" />
 		<unzip src="${lib.dir}/kxml2-2.2.2.jar" dest="${lib.class.dir}" overwrite="true" />
-		<javac destdir="${src.build.dir}" optimize="true" target="${java.class.target.level}" debuglevel="none">
+		<javac destdir="${src.build.dir}" optimize="true" target="${java.class.target.level}" source="${java.class.source.level}" debuglevel="none">
 			<classpath refid="lib.classpath" />
 			<src path="${src.dir}" />
 			<src path="${midp_src.dir}" />
