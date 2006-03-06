@@ -30,9 +30,6 @@ import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
 public class HttpTransportSE extends Transport {
-    OutputStream os;
-    InputStream is;
-//    private boolean connected;
 
   /**
      * Creates instance of HttpTransportSE with set url
@@ -57,7 +54,6 @@ public class HttpTransportSE extends Transport {
         byte[] requestData = createRequestData(envelope);
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
-//        connected = true;
         ServiceConnection connection = getServiceConnection();
         connection.setRequestProperty("User-Agent", "kSOAP/2.0");
         connection.setRequestProperty("SOAPAction", soapAction);

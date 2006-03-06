@@ -61,6 +61,7 @@ public class HttpTransportBasicAuthTest extends TransportTestCase {
         }
 
         protected ServiceConnection getServiceConnection() throws IOException {
+            addBasicAuthentication(serviceConnection);
             return serviceConnection;
         }
     }

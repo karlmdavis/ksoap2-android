@@ -45,7 +45,7 @@
 			<classpath path="${src.build.dir}" />
 			<classpath path="${test.build.dir}" />
 			<formatter type="brief" usefile="false" />
-			<batchtest fork="yes" todir="." >
+			<batchtest fork="yes" todir="." haltonfailure="true" haltonerror="true">
 				<fileset dir="${test.dir}">
 					<include name="**/*Test.java" />
 				</fileset>
