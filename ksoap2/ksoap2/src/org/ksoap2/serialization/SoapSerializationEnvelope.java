@@ -33,6 +33,16 @@ import com.sun.tools.javac.comp.*;
  * This class extends the SoapEnvelope with Soap Serialization functionality.
  */
 public class SoapSerializationEnvelope extends SoapEnvelope {
+    private static final String ANY_TYPE_LABEL = "anyType";
+    private static final String ARRAY_MAPPING_NAME = "Array";
+    private static final String NULL_LABEL = "null";
+    private static final String NIL_LABEL = "nil";
+    private static final String HREF_LABEL = "href";
+    private static final String ID_LABEL = "id";
+    private static final String ROOT_LABEL = "root";
+    private static final String TYPE_LABEL = "type";
+    private static final String ITEM_LABEL = "item";
+    private static final String ARRAY_TYPE_LABEL = "arrayType";
     static final Marshal DEFAULT_MARSHAL = new DM();
     public Hashtable properties = new Hashtable();
 
@@ -65,7 +75,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     public SoapSerializationEnvelope(int version) {
         super(version);
-        addMapping(enc, "Array", PropertyInfo.VECTOR_CLASS);
+        addMapping(enc, ARRAY_MAPPING_NAME, PropertyInfo.VECTOR_CLASS);
         DEFAULT_MARSHAL.register(this);
     }
 
@@ -78,7 +88,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             bodyIn = fault;
         } else {
             while (parser.getEventType() == XmlPullParser.START_TAG) {
-                String rootAttr = parser.getAttributeValue(enc, "root");
+                String rootAttr = parser.getAttributeValue(enc, ROOT_LABEL);
                 Object o = read(parser, null, -1, parser.getNamespace(), parser.getName(), PropertyInfo.OBJECT_TYPE);
                 if ("1".equals(rootAttr) || bodyIn == null)
                     bodyIn = o;
@@ -162,7 +172,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         String name = null;
         int size = v.size();
         boolean dynamic = true;
-        String type = parser.getAttributeValue(enc, "arrayType");
+        String type = parser.getAttributeValue(enc, ARRAY_TYPE_LABEL);
         if (type != null) {
             int cut0 = type.indexOf(':');
             int cut1 = type.indexOf("[", cut0);
@@ -202,7 +212,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     public Object read(XmlPullParser parser, Object owner, int index, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
         String elementName = parser.getName();
-        String href = parser.getAttributeValue(null, "href");
+        String href = parser.getAttributeValue(null, HREF_LABEL);
         Object obj;
         if (href != null) {
             if (owner == null)
@@ -220,25 +230,25 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             parser.nextTag(); // start tag
             parser.require(XmlPullParser.END_TAG, null, elementName);
         } else {
-            String nullAttr = parser.getAttributeValue(xsi, "nil");
-            String id = parser.getAttributeValue(null, "id");
+            String nullAttr = parser.getAttributeValue(xsi, NIL_LABEL);
+            String id = parser.getAttributeValue(null, ID_LABEL);
             if (nullAttr == null)
-                nullAttr = parser.getAttributeValue(xsi, "null");
+                nullAttr = parser.getAttributeValue(xsi, NULL_LABEL);
             if (nullAttr != null && SoapEnvelope.stringToBoolean(nullAttr)) {
                 obj = null;
                 parser.nextTag();
                 parser.require(XmlPullParser.END_TAG, null, elementName);
             } else {
-                String type = parser.getAttributeValue(xsi, "type");
+                String type = parser.getAttributeValue(xsi, TYPE_LABEL);
                 if (type != null) {
                     int cut = type.indexOf(':');
                     name = type.substring(cut + 1);
                     String prefix = cut == -1 ? "" : type.substring(0, cut);
                     namespace = parser.getNamespace(prefix);
                 } else if (name == null && namespace == null) {
-                    if (parser.getAttributeValue(enc, "arrayType") != null) {
+                    if (parser.getAttributeValue(enc, ARRAY_TYPE_LABEL) != null) {
                         namespace = enc;
-                        name = "Array";
+                        name = ARRAY_MAPPING_NAME;
                     } else {
                         Object[] names = getInfo(expected.type, null);
                         namespace = (String) names[0];
@@ -328,7 +338,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             if (tmp != null)
                 return tmp;
         }
-        return new Object[] { xsd, "anyType", null, null };
+        return new Object[] { xsd, ANY_TYPE_LABEL, null, null };
     }
 
     /**
@@ -359,12 +369,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     }
 
     /**
-     * Response from the soap call.  Pulls the object from the wrapper object and 
+     * Response from the soap call. Pulls the object from the wrapper object and
      * returns it.
      * 
      * @since 2.0.3
      * @return response from the soap call.
-     * @throws SoapFault 
+     * @throws SoapFault
      */
     public Object getResponse() throws SoapFault {
         if (bodyIn instanceof SoapFault) {
@@ -383,45 +393,39 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
         return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
     }
 
-    /** 
+    /**
      * Serializes the request object to the given XmlSerliazer object
-     * @param writer XmlSerializer object to write the body into 
+     * 
+     * @param writer
+     *            XmlSerializer object to write the body into.
      */
     public void writeBody(XmlSerializer writer) throws IOException {
         multiRef = new Vector();
         multiRef.addElement(bodyOut);
         types.addElement(PropertyInfo.OBJECT_TYPE);
-        // For loop not needed as the size of the array is always the
-        // same size... extra code.
-        // TODO: looks broken here
-        for (int i = 0; i < multiRef.size(); i++) {
-            Object obj = multiRef.elementAt(i);
-            Object[] qName = getInfo(null, obj);
-            writer.startTag((String) qName[0], (String) qName[1]);
-            writer.attribute(null, "id", qName[2] == null ? ("o" + i) : (String) qName[2]);
-            if (i == 0)
-                writer.attribute(enc, "root", "1");
-            if (qName[3] != null)
-                ((Marshal) qName[3]).writeInstance(writer, obj);
-            else if (obj instanceof KvmSerializable)
-                writeObjectBody(writer, (KvmSerializable) obj);
-            else if (obj instanceof Vector)
-                writeVectorBody(writer, (Vector) obj, ((PropertyInfo) types.elementAt(i)).elementType);
-            else
-                throw new RuntimeException("Cannot serialize: " + obj);
-            writer.endTag((String) qName[0], (String) qName[1]);
-        }
+        Object[] qName = getInfo(null, bodyOut);
+        writer.startTag((String) qName[0], (String) qName[1]);
+        writer.attribute(null, ID_LABEL, qName[2] == null ? ("o" + 0) : (String) qName[2]);
+        writer.attribute(enc, ROOT_LABEL, "1");
+        if (qName[3] != null)
+            ((Marshal) qName[3]).writeInstance(writer, bodyOut);
+        else if (bodyOut instanceof KvmSerializable)
+            writeObjectBody(writer, (KvmSerializable) bodyOut);
+        else if (bodyOut instanceof Vector)
+            writeVectorBody(writer, (Vector) bodyOut, ((PropertyInfo) types.elementAt(0)).elementType);
+        else
+            throw new RuntimeException("Cannot serialize: " + bodyOut);
+        writer.endTag((String) qName[0], (String) qName[1]);
     }
 
     /**
      * Writes the body of an KvmSerializable object. This method is public for
      * access from Marshal subclasses.
      */
-
     public void writeObjectBody(XmlSerializer writer, KvmSerializable obj) throws IOException {
         PropertyInfo info = new PropertyInfo();
         int cnt = obj.getPropertyCount();
-        String namespace = dotNet ? writer.getNamespace() : ""; // unused...curious
+//        String namespace = dotNet ? writer.getNamespace() : ""; // unused...curious
         for (int i = 0; i < cnt; i++) {
             obj.getPropertyInfo(i, properties, info);
             if ((info.flags & PropertyInfo.TRANSIENT) == 0) {
@@ -438,7 +442,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     protected void writeProperty(XmlSerializer writer, Object obj, PropertyInfo type) throws IOException {
         if (obj == null) {
-            writer.attribute(xsi, version >= VER12 ? "nil" : "null", "true");
+            writer.attribute(xsi, version >= VER12 ? NIL_LABEL : NULL_LABEL, "true");
             return;
         }
         Object[] qName = getInfo(null, obj);
@@ -449,11 +453,11 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 multiRef.addElement(obj);
                 types.addElement(type);
             }
-            writer.attribute(null, "href", qName[2] == null ? ("#o" + i) : "#" + qName[2]);
+            writer.attribute(null, HREF_LABEL, qName[2] == null ? ("#o" + i) : "#" + qName[2]);
         } else {
             if (!implicitTypes || obj.getClass() != type.type) {
                 String prefix = writer.getPrefix((String) qName[0], true);
-                writer.attribute(xsi, "type", prefix + ":" + qName[1]);
+                writer.attribute(xsi, TYPE_LABEL, prefix + ":" + qName[1]);
             }
             if (qName[3] != null)
                 ((Marshal) qName[3]).writeInstance(writer, obj);
@@ -471,19 +475,19 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             elementType = PropertyInfo.OBJECT_TYPE;
         int cnt = vector.size();
         Object[] arrType = getInfo(elementType.type, null);
-        writer.attribute(enc, "arrayType", writer.getPrefix((String) arrType[0], false) + ":" + arrType[1] + "[" + cnt + "]");
+        writer.attribute(enc, ARRAY_TYPE_LABEL, writer.getPrefix((String) arrType[0], false) + ":" + arrType[1] + "[" + cnt + "]");
         boolean skipped = false;
         for (int i = 0; i < cnt; i++) {
             if (vector.elementAt(i) == null)
                 skipped = true;
             else {
-                writer.startTag(null, "item");
+                writer.startTag(null, ITEM_LABEL);
                 if (skipped) {
                     writer.attribute(enc, "position", "[" + i + "]");
                     skipped = false;
                 }
                 writeProperty(writer, vector.elementAt(i), elementType);
-                writer.endTag(null, "item");
+                writer.endTag(null, ITEM_LABEL);
             }
         }
     }
