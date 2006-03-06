@@ -4,6 +4,8 @@ History
 =======
 2.1.0	2006/03/??	Release
 
+- Deprecated getResult in SoapSerialization envelope and replaced it with a fault throwing
+getResponse().
 - SF FEATURE # 1428588 Added a HttpTransport layer for use with webservices with Basic Authentication.
 - SF BUG # 1442028 Null pointer exception when providing a KVMSerializable object with
 a null name for the PropertyInfo object.  This change protects the library from misconfigured
