@@ -2,7 +2,7 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
-2.1.0	2006/03/??	Release
+2.1.0-alpha	2006/03/08	Release
 
 - Deprecated getResult in SoapSerialization envelope and replaced it with a fault throwing
 getResponse().

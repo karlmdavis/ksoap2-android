@@ -10,4 +10,6 @@ ksoap2-j2me-core.jar -- J2ME compatible version which is fully self sufficient a
 
 ksoap2-j2me-nodeps.jar -- J2ME version with only the ksoap classes.  Requires kxml and appropriate kobjects classes to operate.
 
+ksoap2-j2me-extras.jar -- Provides a transport layer that authenticates against a Basic Authentication Web Service.
+
 ksoap2-src.zip -- Source package.
