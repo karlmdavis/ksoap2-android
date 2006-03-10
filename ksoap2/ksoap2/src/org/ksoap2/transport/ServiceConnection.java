@@ -31,7 +31,7 @@ public interface ServiceConnection {
 
     public void setRequestProperty(String propertyName, String value) throws IOException;
 
-    public void setRequestMethod(String post) throws ProtocolException, IOException;
+    public void setRequestMethod(String post) throws IOException;
 
     public OutputStream openOutputStream() throws IOException;
 
