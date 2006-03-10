@@ -47,7 +47,7 @@ public class ServiceConnectionSE implements ServiceConnection {
         connection.setRequestProperty(string, soapAction);
     }
 
-    public void setRequestMethod(String post) throws ProtocolException {
+    public void setRequestMethod(String post) throws IOException {
         connection.setRequestMethod(post);
     }
 
