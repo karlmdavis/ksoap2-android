@@ -11,4 +11,8 @@ public class MockTransport extends Transport {
     public void parseResponse(SoapEnvelope envelope, InputStream is) throws XmlPullParserException, IOException {
         super.parseResponse(envelope, is);
     }
+
+    public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException {
+        throw new RuntimeException("call not currently implemented");
+    }
 }

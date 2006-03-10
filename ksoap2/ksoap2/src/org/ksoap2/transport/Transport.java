@@ -26,6 +26,7 @@ package org.ksoap2.transport;
 import java.io.*;
 
 import org.ksoap2.*;
+import org.ksoap2.serialization.*;
 import org.kxml2.io.*;
 import org.xmlpull.v1.*;
 
@@ -91,5 +92,10 @@ abstract public class Transport {
     public void setXmlVersionTag(String tag) {
         xmlVersionTag = tag;
     }
+
+    public void reset() {
+    }
+
+    abstract public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException;
 
 }
