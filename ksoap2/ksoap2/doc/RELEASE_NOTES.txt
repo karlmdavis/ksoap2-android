@@ -2,6 +2,13 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
+2.1.0-beta	2006/03/13 Beta Release
+
+- With some testing, I have not been able to break anything we do not already known about
+in the 2.0.x release.  
+- Moved more method references up to the Transport class so that code can be abstracted to 
+use the SE or the MIDP transport layers.
+
 2.1.0-alpha	2006/03/08	Release
 
 - Deprecated getResult in SoapSerialization envelope and replaced it with a fault throwing
