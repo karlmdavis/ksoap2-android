@@ -26,7 +26,9 @@
 
 
 
-<p>2006-03-08 -- Updates fixing some bugs and working towards a releasable version. Differences between the versions can be found <a href="doc/tagdiff.html">here</a>.</p>
+<p>2006-03-13 -- Beta release with some small changes and updated javadocs. Diffs between 2.0.x and this version are located <a href="doc/tagdiff.html">here</a>.</p>
+
+<p>2006-03-08 -- Updates fixing some bugs and working towards a releasable version. </p>
 
 <p>2006-02-05 -- The project is undergoing work to enhance testing
 increase stability and keep pushing forward development to remove bugs
