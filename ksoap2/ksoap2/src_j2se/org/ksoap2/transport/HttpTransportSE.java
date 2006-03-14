@@ -29,9 +29,12 @@ import java.io.*;
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
+/**
+ * A J2SE based HttpTransport layer.
+ */
 public class HttpTransportSE extends Transport {
 
-  /**
+    /**
      * Creates instance of HttpTransportSE with set url
      * 
      * @param url
@@ -46,8 +49,9 @@ public class HttpTransportSE extends Transport {
      * 
      * @param soapAction
      *            the desired soapAction
+     * @param envelope
+     *            the envelope containing the information for the soap call.
      */
-
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
         if (soapAction == null)
             soapAction = "\"\"";

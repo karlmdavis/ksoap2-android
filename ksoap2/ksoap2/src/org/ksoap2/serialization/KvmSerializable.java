@@ -41,17 +41,15 @@ public interface KvmSerializable {
      *            the specified index
      * @return the serialized property
      */
-
     Object getProperty(int index);
 
     /** 
      * @return the number of serializable properties 
      */
-
     int getPropertyCount();
 
     /**
-     * sets the property with the given index to the given value.
+     * Sets the property with the given index to the given value.
      * 
      * @param index
      *            the index to be set
@@ -66,12 +64,11 @@ public interface KvmSerializable {
      * @param index
      *            the index to be queried
      * @param properties
-     *            information about the (de)serializer
+     *            information about the (de)serializer.  Not frequently used.
      * @param info
      *            The return parameter, to be filled with information about the
      *            property with the given index.
      */
-
     void getPropertyInfo(int index, Hashtable properties, PropertyInfo info);
 
 }

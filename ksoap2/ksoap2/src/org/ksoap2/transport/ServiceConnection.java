@@ -22,21 +22,68 @@
 package org.ksoap2.transport;
 
 import java.io.*;
-import java.net.*;
 
+/**
+ * Interface to allow the abstraction of the raw transport information
+ */
 public interface ServiceConnection {
+
+    /**
+     * Make an outgoing connection.
+     * 
+     * @exception IOException
+     */
     public void connect() throws IOException;
 
+    /**
+     * Disconnect from the outgoing connection
+     * 
+     * @exception IOException
+     */
     public void disconnect() throws IOException;
 
+    /**
+     * Set properties on the outgoing connection.
+     * 
+     * @param propertyName
+     *            the name of the property to set. For HTTP connections these
+     *            are the request properties in the HTTP Header.
+     * @param value
+     *            the string to set the property header to.
+     * @exception IOException
+     */
     public void setRequestProperty(String propertyName, String value) throws IOException;
 
-    public void setRequestMethod(String post) throws IOException;
+    /**
+     * Sets how to make the requests. For HTTP this is typically POST or GET.
+     * 
+     * @param requestMethodType
+     *            the type of request method to make the soap call with.
+     * @exception IOException
+     */
+    public void setRequestMethod(String requestMethodType) throws IOException;
 
+    /**
+     * Open and return the outputStream to the endpoint.
+     * 
+     * @exception IOException
+     * @return the output stream to write the soap message to.
+     */
     public OutputStream openOutputStream() throws IOException;
 
+    /**
+     * Opens and returns the inputstream from which to parse the result of the
+     * soap call.
+     * 
+     * @exception IOException
+     * @return the inputstream containing the xml to parse the result from the
+     *         call from.
+     */
     public InputStream openInputStream() throws IOException;
 
+    /**
+     * @return the error stream for the call.
+     */
     public InputStream getErrorStream();
 
 }

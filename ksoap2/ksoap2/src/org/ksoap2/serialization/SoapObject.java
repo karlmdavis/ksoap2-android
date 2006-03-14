@@ -111,7 +111,6 @@ public class SoapObject implements KvmSerializable {
      * 
      * @return the number of properties
      */
-
     public int getPropertyCount() {
         return data.size();
     }
@@ -125,7 +124,6 @@ public class SoapObject implements KvmSerializable {
      * @param propertyInfo
      *            designated retainer of desired property
      */
-
     public void getPropertyInfo(int index, Hashtable properties, PropertyInfo propertyInfo) {
         PropertyInfo p = (PropertyInfo) info.elementAt(index);
         propertyInfo.name = p.name;
@@ -142,7 +140,6 @@ public class SoapObject implements KvmSerializable {
      * 
      * @return a copy of this.
      */
-
     public SoapObject newInstance() {
         SoapObject o = new SoapObject(namespace, name);
         for (int i = 0; i < data.size(); i++) {
@@ -189,7 +186,6 @@ public class SoapObject implements KvmSerializable {
      * @param value
      *            the value of the property
      */
-
     public SoapObject addProperty(PropertyInfo propertyInfo, Object value) {
         info.addElement(propertyInfo);
         data.addElement(value);

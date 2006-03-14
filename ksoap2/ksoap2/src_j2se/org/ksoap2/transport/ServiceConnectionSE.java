@@ -24,10 +24,17 @@ package org.ksoap2.transport;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Connection for J2SE environments.
+ */
 public class ServiceConnectionSE implements ServiceConnection {
 
     private HttpURLConnection connection;
 
+    /**
+     * Constructor taking the url to the endpoint for this soap communication
+     * @param url the url to open the connection to.
+     */
     public ServiceConnectionSE(String url) throws IOException {
         connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setUseCaches(false);
@@ -47,8 +54,8 @@ public class ServiceConnectionSE implements ServiceConnection {
         connection.setRequestProperty(string, soapAction);
     }
 
-    public void setRequestMethod(String post) throws IOException {
-        connection.setRequestMethod(post);
+    public void setRequestMethod(String requestMethod) throws IOException {
+        connection.setRequestMethod(requestMethod);
     }
 
     public OutputStream openOutputStream() throws IOException {

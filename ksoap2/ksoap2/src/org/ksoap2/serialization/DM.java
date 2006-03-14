@@ -28,7 +28,6 @@ import org.ksoap2.*;
  * This class is not public, so save a few bytes by using a short class name (DM
  * stands for DefaultMarshal)...
  */
-
 class DM implements Marshal {
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {

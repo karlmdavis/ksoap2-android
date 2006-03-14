@@ -23,8 +23,8 @@ package org.ksoap2.serialization;
 import java.io.*;
 import org.xmlpull.v1.*;
 
-/** 
- * Interface for custom (de)serialization. 
+/**
+ * Interface for custom (de)serialization.
  */
 
 public interface Marshal {
@@ -34,8 +34,13 @@ public interface Marshal {
      * please note that the start and and tag must be consumed. This is not
      * symmetric to writeInstance, but otherwise it would not be possible to
      * access the attributes of the start tag here.
+     * 
+     * @param parser
+     *            the xml parser
+     * @param namespace
+     *            the namespace.
+     * @return the object read from the xml stream.
      */
-
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException;
 
     /**
@@ -43,13 +48,19 @@ public interface Marshal {
      * readInstance, it is not neccessary to care about the sorrounding start
      * and end tags. Additional attributes must be writen before anything else
      * is written.
+     * 
+     * @param writer
+     *            the xml serializer.
+     * @param instance
+     *            the instance to write to the writer.
      */
-
     public void writeInstance(XmlSerializer writer, Object instance) throws IOException;
 
-    /** 
-     * Register this Marshal with Envelope 
+    /**
+     * Register this Marshal with Envelope
+     * 
+     * @param envelope
+     *            the soap serialization envelope.
      */
-
-    public void register(SoapSerializationEnvelope cm);
+    public void register(SoapSerializationEnvelope envelope);
 }

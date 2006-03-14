@@ -26,7 +26,6 @@ package org.ksoap2.transport;
 import java.io.*;
 
 import org.ksoap2.*;
-import org.ksoap2.serialization.*;
 import org.kxml2.io.*;
 import org.xmlpull.v1.*;
 
@@ -89,13 +88,31 @@ abstract public class Transport {
         this.url = url;
     }
 
+    /**
+     * Sets the version tag for the outgoing soap call. Example <?xml
+     * version=\"1.0\" encoding=\"UTF-8\"?>
+     * 
+     * @param tag
+     *            the xml string to set at the top of the soap message.
+     */
     public void setXmlVersionTag(String tag) {
         xmlVersionTag = tag;
     }
 
+    /**
+     * Attempts to reset the connection.
+     */
     public void reset() {
     }
 
+    /**
+     * Perform a soap call with a given namespace and the given envelope.
+     * 
+     * @param targetNamespace
+     *            the namespace with which to perform the call in.
+     * @param envelope
+     *            the envelope the contains the information for the call.
+     */
     abstract public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException;
 
 }

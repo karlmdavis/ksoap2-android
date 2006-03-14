@@ -28,7 +28,9 @@ import java.io.*;
 
 /**
  * An Http transport layer class which provides a mechanism to login to
- * webservices using Basic Authentication
+ * webservices using Basic Authentication on midp platforms.
+ * 
+ * <i>Thanks to Paul Spencer</i>
  */
 public class HttpTransportBasicAuth extends HttpTransport {
     private String username;
@@ -39,7 +41,7 @@ public class HttpTransportBasicAuth extends HttpTransport {
      * @param url
      *            The url address of the webservice endpoint
      * @param username
-     *            Username for the Basic Authentication challenge RFC 2617 *
+     *            Username for the Basic Authentication challenge RFC 2617 
      * @param password
      *            Password for the Basic Authentication challenge RFC 2617
      */

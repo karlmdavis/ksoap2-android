@@ -285,7 +285,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * null is returned. This method is used by the SoapParser in order to
      * convert the XML code to Java objects.
      */
-
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
         Object obj = qNameToClass.get(new SoapPrimitive(namespace, name, null));
         if (obj == null)
@@ -316,7 +315,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * in order to map Java objects to the corresponding SOAP section five XML
      * code.
      */
-
     public Object[] getInfo(Object type, Object instance) {
         if (type == null) {
             if (instance instanceof SoapObject || instance instanceof SoapPrimitive)
@@ -344,7 +342,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * Defines a direct mapping from a namespace and name to a java class (and
      * vice versa), using the given marshal mechanism
      */
-
     public void addMapping(String namespace, String name, Class clazz, Marshal marshal) {
         qNameToClass.put(new SoapPrimitive(namespace, name, null), marshal == null ? (Object) clazz : marshal);
         classToQName.put(clazz.getName(), new Object[] { namespace, name, null, marshal });
