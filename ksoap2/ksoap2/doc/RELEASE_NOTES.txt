@@ -2,8 +2,13 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
+2.1.0		2006/04/19 Beta Release
+
+- No reported problems. Full Release
+
 2.1.0-beta	2006/03/13 Beta Release
 
+- Corrected a compile problem where an jdk1.5 exception was accidently included in the build.
 - With some testing, I have not been able to break anything we do not already known about
 in the 2.0.x release.  
 - Moved more method references up to the Transport class so that code can be abstracted to 

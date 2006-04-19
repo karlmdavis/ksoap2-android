@@ -2,7 +2,7 @@
 
 <project name="ksoap2" default="build" basedir=".">
 	<property name="build.dir" value="build" />
-	<property name="version" value="2.1.0_beta" />
+	<property name="version" value="2.1.0" />
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="src" />
 	<property name="test.dir" value="test" />
