@@ -1,4 +1,11 @@
-<project name="cvs" default="tagdiff">
+<project name="cvs" default="noop">
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: noop                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="noop">
+            <echo>Not using cvs currently. Will update when svn tools ready.</echo>
+    </target>
+
     <target name="tagdiff">
          <cvstagdiff cvsRoot=":ext:cgul@cvs.sourceforge.net:/cvsroot/ksoap2"
                 destfile="tagdiff.xml"
