@@ -153,6 +153,7 @@ public class HttpTransport extends Transport {
                         break;
                     bos.write(buf, 0, rd);
                 }
+                bos.flush();
                 buf = bos.toByteArray();
                 responseDump = new String(buf);
                 is.close();
