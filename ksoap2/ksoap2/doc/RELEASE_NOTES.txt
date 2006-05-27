@@ -2,7 +2,7 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
-2.1.0		2006/04/19 Beta Release
+2.1.0		2006/04/19 Full Release
 
 - No reported problems. Full Release
 
