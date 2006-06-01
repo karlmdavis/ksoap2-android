@@ -6,9 +6,6 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<ant dir="ksoap2" antfile="build_tagdiff.xml"/>
-		<copy file="ksoap2/tagdiff.html" todir="www/doc"/>
-			
 	</target>
 
 	<target name="clean">
