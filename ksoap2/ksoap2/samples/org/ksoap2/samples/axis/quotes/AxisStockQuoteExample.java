@@ -5,7 +5,8 @@ import org.ksoap2.serialization.*;
 import org.ksoap2.transport.*;
 /*
  * Example that uses one of the built in axis .jws examples
- * Install apache tomcat and the default version of axis and 
+ * Install apache tomcat or use simple axis server 
+ * and the default version of axis then 
  * start the server verify you have all of the needed .jars
  * installed correctly and you should be able to run this 
  * Example.
