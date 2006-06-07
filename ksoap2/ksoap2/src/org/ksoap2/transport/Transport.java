@@ -75,6 +75,7 @@ abstract public class Transport {
         xw.flush();
         bos.write('\r');
         bos.write('\n');
+        bos.flush();
         return bos.toByteArray();
     }
 

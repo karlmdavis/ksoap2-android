@@ -67,6 +67,7 @@ public class HttpTransportSE extends Transport {
         connection.setRequestMethod("POST");
         OutputStream os = connection.openOutputStream();
         os.write(requestData, 0, requestData.length);
+        os.flush();
         os.close();
         requestData = null;
         InputStream is;
@@ -89,6 +90,7 @@ public class HttpTransportSE extends Transport {
                     break;
                 bos.write(buf, 0, rd);
             }
+            bos.flush();
             buf = bos.toByteArray();
             responseDump = new String(buf);
             is.close();
