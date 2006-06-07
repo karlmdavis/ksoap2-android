@@ -1,34 +1,20 @@
 package org.ksoap2.samples.soccer;
 
-import java.util.*;
-
 import org.ksoap2.serialization.*;
 
-public class StadiumNamesResult extends Vector implements KvmSerializable {
+public class StadiumNamesResult extends LiteralArrayVector {
 
-        public void register(SoapSerializationEnvelope envelope, String namespace, String name) {
-            envelope.addMapping(namespace, name, this.getClass());
-        }
+    // in the resultant xml message, the array elements can
+    // be described with different tags depending on a number
+    // of factors (doc literal, rpc, etc...).  This tells
+    // our parent class to look for "string"
+    protected String getItemDescriptor() {
+        return "string";
+    }
 
-        public void getPropertyInfo(int index, Hashtable properties, PropertyInfo info) {
-            info.name = getItemDescriptor();
-            info.type = PropertyInfo.STRING_CLASS;
-        }
-
-        public Object getProperty(int index) {
-            return this;
-        }
-
-        public int getPropertyCount() {
-            return 1;
-        }
-
-        public void setProperty(int index, Object value) {
-            addElement(value);
-        }
-
-        protected String getItemDescriptor() {
-            return "string";
-        }
+    // This describes what type of objects are to be contained in the Array
+    protected Class getElementClass() {
+        return PropertyInfo.STRING_CLASS;
+    }
 
 }
