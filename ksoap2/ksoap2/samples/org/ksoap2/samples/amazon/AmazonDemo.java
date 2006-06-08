@@ -109,7 +109,7 @@ public class AmazonDemo extends MIDlet implements CommandListener, Runnable {
 
 				System.err.println (ht.responseDump);  
 				
-				SoapObject result = (SoapObject) envelope.getResult();
+				SoapObject result = (SoapObject) envelope.getResponse();
 				
 			 	resultVector = (Vector) result.getProperty("Details"); //.getProperty("Details");
 			 	
@@ -174,8 +174,4 @@ public class AmazonDemo extends MIDlet implements CommandListener, Runnable {
 		}		
     }
 
-/*
-    public static void main(String[] argv) {
-        new StockQuoteDemo().startApp();
-    }*/
 }
