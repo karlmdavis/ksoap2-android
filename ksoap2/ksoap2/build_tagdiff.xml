@@ -11,7 +11,7 @@
                 destfile="tagdiff.xml"
                 package="ksoap2"
                 startTag="RELEASE_2_0_2"
-                endTag="RELEASE_2_1_0" />
+                endTag="RELEASE_2_1_1" />
         <style in="tagdiff.xml" 
                out="tagdiff.html" 
                style="${ant.home}/etc/tagdiff.xsl">
