@@ -65,6 +65,7 @@ public class HttpTransportSE extends Transport {
         connection.setRequestProperty("Connection", "close");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
         connection.setRequestMethod("POST");
+        connection.connect();
         OutputStream os = connection.openOutputStream();
         os.write(requestData, 0, requestData.length);
         os.flush();
