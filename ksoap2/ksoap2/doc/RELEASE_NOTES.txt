@@ -2,6 +2,11 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
+2.1.1		2006/06/08 Full Release
+
+- When using the debug feature there are some problems with flushing the data.  This fix
+flushes the bytearrayoutputstream.
+
 2.1.0		2006/04/19 Full Release
 
 - No reported problems. Full Release
