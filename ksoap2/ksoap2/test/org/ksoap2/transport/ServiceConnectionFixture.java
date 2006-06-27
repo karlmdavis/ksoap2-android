@@ -194,11 +194,11 @@ public class ServiceConnectionFixture implements ServiceConnection {
     }
     
     public void connect() throws IOException {
-        throw new RuntimeException("MockServiceConnection.connect is not implemented yet");
+        throw new RuntimeException("ServiceConnectionFixture.connect is not implemented yet");
     }
 
     public void disconnect() throws IOException {
-        throw new RuntimeException("MockServiceConnection.disconnect is not implemented yet");
+        throw new RuntimeException("ServiceConnectionFixture.disconnect is not implemented yet");
     }
 
     public void setRequestProperty(String propertyName, String value) throws IOException {
@@ -217,7 +217,7 @@ public class ServiceConnectionFixture implements ServiceConnection {
     }
 
     public InputStream getErrorStream() {
-        throw new RuntimeException("MockServiceConnection.getErrorStream is not implemented yet");
+        throw new RuntimeException("ServiceConnectionFixture.getErrorStream is not implemented yet");
     }
     
     public static void assertComplexResponseCorrect(ComplexResponse complexResponse) {
