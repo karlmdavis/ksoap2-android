@@ -45,7 +45,7 @@ public interface Marshal {
 
     /**
      * Write the instance to the given XmlSerializer. In contrast to
-     * readInstance, it is not neccessary to care about the sorrounding start
+     * readInstance, it is not neccessary to care about the surrounding start
      * and end tags. Additional attributes must be writen before anything else
      * is written.
      * 

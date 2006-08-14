@@ -32,6 +32,9 @@ import org.xmlpull.v1.*;
  * This class extends the SoapEnvelope with Soap Serialization functionality.
  */
 public class SoapSerializationEnvelope extends SoapEnvelope {
+    protected static final int QNAME_TYPE = 1;
+    protected static final int QNAME_NAMESPACE = 0;
+    protected static final int QNAME_MARSHAL = 3;
     private static final String ANY_TYPE_LABEL = "anyType";
     private static final String ARRAY_MAPPING_NAME = "Array";
     private static final String NULL_LABEL = "null";
@@ -47,7 +50,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
     Hashtable idMap = new Hashtable();
     Vector multiRef; // = new Vector();
-    Vector types = new Vector();
 
     public boolean implicitTypes;
 
@@ -398,20 +400,16 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     public void writeBody(XmlSerializer writer) throws IOException {
         multiRef = new Vector();
         multiRef.addElement(bodyOut);
-        types.addElement(PropertyInfo.OBJECT_TYPE);
         Object[] qName = getInfo(null, bodyOut);
-        writer.startTag((String) qName[0], (String) qName[1]);
+        writer.startTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
+        if (dotNet) {
+            writer.attribute(null, "xmlns", (String) qName[QNAME_NAMESPACE]);
+        }
         writer.attribute(null, ID_LABEL, qName[2] == null ? ("o" + 0) : (String) qName[2]);
         writer.attribute(enc, ROOT_LABEL, "1");
-        if (qName[3] != null)
-            ((Marshal) qName[3]).writeInstance(writer, bodyOut);
-        else if (bodyOut instanceof KvmSerializable)
-            writeObjectBody(writer, (KvmSerializable) bodyOut);
-        else if (bodyOut instanceof Vector)
-            writeVectorBody(writer, (Vector) bodyOut, ((PropertyInfo) types.elementAt(0)).elementType);
-        else
-            throw new RuntimeException("Cannot serialize: " + bodyOut);
-        writer.endTag((String) qName[0], (String) qName[1]);
+        writeElement(writer, bodyOut, null, qName[QNAME_MARSHAL]);
+        writer.endTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
+
     }
 
     /**
@@ -421,17 +419,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
     public void writeObjectBody(XmlSerializer writer, KvmSerializable obj) throws IOException {
         PropertyInfo info = new PropertyInfo();
         int cnt = obj.getPropertyCount();
-//        String namespace = dotNet ? writer.getNamespace() : ""; // unused...curious
         for (int i = 0; i < cnt; i++) {
             obj.getPropertyInfo(i, properties, info);
             if ((info.flags & PropertyInfo.TRANSIENT) == 0) {
-                // TODO: looks broken here
-                String nsp = info.namespace;
-                if (nsp == null)
-                    nsp = info.namespace;
-                writer.startTag(nsp, info.name);
+                writer.startTag(info.namespace, info.name);
                 writeProperty(writer, obj.getProperty(i), info);
-                writer.endTag(nsp, info.name);
+                writer.endTag(info.namespace, info.name);
             }
         }
     }
@@ -447,23 +440,26 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
             if (i == -1) {
                 i = multiRef.size();
                 multiRef.addElement(obj);
-                types.addElement(type);
             }
             writer.attribute(null, HREF_LABEL, qName[2] == null ? ("#o" + i) : "#" + qName[2]);
         } else {
             if (!implicitTypes || obj.getClass() != type.type) {
-                String prefix = writer.getPrefix((String) qName[0], true);
-                writer.attribute(xsi, TYPE_LABEL, prefix + ":" + qName[1]);
+                String prefix = writer.getPrefix((String) qName[QNAME_NAMESPACE], true);
+                writer.attribute(xsi, TYPE_LABEL, prefix + ":" + qName[QNAME_TYPE]);
             }
-            if (qName[3] != null)
-                ((Marshal) qName[3]).writeInstance(writer, obj);
-            else if (obj instanceof KvmSerializable)
-                writeObjectBody(writer, (KvmSerializable) obj);
-            else if (obj instanceof Vector)
-                writeVectorBody(writer, (Vector) obj, type.elementType);
-            else
-                throw new RuntimeException("Cannot serialize: " + obj);
+            writeElement(writer, obj, type, qName[QNAME_MARSHAL]);
         }
+    }
+
+    private void writeElement(XmlSerializer writer, Object element, PropertyInfo type, Object marshal) throws IOException {
+        if (marshal != null)
+            ((Marshal) marshal).writeInstance(writer, element);
+        else if (element instanceof KvmSerializable)
+            writeObjectBody(writer, (KvmSerializable) element);
+        else if (element instanceof Vector)
+            writeVectorBody(writer, (Vector) element, type.elementType);
+        else
+            throw new RuntimeException("Cannot serialize: " + element);
     }
 
     protected void writeVectorBody(XmlSerializer writer, Vector vector, PropertyInfo elementType) throws IOException {
