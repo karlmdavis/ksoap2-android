@@ -25,18 +25,26 @@ import java.util.*;
 import org.ksoap2.serialization.*;
 
 public class ComplexResponse implements KvmSerializable {
+    public static final String BOOLEAN_RESPONSE_NAME = "booleanResponse";
+    public static final String INTEGER_REPONSE_NAME = "integerReponse";
     public String stringResponse;
     public long longResponse;
-    public String namespace ="";
+    public int integerResponse;
+    public boolean booleanResponse;
+    public String namespace = "";
     public String responseOne_Name = "longResponse";
-    public int parameterCount = 2;
+    public int parameterCount = 4;
 
     public Object getProperty(int index) {
         if (index == 0)
             return stringResponse;
         else if (index == 1)
             return new Long(longResponse);
-        else
+        else if (index == 2) {
+            return new Integer(integerResponse);
+        } else if (index == 3) {
+            return new Boolean(booleanResponse);
+        } else
             throw new RuntimeException("invalid parameter");
     }
 
@@ -49,8 +57,12 @@ public class ComplexResponse implements KvmSerializable {
             stringResponse = (String) value;
         else if (index == 1 && value instanceof Long)
             longResponse = ((Long) value).longValue();
-        else 
-            throw new RuntimeException("invalid parameter in set");
+        else if (index == 2 ) {
+            integerResponse = ((Integer) value).intValue();
+        } else if (index == 3) {
+            booleanResponse = ((Boolean) value).booleanValue();
+        } else
+            throw new RuntimeException("invalid parameter in set: "+index+":"+value.toString()+":"+value.getClass().getName());
     }
 
     public void getPropertyInfo(int index, Hashtable properties, PropertyInfo info) {
@@ -60,6 +72,12 @@ public class ComplexResponse implements KvmSerializable {
         } else if (index == 1) {
             info.name = responseOne_Name;
             info.type = PropertyInfo.LONG_CLASS;
+        } else if (index == 2) {
+            info.name = INTEGER_REPONSE_NAME;
+            info.type = PropertyInfo.INTEGER_CLASS;
+        } else if (index == 3) {
+            info.name = BOOLEAN_RESPONSE_NAME;
+            info.type = PropertyInfo.BOOLEAN_CLASS;
         } else {
             throw new RuntimeException("invalid parameter");
         }

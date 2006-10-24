@@ -36,6 +36,8 @@ public class ServiceConnectionFixture implements ServiceConnection {
     static public final String AXIS_FAULT_MESSAGE = "java.io.FileNotFoundException: /WebService.jws";
     public static String theStringResponse = "theStringResponse";
     public static long theLongResponse = 1234567890;
+    public static int theIntegerResponse = 12;
+    public static boolean theBooleanResponse = true;
     public HashMap requestPropertyMap = new HashMap();
     
     public static String TWO_DIMENSIONAL_STRING_ARRAY = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
@@ -119,8 +121,10 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "            <ComplexFunctionReturn href=\"#id0\"/>" + "\n" + 
     "         </" + RESPONSE_CLASS_NAME + ">" + "\n" + 
     "         <multiRef id=\"id0\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"ns1:" + RESPONSE_CLASS_NAME + "\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
-    "            <longResponse href=\"#id1\"/>" + "\n" + 
-    "            <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
+    "             <longResponse href=\"#id1\"/>" + "\n" + 
+    "             <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
+    "             <"+ComplexResponse.INTEGER_REPONSE_NAME+" xsi:type=\"xsd:int\">" + theIntegerResponse + "</"+ComplexResponse.INTEGER_REPONSE_NAME+"> \n" +
+    "             <"+ComplexResponse.BOOLEAN_RESPONSE_NAME+" xsi:type=\"xsd:boolean\">" + theBooleanResponse + "</"+ComplexResponse.BOOLEAN_RESPONSE_NAME+"> \n" +
     "         </multiRef>" + "\n" + 
     "         <multiRef id=\"id1\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"xsd:long\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">"+theLongResponse+"</multiRef>" + "\n" + 
     "      </soapenv:Body>" + "\n" + 
@@ -132,8 +136,10 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "            <ComplexFunctionReturn href=\"#id0\"/>" + "\n" + 
     "         </" + RESPONSE_CLASS_NAME + ">" + "\n" + 
     "         <multiRef id=\"id0\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"ns1:" + RESPONSE_CLASS_NAME + "\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
-    "            <longResponse xsi:type=\"xsd:long\">"+theLongResponse+"</longResponse>" + "\n" + 
-    "            <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
+    "             <longResponse xsi:type=\"xsd:long\">"+theLongResponse+"</longResponse>" + "\n" + 
+    "             <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
+    "             <"+ComplexResponse.INTEGER_REPONSE_NAME+" xsi:type=\"xsd:int\">" + theIntegerResponse + "</"+ComplexResponse.INTEGER_REPONSE_NAME+"> \n" +
+    "             <"+ComplexResponse.BOOLEAN_RESPONSE_NAME+" xsi:type=\"xsd:boolean\">" + theBooleanResponse + "</"+ComplexResponse.BOOLEAN_RESPONSE_NAME+"> \n" +
     "         </multiRef>" + "\n" + 
     "         <multiRef id=\"id1\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"xsd:long\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">10</multiRef>" + "\n" + 
     "      </soapenv:Body>" + "\n" + 
@@ -145,6 +151,8 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "          <ComplexFunctionReturn xsi:type=\"ns1:" + RESPONSE_CLASS_NAME + "\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
     "             <longResponse xsi:type=\"xsd:long\">"+theLongResponse+"</longResponse>" + "\n" + 
     "             <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
+    "             <"+ComplexResponse.INTEGER_REPONSE_NAME+" xsi:type=\"xsd:int\">" + theIntegerResponse + "</"+ComplexResponse.INTEGER_REPONSE_NAME+"> \n" +
+    "             <"+ComplexResponse.BOOLEAN_RESPONSE_NAME+" xsi:type=\"xsd:boolean\">" + theBooleanResponse + "</"+ComplexResponse.BOOLEAN_RESPONSE_NAME+"> \n" +
     "          </ComplexFunctionReturn>" + "\n" + 
     "       </" + RESPONSE_CLASS_NAME + ">" + "\n" + 
     "    </soapenv:Body>" + "\n" + 
@@ -156,6 +164,8 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "          <ComplexFunctionReturn xsi:type=\"ns1:" + RESPONSE_CLASS_NAME + "\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" + 
     "             <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" + 
     "             <longResponse xsi:type=\"xsd:long\">"+theLongResponse+"</longResponse>" + "\n" + 
+    "             <"+ComplexResponse.INTEGER_REPONSE_NAME+" xsi:type=\"xsd:int\">" + theIntegerResponse + "</"+ComplexResponse.INTEGER_REPONSE_NAME+"> \n" +
+    "             <"+ComplexResponse.BOOLEAN_RESPONSE_NAME+" xsi:type=\"xsd:boolean\">" + theBooleanResponse + "</"+ComplexResponse.BOOLEAN_RESPONSE_NAME+"> \n" +
     "          </ComplexFunctionReturn>" + "\n" + 
     "       </" + RESPONSE_CLASS_NAME + ">" + "\n" + 
     "    </soapenv:Body>" + "\n" + 
