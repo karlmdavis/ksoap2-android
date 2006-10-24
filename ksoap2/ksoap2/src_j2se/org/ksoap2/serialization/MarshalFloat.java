@@ -30,14 +30,15 @@ public class MarshalFloat implements Marshal {
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo propertyInfo) throws IOException, XmlPullParserException {
         String stringValue = parser.nextText();
         Object result;
-        if (name.equals("float"))
+        if (name.equals("float")) {
             result = new Float(stringValue);
-        else if (name.equals("double"))
+        } else if (name.equals("double")) {
             result = new Double(stringValue);
-        else if (name.equals("decimal"))
+        } else if (name.equals("decimal")) {
             result = new java.math.BigDecimal(stringValue);
-        else
+        } else {
             throw new RuntimeException("float, double, or decimal expected");
+        }
         return result;
     }
 

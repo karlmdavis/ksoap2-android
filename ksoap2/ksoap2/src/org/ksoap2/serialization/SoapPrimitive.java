@@ -45,8 +45,9 @@ public class SoapPrimitive {
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof SoapPrimitive))
+        if (!(o instanceof SoapPrimitive)) {
             return false;
+        }
         SoapPrimitive p = (SoapPrimitive) o;
         return name.equals(p.name) && namespace.equals(p.namespace) && (value == null ? (p.value == null) : value.equals(p.value));
     }

@@ -70,9 +70,11 @@ public class SoapObject implements KvmSerializable {
             return false;
 
         try {
-            for (int i = 0; i < cnt; i++)
-                if (!data.elementAt(i).equals(so.getProperty(((PropertyInfo) info.elementAt(i)).name)))
+            for (int i = 0; i < cnt; i++) {
+                if (!data.elementAt(i).equals(so.getProperty(((PropertyInfo) info.elementAt(i)).name))) {
                     return false;
+                }
+            }
         } catch (Exception e) {
             return false;
         }
@@ -100,8 +102,9 @@ public class SoapObject implements KvmSerializable {
 
     public Object getProperty(String name) {
         for (int i = 0; i < data.size(); i++) {
-            if (name.equals(((PropertyInfo) info.elementAt(i)).name))
+            if (name.equals(((PropertyInfo) info.elementAt(i)).name)) {
                 return data.elementAt(i);
+            }
         }
         throw new RuntimeException("illegal property: " + name);
     }
