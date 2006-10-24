@@ -75,7 +75,12 @@
 		<extendclasspath path="lib/clover.jar" />
 		<taskdef resource="clovertasks" classpath="lib/clover.jar" />
 		<mkdir dir="${clover.directory.name}" />
-		<clover-setup initString="${clover.db.name}" />
+		<clover-setup initString="${clover.db.name}">
+			<fileset dir=".">
+				<exclude name="**/mock/**/*"/>
+				<include name="**/*.java" />
+			</fileset>
+		</clover-setup>
 	</target>
 
 

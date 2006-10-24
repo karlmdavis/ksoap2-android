@@ -53,12 +53,12 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         myTransport = new MockTransport();
     }
 
-    public void xx_testTwoDimensionalStringArrays() throws Throwable {
-        // can't handle two dimensional arrays.
-        myTransport.parseResponse(envelope, ServiceConnectionFixture.createTwoDimensionalStringArrayResponseAsStream());
-        Object result = envelope.getResponse();
-        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
-    }
+//    public void xx_testTwoDimensionalStringArrays() throws Throwable {
+//        // can't handle two dimensional arrays.
+//        myTransport.parseResponse(envelope, ServiceConnectionFixture.createTwoDimensionalStringArrayResponseAsStream());
+//        Object result = envelope.getResponse();
+//        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+//    }
 
     public void testInbound() throws Throwable {
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
