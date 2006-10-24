@@ -16,8 +16,11 @@
 	<property name="dist.dir" value="dist" />
 	<property name="api.dir" value="doc/api" />
 	<property name="java.class.target.level" value="1.2" />
- 	<property name="java.class.source.level" value="1.2" />
-	
+	<property name="java.class.source.level" value="1.2" />
+	<property name="clover.directory.name" value="clover" />
+	<property name="clover.pdf.name" value="${clover.directory.name}/coverage.pdf" />
+	<property name="clover.db.name" value="mycoverage.db" />
+
 	<path id="lib.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
@@ -37,7 +40,7 @@
 	<target name="build" depends="build_src, build_j2me_full.jar, build_j2se_full.jar, build_j2me_nodeps.jar, build_j2me_core.jar, build_extras.jar" description="--> Builds all products." />
 
 	<target name="release" depends="test,build" description="--> Builds all products and runs the tests." />
-	
+
 	<target name="test" depends="build.test.classes" description="--> Run the unit tests">
 		<junit>
 			<classpath refid="lib.classpath" />
@@ -52,7 +55,30 @@
 			</batchtest>
 		</junit>
 	</target>
-	
+
+	<target name="clover" depends="-init.clover, test" description="--> Runs clover test coverage report">
+		<clover-report>
+			<current outfile="${clover.pdf.name}" summary="yes">
+				<format type="pdf" />
+			</current>
+		</clover-report>
+		<clover-report>
+			<current outfile="${clover.directory.name}">
+				<format type="html" />
+			</current>
+		</clover-report>
+	</target>
+
+	<target name="-init.clover">
+		<property name="clover.license.path" location="${user.home}/clover.license" />
+		<taskdef resource="com/cenqua/ant/antlib.xml" classpath="lib/cenquatasks.jar" />
+		<extendclasspath path="lib/clover.jar" />
+		<taskdef resource="clovertasks" classpath="lib/clover.jar" />
+		<mkdir dir="${clover.directory.name}" />
+		<clover-setup initString="${clover.db.name}" />
+	</target>
+
+
 	<target name="clean" description="--> Cleans up built products">
 		<delete dir="${dist.dir}" />
 		<delete dir="${build.dir}" />
@@ -60,6 +86,12 @@
 		<delete dir="${api.dir}" />
 		<delete file="tagdiff.xml" />
 		<delete file="tagdiff.html" />
+		<delete dir="${clover.directory.name}" />
+		<delete>
+			<fileset dir=".">
+				<include name="${clover.db.name}*" />
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="javadoc" description="--> Creates the javadoc for the ksoap2 source.">
@@ -71,8 +103,8 @@
 			<sourcepath location="${src.dir}" />
 			<sourcepath location="${j2se_src.dir}" />
 			<sourcepath location="${midp_src.dir}" />
-			<sourcepath location="${servlet_src.dir}"/>
-			<sourcepath location="${extras_src.dir}"/>
+			<sourcepath location="${servlet_src.dir}" />
+			<sourcepath location="${extras_src.dir}" />
 			<package name="org.ksoap2.*" />
 		</javadoc>
 	</target>
@@ -86,8 +118,8 @@
 			<src path="${test.dir}" />
 			<src path="${midp_src.dir}" />
 			<src path="${j2se_src.dir}" />
-			<src path="${servlet_src.dir}"/>
-			<src path="${extras_src.dir}"/>
+			<src path="${servlet_src.dir}" />
+			<src path="${extras_src.dir}" />
 		</javac>
 	</target>
 
@@ -100,8 +132,8 @@
 			<src path="${src.dir}" />
 			<src path="${midp_src.dir}" />
 			<src path="${j2se_src.dir}" />
-			<src path="${servlet_src.dir}"/>
-			<src path="${extras_src.dir}"/>
+			<src path="${servlet_src.dir}" />
+			<src path="${extras_src.dir}" />
 		</javac>
 	</target>
 
@@ -176,7 +208,7 @@
 			</fileset>
 		</jar>
 	</target>
-	
+
 	<target name="build_extras.jar" depends="build.classes" description="--> Builds a J2ME jar with extras included (eg. HttpTransportBasicAuth).">
 		<jar jarfile="${dist.dir}/${ant.project.name}-j2me-extras-${version}.jar">
 			<fileset dir="${src.build.dir}">
