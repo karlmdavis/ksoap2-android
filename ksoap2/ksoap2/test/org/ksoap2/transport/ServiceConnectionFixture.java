@@ -170,10 +170,56 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "       </" + RESPONSE_CLASS_NAME + ">" + "\n" + 
     "    </soapenv:Body>" + "\n" + 
     "</soapenv:Envelope>";
-
+    public static final String HASH_TABLE_PARAMETERS ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" +
+    "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
+    "    <soapenv:Body>" + "\n" + 
+    "           <hashthingy n3:type=\"n2:Map\" xmlns:n2=\"http://xml.apache.org/xml-soap\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema-instance\">\n"+
+    "               <item>\n"+
+    "                   <key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key>\n"+
+    "                   <value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value>\n"+
+    "               </item>\n"+
+    "           </hashthingy>\n"+
+    "    </soapenv:Body>" + "\n" + 
+    "</soapenv:Envelope>";
+    
+    public static final String HASH_TABLE_PARAMETERS_DUP ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" +
+    "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
+    "    <soapenv:Body>" + "\n" + 
+    "           <hashthingy n3:type=\"n2:Map\" xmlns:n2=\"http://xml.apache.org/xml-soap\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema-instance\">\n"+
+    "               <item>\n"+
+    "                   <key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key>\n"+
+    "                   <value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value>\n"+
+    "               </item>\n"+
+    "               <item>\n"+
+    "                   <key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key>\n"+
+    "                   <value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value>\n"+
+    "               </item>\n"+
+    "               <item>\n"+
+    "                   <key n3:null=\"true\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\"/>\n"+
+    "                   <value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">blah</value>\n"+
+    "               </item>\n"+
+    "               <item>\n"+
+    "                   <key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">another</key>\n"+
+    "                   <value n3:null=\"true\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\"/>\n"+
+    "               </item>\n"+
+    "           </hashthingy>\n"+
+    "    </soapenv:Body>" + "\n" + 
+    "</soapenv:Envelope>";
+    
+    
+    
     private ByteArrayInputStream inputStream;
     public ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
+    public boolean connected;
+    
+    public static InputStream hashTableWithDupAsStream() {
+        return messsageAsStream(HASH_TABLE_PARAMETERS_DUP);
+    }
+    
+    public static InputStream hashTableAsStream() {
+        return messsageAsStream(HASH_TABLE_PARAMETERS);
+    }
+    
     public static InputStream faultStringAsStream() {
         return messsageAsStream(FAULT_STRING);
     }
@@ -204,7 +250,7 @@ public class ServiceConnectionFixture implements ServiceConnection {
     }
     
     public void connect() throws IOException {
-        throw new RuntimeException("ServiceConnectionFixture.connect is not implemented yet");
+        connected = true;
     }
 
     public void disconnect() throws IOException {
@@ -238,5 +284,6 @@ public class ServiceConnectionFixture implements ServiceConnection {
     public static InputStream createTwoDimensionalStringArrayResponseAsStream() {
         return messsageAsStream(TWO_DIMENSIONAL_STRING_ARRAY);
     }
+
 
 }

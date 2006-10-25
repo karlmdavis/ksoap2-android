@@ -30,7 +30,7 @@ public class MarshalDateTest extends TestCase {
     public void testMarshalDateOutbound() throws IOException {
         MockXmlSerializer writer = new MockXmlSerializer();
         marshalDate.writeInstance(writer , TEST_DATE);
-        assertEquals(ENCODED_DATE_STRING, writer.outputText);
+        assertEquals(ENCODED_DATE_STRING, writer.getOutputText());
     }
     
     public void testRegistration_moreIntegrationLike() throws IOException, XmlPullParserException {

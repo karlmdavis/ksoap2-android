@@ -9,7 +9,7 @@ import junit.framework.*;
 public abstract class TransportTestCase extends TestCase {
 
     protected static final String containerNameSpaceURI = ServiceConnectionFixture.NAMESPACE;
-    protected static final String soapAction = "SoapActionString";
+    protected String soapAction = "SoapActionString";
     ServiceConnectionFixture serviceConnection;
     protected SoapSerializationEnvelope envelope;
     protected SoapObject soapObject;

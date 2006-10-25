@@ -55,12 +55,14 @@ public class MarshalHashtable implements Marshal {
             parser.nextTag();
             Object key = envelope.read(parser, item, 0, null, null, PropertyInfo.OBJECT_TYPE);
             parser.nextTag();
-            if (key != null)
+            if (key != null) {
                 item.setProperty(0, key);
+            }
             Object value = envelope.read(parser, item, 1, null, null, PropertyInfo.OBJECT_TYPE);
             parser.nextTag();
-            if (value != null)
+            if (value != null) {
                 item.setProperty(1, value);
+            }
             parser.require(XmlPullParser.END_TAG, null, "item");
         }
         parser.require(XmlPullParser.END_TAG, null, elementName);

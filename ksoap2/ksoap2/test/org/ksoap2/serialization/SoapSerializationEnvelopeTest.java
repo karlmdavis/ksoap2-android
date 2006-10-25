@@ -21,6 +21,7 @@
 package org.ksoap2.serialization;
 
 import java.io.*;
+import java.util.*;
 
 import junit.framework.*;
 import org.ksoap2.*;
@@ -147,6 +148,30 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         return parser;
     }
 
+    public void testWriteHashtable() throws IOException {
+        Hashtable hashtable = new Hashtable();
+        hashtable.put("key1", "value1");
+        soapObject.addProperty("hashthingy", hashtable);
+        new MarshalHashtable().register(envelope);
+        writeBodyWithSoapObject(soapObject);
+        assertEquals(BODY_XML_STRING + ">" + "<hashthingy n3:type=\"n2:Map\" xmlns:n2=\"http://xml.apache.org/xml-soap\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema-instance\"><item><key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key><value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value></item></hashthingy></n0:FunctionName>", new String(outputStream.toByteArray()));
+    }
+    
+    public void testReadHashtable() throws XmlPullParserException, IOException {
+        new MarshalHashtable().register(envelope);
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.hashTableAsStream());
+        Hashtable result = (Hashtable) envelope.bodyIn;
+        assertEquals("value1", result.get("key1"));
+    }
+    
+    public void testReadHashtable_dupkeyvalueandnulls() throws XmlPullParserException, IOException {
+        new MarshalHashtable().register(envelope);
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.hashTableWithDupAsStream());
+        Hashtable result = (Hashtable) envelope.bodyIn;
+        assertEquals("value1", result.get("key1"));
+        assertEquals(1, result.values().size());
+    }
+    
     public void testWritingBody_WithNullParameter() throws Exception {
         soapObject.addProperty(PARAMETER_NAME, null);
         writeBodyWithSoapObject(soapObject);

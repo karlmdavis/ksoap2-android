@@ -6,10 +6,15 @@ import org.xmlpull.v1.*;
 
 public class MockXmlSerializer implements XmlSerializer {
 
-    public String outputText;
+    public static final String PREFIX = "PREFIX";
+    public String outputText = "";
+    public String propertyType = "";
+    public String endtag = "";
+    public String startTag = "";
 
-    public XmlSerializer attribute(String arg0, String arg1, String arg2) throws IOException, IllegalArgumentException, IllegalStateException {
-        throw new UnsupportedOperationException("MockXmlSerializer.attribute is not implemented yet");
+    public XmlSerializer attribute(String arg0, String label, String type) throws IOException, IllegalArgumentException, IllegalStateException {
+        propertyType += (type + ";");
+        return this;
     }
 
     public void cdsect(String arg0) throws IOException, IllegalArgumentException, IllegalStateException {
@@ -28,8 +33,9 @@ public class MockXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException("MockXmlSerializer.endDocument is not implemented yet");
     }
 
-    public XmlSerializer endTag(String arg0, String arg1) throws IOException, IllegalArgumentException, IllegalStateException {
-        throw new UnsupportedOperationException("MockXmlSerializer.endTag is not implemented yet");
+    public XmlSerializer endTag(String arg0, String tag) throws IOException, IllegalArgumentException, IllegalStateException {
+        endtag += (tag + ";");
+        return this;
     }
 
     public void entityRef(String arg0) throws IOException, IllegalArgumentException, IllegalStateException {
@@ -57,7 +63,7 @@ public class MockXmlSerializer implements XmlSerializer {
     }
 
     public String getPrefix(String arg0, boolean arg1) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("MockXmlSerializer.getPrefix is not implemented yet");
+        return PREFIX;
     }
 
     public Object getProperty(String arg0) {
@@ -96,17 +102,34 @@ public class MockXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException("MockXmlSerializer.startDocument is not implemented yet");
     }
 
-    public XmlSerializer startTag(String arg0, String arg1) throws IOException, IllegalArgumentException, IllegalStateException {
-        throw new UnsupportedOperationException("MockXmlSerializer.startTag is not implemented yet");
+    public XmlSerializer startTag(String arg0, String key) throws IOException, IllegalArgumentException, IllegalStateException {
+        startTag += (key + ";");
+        return this;
     }
 
     public XmlSerializer text(String text) throws IOException, IllegalArgumentException, IllegalStateException {
-        outputText = text;
+        outputText += (text + ";");
         return this;
     }
 
     public XmlSerializer text(char[] arg0, int arg1, int arg2) throws IOException, IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException("MockXmlSerializer.text is not implemented yet");
+    }
+
+    public String getOutputText() {
+        return outputText.substring(0, outputText.length() - 1);
+    }
+
+    public String getEndtag() {
+        return endtag.substring(0, endtag.length() - 1);
+    }
+
+    public String getPropertyType() {
+        return propertyType.substring(0, propertyType.length() - 1);
+    }
+
+    public String getStartTag() {
+        return startTag.substring(0, startTag.length() - 1);
     }
 
 }

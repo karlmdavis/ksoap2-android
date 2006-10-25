@@ -28,9 +28,18 @@ public class HttpTransportSETest extends TransportTestCase {
         MyTransport ht = new MyTransport("a url");
         ht.call(soapAction, envelope);
         assertSerializationDeserialization();
+        assertTrue(serviceConnection.connected);
+    }
+    
+    public void testOutbound_WithNoSoapAction() throws Throwable {
+        MyTransport ht = new MyTransport("a url");
+        ht.call(null, envelope);
+        soapAction = "\"\"";// expected answer for null
+        assertSerializationDeserialization();
+        assertTrue(serviceConnection.connected);
     }
 
-    class MyTransport extends HttpTransport {
+    class MyTransport extends HttpTransportSE {
         public MyTransport(String url) {
             super(url);
         }

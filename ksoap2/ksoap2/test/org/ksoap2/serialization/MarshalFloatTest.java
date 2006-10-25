@@ -44,18 +44,24 @@ public class MarshalFloatTest extends TestCase {
 
     }
 
-    public void testMarshalDateOutbound() throws IOException {
+    public void testMarshalDateOutbound_Float() throws IOException {
         MockXmlSerializer writer = new MockXmlSerializer();
         marshalFloat.writeInstance(writer, new Float(12.0));
-        assertEquals(FLOATING_POINT_VALUE, writer.outputText);
-
+        assertEquals(FLOATING_POINT_VALUE, writer.getOutputText());
+    }
+    
+    public void testmarshalDateOutbound_Double() throws IOException {
+        MockXmlSerializer writer = new MockXmlSerializer();
         marshalFloat.writeInstance(writer, new Double(12.0));
-        assertEquals(FLOATING_POINT_VALUE, writer.outputText);
-
-        marshalFloat.writeInstance(writer, new BigDecimal(12.0));
-        assertEquals("12", writer.outputText);
+        assertEquals(FLOATING_POINT_VALUE, writer.getOutputText());
     }
 
+    public void testmarshalDateOutbound_Decimal() throws IOException {
+        MockXmlSerializer writer = new MockXmlSerializer();
+        marshalFloat.writeInstance(writer, new BigDecimal(12.0));
+        assertEquals("12", writer.getOutputText());
+    }
+    
     public void testRegistration_moreIntegrationLike() throws IOException, XmlPullParserException {
         MockXmlPullParser pullParser = new MockXmlPullParser();
         pullParser.nextText = FLOATING_POINT_VALUE;
