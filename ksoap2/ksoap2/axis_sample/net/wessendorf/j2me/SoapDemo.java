@@ -1,26 +1,17 @@
 package net.wessendorf.j2me;
 
 
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
-import javax.microedition.lcdui.Display;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.TextBox;
-import javax.microedition.lcdui.TextField;
-import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.midlet.*;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransport;
+import org.ksoap2.*;
+import org.ksoap2.serialization.*;
+import org.ksoap2.transport.*;
 
 
 
 public class SoapDemo extends MIDlet implements CommandListener{
     
-    private Command exitCommand;
     private Display display;
     
     Form mainForm = new Form ("Hello World WebService");
@@ -62,7 +53,7 @@ public class SoapDemo extends MIDlet implements CommandListener{
                 ht.call("", envelope);
 
                 SoapObject ret = new SoapObject("http://ws.wessendorf.net","CustomObject");
-                ret =(SoapObject)envelope.getResult();
+                ret = (SoapObject) envelope.getResponse();
                 t.setString(ret.getProperty(0).toString());
             }
             catch ( SoapFault sf){

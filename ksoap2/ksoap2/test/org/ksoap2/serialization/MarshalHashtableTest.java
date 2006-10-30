@@ -3,11 +3,10 @@ package org.ksoap2.serialization;
 import java.io.*;
 import java.util.*;
 
+import junit.framework.*;
+
 import org.ksoap2.*;
 import org.ksoap2.transport.mock.*;
-import org.xmlpull.v1.*;
-
-import junit.framework.*;
 
 public class MarshalHashtableTest extends TestCase {
 

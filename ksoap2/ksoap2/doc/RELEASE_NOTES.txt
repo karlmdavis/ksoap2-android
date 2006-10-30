@@ -2,6 +2,9 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
+x.x.x
+- Cleaned up most warnings from code.
+- added clover code coverage to the project
 2.1.1		2006/06/08 Full Release
 
 - When using the debug feature there are some problems with flushing the data.  This fix flushes the bytearrayoutputstream. SF Patch #1488534

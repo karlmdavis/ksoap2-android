@@ -53,7 +53,7 @@ public class StockQuoteDemo extends MIDlet implements CommandListener, Runnable 
 			//ht.debug = true;
              
 			ht.call("urn:xmethods-delayed-quotes#getQuote", envelope);
-			resultItem.setText("" + envelope.getResult());
+			resultItem.setText("" + envelope.getResponse());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
