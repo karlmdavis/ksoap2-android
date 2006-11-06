@@ -1,202 +1,122 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-
-
-
-
-		
-  
-  
-  
   <title>kSOAP 2</title>
+
+
 </head>
 
 
-<body bgcolor="#ffffff">
-
-
-
+<body style="background-color: rgb(255, 255, 255);">
 
 <!--#include virtual="prolog.shtml" -->
 <h1>kSOAP 2</h1>
 
-
-
-
-
 <h2>News</h2>
 
+<p>2006-10-23 -- <a href="http://www.cenqua.com/"><img src="http://www.cenqua.com/images/cenquad.gif" alt="Supported by Cenqua" border="0" height="33" width="89"></a>
+:: We have been given a free license to support
+code coverage reporting by Cenqua using a tool called Clover. &nbsp;I
+have been working on improving code coverage and this tool is helping
+identify areas which are lacking some coverage. &nbsp;Once the code is
+well covered then it is easier to refactor, correct problems, and
+improve the code base. &nbsp;Thank you again to cenqua for your
+support. &nbsp;I will be publishing the code coverage reports as soon
+as possible on this site.</p>
 
+<p>2006-06-08 -- Full release of 2.1.1 fixing flusing problem
+while debugging the application.</p>
 
+<p>2006-03-13 -- Beta release with some small changes and updated
+javadocs. Diffs between 2.0.x and this version are located <a href="doc/tagdiff.html">here</a>.</p>
 
+<p>2006-03-08 -- Updates fixing some bugs and working towards a
+releasable version. </p>
 
-<p>2006-06-08 -- Full release of 2.1.1 fixing flusing problem while debugging the application.</p>
-<p>2006-03-13 -- Beta release with some small changes and updated javadocs. Diffs between 2.0.x and this version are located <a href="doc/tagdiff.html">here</a>.</p>
-
-
-<p>2006-03-08 -- Updates fixing some bugs and working towards a releasable version. </p>
-
-
-<p>2006-02-05 -- The project is undergoing work to enhance testing
+<p>2006-02-05 -- The project is undergoing work to enhance
+testing
 increase stability and keep pushing forward development to remove bugs
 and apply new features</p>
 
-
-
-
-
 <h2>Background</h2>
 
-
-
-
-<p>kSOAP is a SOAP web service client library for constrained Java
+<p>kSOAP is a SOAP web service client library for constrained
+Java
 environments such as Applets or J2ME applications (CLDC / CDC / MIDP).</p>
 
-
-
-
-
-<p>Please note that SOAP introduces some significant overhead for web
+<p>Please note that SOAP introduces some significant overhead for
+web
 services that may be problematic for mobile devices. If you have full
 control over the client and the server, a REST based architecture may
 be more adequate.</p>
 
-
-
-
-
-<p>kSOAP 2 is a complete redesign, taking the lessons learned from kSOAP 1.x into account. Some important changes are:</p>
-
-
-
-
+<p>kSOAP 2 is a complete redesign, taking the lessons learned
+from kSOAP 1.x into account. Some important changes are:</p>
 
 <ul>
 
+  <li>Structure cleaned up</li>
 
+  <li>kSOAP2 has improved support for literal encoding</li>
 
+  <li>SOAP Serialization support is now optional and contained in
+a separate package</li>
 
-	<li>Structure cleaned up</li>
-
-
-
-
-	<li>kSOAP2 has improved support for literal encoding</li>
-
-
-
-
-	<li>SOAP Serialization support is now optional and contained in a separate package</li>
-
-
-
-
-	<li>Several separate classes have been integrated into the class
+  <li>Several separate classes have been integrated into the
+class
 SoapSerializationEnvelope, providing SOAP serialization support.
 SoapSerializationEnvelope extends the base class SoapEnvelope. </li>
 
-
-
-
-	<li>A dotNet flag can be used to switch the SoapSerializationEnvelope
+  <li>A dotNet flag can be used to switch the
+SoapSerializationEnvelope
 from standard behaviour to the namespace handling that seems to be
 default in .NET</li>
 
-
-
-
 </ul>
 
+<p>Unfortunately, the improvements will require some additional
+effort when porting applications from kSOAP 1 to kSOAP 2. </p>
 
-
-
-
-<p>Unfortunately, the improvements will require some additional effort when porting applications from kSOAP 1 to kSOAP 2. </p>
-
-
-
-
-
-<p>kSOAP 1 is deprecated and archived at <a href="http://ksoap.objectweb.org/">ksoap.objectweb.org</a> (thanks to the objectweb.org team for keeping the kSOAP 1 pages after the merger with enhydra.org).
-
+<p>kSOAP 1 is deprecated and archived at <a href="http://ksoap.objectweb.org/">ksoap.objectweb.org</a>
+(thanks to the objectweb.org team for keeping the kSOAP 1 pages after
+the merger with enhydra.org).
 </p>
 
-
-
-<p><b>Please find more information (mailing lists, releases) at the kSoap2 Sourceforge pages:</b> <a href="http://sourceforge.net/projects/ksoap2/">http://sourceforge.net/projects/ksoap2/</a></p>
-
-
-
-
+<p><b>Please find more information (mailing lists,
+releases) at the kSoap2 Sourceforge pages:</b> <a href="http://sourceforge.net/projects/ksoap2/">http://sourceforge.net/projects/ksoap2/</a></p>
 
 <p></p>
 
-
-
-
-
 <h2>Documentation</h2>
 
-
-
-
-
-<p>The kSOAP JavaDoc and some examples are contained in the source distribution.</p>
-
-
-
-
+<p>The kSOAP JavaDoc and some examples are contained in the
+source distribution.</p>
 
 <p>An online version of the kSOAP2 API can be found online <a href="doc/api">here</a>.</p>
 
-<p>An early documentation project has be started and is located at this <a href="http://ksoap2.seigel.info">wiki site</a>.</p>
+<p>An early documentation project has be started and is located
+at this <a href="http://ksoap2.seigel.info">wiki site</a>.</p>
 
-
-
-
-
-<p>There are some articles about available on the net (unfortunately covering kSOAP 1 only):</p>
-
-
-
-
+<p>There are some articles about available on the net
+(unfortunately covering kSOAP 1 only):</p>
 
 <ul>
 
+  <li><a href="http://webservices.xml.com/pub/a/ws/2003/08/19/ksoap.html">Low
+Bandwidth SOAP (Jeff McHugh, xml.com)</a></li>
 
-
-
-   <li><a href="http://webservices.xml.com/pub/a/ws/2003/08/19/ksoap.html">Low Bandwidth SOAP (Jeff McHugh, xml.com)</a></li>
-
-
-
-
-   <li><a href="http://www-106.ibm.com/developerworks/wireless/edu/wi-dw-wiwsvs-i.html">Deliver Web services to mobile apps (Naveen Balani, IBM developerworks tutorial, registration required)</a></li>
-
-
-
+  <li><a href="http://www-106.ibm.com/developerworks/wireless/edu/wi-dw-wiwsvs-i.html">Deliver
+Web services to mobile apps (Naveen Balani, IBM developerworks
+tutorial, registration required)</a></li>
 
 </ul>
 
-
-
-
- 
 <h2>Help Wanted</h2>
 
-
-
-
-
-<p>If you have created an open source client for a web service that is
+<p>If you have created an open source client for a web service
+that is
 open to anyone, please let us know, so we can reference it here or
 include it in the kSOAP examples!</p>
-
-
-
-
 
 <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=158028&amp;type=2" alt="SourceForge.net Logo" border="0" height="37" width="125"></a>
 <!--#include virtual="epilog.shtml" -->
