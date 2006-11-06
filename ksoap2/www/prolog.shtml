@@ -1,51 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+</head>
+<body>
 <table>
- <tr>
-  <td valign="top">
-   <table width="100%" cellpadding="10px">
+
+ <tbody>
     <tr>
+
+  <td valign="top">
+   
+      <table cellpadding="10" width="100%">
+
+    <tbody>
+          <tr>
+
      <td bgcolor="#8888ff"><b><i><font color="#cccccc">k</font></i><font color="#ffffff">SOAP</font></b></td>
+
     </tr>
 
+
     <tr>
+
      <td bgcolor="#ddddff">
-       <a href="/index.shtml">News</a><br />
+       <a href="/index.shtml">News</a><br>
+
        <a href="/about.shtml">About</a>
      </td>
+
     </tr>
 
+
     <tr>
-     <td bgcolor="#ddddff">Related</a>
+
+     <td bgcolor="#ddddff">Related
       <small>
-       <ul>
+       
+            <ul>
+
         <li><a href="http://kxml.org">kXML</a></li>
+
         <li><a href="http://sourceforge.net/projects/kobjects/me4se/">ME4SE</a></li>
+
         <li><a href="http://sourceforge.net/projects/kobjects/utils/">Utilities</a></li>
-        <li><a href="http://mail4me.objectweb.org">Mail4ME</a></li>
-        <li><a href="https://jdbcwrapper.dev.java.net">JDBCwrapper</a></li>
-        <li><a href="http://infolayer.org">Infolayer</a></li>
-       </ul>
+            </ul>
+
       </small>
      </td>
+
     </tr>
 
+
     <tr>
+
      <td bgcolor="#ddddff"> 
 	  <a href="http://sourceforge.net/projects/ksoap2/">Development</a>
       <small>
-	   <ul>
+	   
+            <ul>
+
 	   	<li><a href="http://sourceforge.net/projects/ksoap2">Project Page</a></li>
+              <li><a href="http://sourceforge.net/forum/?group_id=158028">Forums</a></li>
+
 	    <li><a href="http://sourceforge.net/mail/?group_id=158028">Mailing Lists</a></li>
-	    <li><a href="http://cvs.sourceforge.net/viewcvs.py/ksoap2">Browse Source</a></li>
-	    <li><a href="http://sourceforge.net/cvs/?group_id=158028">CVS Access</a></li>
-	    <li><a href="http://sourceforge.net/tracker/?atid=806187&group_id=158028">Bugs</a></li>
-	    <li><a href="doc/api">API</a></li>
-	    </ul>
+
+	    <li><a href="http://ksoap2.svn.sourceforge.net/viewvc/ksoap2/">Browse Source</a></li>
+
+	    <li><a href="http://sourceforge.net/svn/?group_id=158028">CVS Access</a></li>
+
+	    <li><a href="http://sourceforge.net/tracker/?atid=806187&amp;group_id=158028">Bugs</a></li>
+            </ul>
+
 	  </small> 
 
-	  <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=158028&type=2" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
+	  <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=158028&amp;type=2" alt="SourceForge.net Logo" border="0" height="37" width="125"></a>
      </td>
+
     </tr>
-   </table>
+
+   
+        </tbody>
+      </table>
+
   </td>
+
   <td>&nbsp;&nbsp;&nbsp;</td>
-  <td valign="top">
+
+  <td valign="top"></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
