@@ -30,7 +30,8 @@
 	  <a href="http://sourceforge.net/projects/ksoap2/">Development</a>
       <small>
 	   <ul>
-	   	<li><a href="http://sourceforge.net/projects/ksoap2">Project Page</a></li>
+	    <li><a href="http://sourceforge.net/projects/ksoap2">Project Page</a></li>
+            <li><a href="http://sourceforge.net/forum/?group_id=158028">Forums</a></li>
 	    <li><a href="http://sourceforge.net/mail/?group_id=158028">Mailing Lists</a></li>
             <li><a href="http://ksoap2.svn.sourceforge.net/viewvc/ksoap2/">Browse Source</a></li>
 	    <li><a href="http://sourceforge.net/svn/?group_id=158028">SVN Access</a></li>
