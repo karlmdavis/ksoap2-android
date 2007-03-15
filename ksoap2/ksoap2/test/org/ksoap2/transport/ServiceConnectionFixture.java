@@ -129,6 +129,7 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "         <multiRef id=\"id1\" soapenc:root=\"0\" soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xsi:type=\"xsd:long\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">"+theLongResponse+"</multiRef>" + "\n" + 
     "      </soapenv:Body>" + "\n" + 
     "   </soapenv:Envelope>";
+    
     public static final String WORKING_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + 
     "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
     "      <soapenv:Body>" + "\n" + 

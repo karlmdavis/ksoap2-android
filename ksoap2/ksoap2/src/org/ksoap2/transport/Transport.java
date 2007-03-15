@@ -36,7 +36,7 @@ import org.xmlpull.v1.*;
  * routines to the subclasses.
  */
 abstract public class Transport {
-
+    protected static final String HTTP_POST = "POST";
     protected String url;
     /** Set to true if debugging */
     public boolean debug;
