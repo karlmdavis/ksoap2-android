@@ -53,6 +53,7 @@ public class ServiceConnectionMidp implements ServiceConnection {
     }
 
     public void connect() throws IOException {
+        throw new RuntimeException("ServiceConnectionMidp.connect is not available.");
     }
 
     public InputStream getErrorStream() {

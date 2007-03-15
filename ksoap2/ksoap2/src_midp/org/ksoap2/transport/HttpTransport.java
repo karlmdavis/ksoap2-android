@@ -134,16 +134,13 @@ public class HttpTransport extends Transport {
         try {
             connected = true;
             connection = getServiceConnection();
-            connection.setRequestProperty("User-Agent", "kSOAP/2.0");
             connection.setRequestProperty("SOAPAction", soapAction);
             connection.setRequestProperty("Content-Type", "text/xml");
-            connection.setRequestProperty("Connection", "close");
             connection.setRequestProperty("Content-Length", "" + requestData.length);
-            connection.setRequestMethod(HTTP_POST);
-            connection.connect();
+            connection.setRequestProperty("User-Agent", "kSOAP/2.0");
+            connection.setRequestMethod(HttpConnection.POST);
             os = connection.openOutputStream();
             os.write(requestData, 0, requestData.length);
-            os.flush();
             os.close();
             requestData = null;
             is = connection.openInputStream();
@@ -164,11 +161,12 @@ public class HttpTransport extends Transport {
             }
             parseResponse(envelope, is);
         } finally {
+            if (!connected)
+                throw new InterruptedIOException();
             reset();
         }
-        if (envelope.bodyIn instanceof SoapFault) {
+        if (envelope.bodyIn instanceof SoapFault)
             throw ((SoapFault) envelope.bodyIn);
-        }
     }
 
     /**
@@ -177,7 +175,7 @@ public class HttpTransport extends Transport {
      * only opened and valid inside of the call method. Close can be called
      * ansynchronously, from another thread to potentially release another
      * thread that is hung up doing network io inside of call. Caution should be
-     * taken, however when using this as a pseudo timeout mechanism. it is a
+     * taken, however when using this as a psedu timeout mechanism. it is a
      * valid and suggested approach for the motorola handsets. oh, and it works
      * in the emulator...
      */
