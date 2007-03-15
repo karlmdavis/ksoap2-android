@@ -2,7 +2,8 @@ kSOAP a lightweight SOAP library for java.
 
 History
 =======
-x.x.x
+2.1.2
+- Corrected a bug with soap primitive causing an NPE when the namespace was null.  (SF Bug #1681706 reported by ilmarmors)
 - Cleaned up most warnings from code.
 - added clover code coverage to the project
 2.1.1		2006/06/08 Full Release
