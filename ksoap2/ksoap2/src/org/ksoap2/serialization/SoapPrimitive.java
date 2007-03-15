@@ -49,11 +49,11 @@ public class SoapPrimitive {
             return false;
         }
         SoapPrimitive p = (SoapPrimitive) o;
-        return name.equals(p.name) && namespace.equals(p.namespace) && (value == null ? (p.value == null) : value.equals(p.value));
+        return name.equals(p.name) && (namespace == null ? p.namespace == null:namespace.equals(p.namespace)) && (value == null ? (p.value == null) : value.equals(p.value));
     }
 
     public int hashCode() {
-        return name.hashCode() ^ namespace.hashCode();
+        return name.hashCode() ^ (namespace == null ? 0 : namespace.hashCode());
     }
 
     public String toString() {
