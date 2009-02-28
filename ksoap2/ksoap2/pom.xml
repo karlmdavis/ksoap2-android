@@ -1,0 +1,276 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>net.sourceforge.ksoap2</groupId>
+	<artifactId>ksoap2-parent</artifactId>
+	<version>2.1.3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	
+	<name>ksoap2-parent</name>
+	<description><![CDATA[
+		A lightweight and efficient SOAP engine suitable for J2ME or constrained java devices.
+		]]>
+	</description>
+	
+	<url>http://ksoap2.sourceforge.net</url>
+	<inceptionYear>2002</inceptionYear>
+	
+<!--
+	<scm>
+		<connection>scm:git:TODO</connection>
+		<developerConnection>scm:svn:TODO</developerConnection>
+		<url>TODO</url>
+	</scm>
+-->
+
+	<issueManagement>
+		<system>sourceforge</system>
+		<url>http://sourceforge.net/tracker/?group_id=158028</url>
+	</issueManagement>
+
+	<modules>
+		<module>ksoap2</module>
+		<module>ksoap2-j2se</module>
+		<module>ksoap2-midp</module>
+		<module>ksoap2-samples</module>
+		<module>ksoap2-samples-axis</module>
+		<module>ksoap2-servlet</module>
+	</modules>
+	
+	<distributionManagement>
+		<repository>
+			<id>eddings</id>
+			<name>eddings</name>
+			<url>scp://eddings.davisonlinehome.name/var/www/maven/repo</url>
+		</repository>
+	</distributionManagement>
+	<repositories>
+		<repository>
+			<id>simplepersistence</id>
+			<name>Simple Persistence Repo</name>
+			<url>http://75.146.134.33:8080/maven/repo</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>simplepersistence</id>
+			<name>Simple Persistence Repo</name>
+			<url>http://75.146.134.33:8080/maven/repo</url>
+		</pluginRepository>
+	</pluginRepositories>
+	
+	<profiles>
+		<profile>
+			<!-- The "release" profile ensures that the source and javadoc JARs are included in deployments -->
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+									<goal>test-jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-j2se</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-j2se</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-midp</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-midp</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-samples</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-samples</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-samples-axis</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-samples-axis</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-servlet</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-servlet</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.kxml</groupId>
+				<artifactId>kxml</artifactId>
+				<version>2.2.2</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.kobjects</groupId>
+				<artifactId>kobjects-j2me</artifactId>
+				<version>0.0-SNAPSHOT-20040926</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.me4se</groupId>
+				<artifactId>me4se</artifactId>
+				<version>2.1.4-SNAPSHOT-20040926</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>3.8.1</version>
+				<type>jar</type>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+	</dependencies>
+	
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<!-- This override of the defaults is necessary to ensure that *.jdo, *.html, etc. files are included in builds and jars. -->
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
