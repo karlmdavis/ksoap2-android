@@ -30,6 +30,7 @@
 
 	<modules>
 		<module>ksoap2</module>
+		<module>ksoap2-android</module>
 		<module>ksoap2-extras</module>
 		<module>ksoap2-j2se</module>
 		<module>ksoap2-midp</module>
@@ -108,6 +109,21 @@
 			<dependency>
 				<groupId>net.sourceforge.ksoap2</groupId>
 				<artifactId>ksoap2</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-android</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.ksoap2</groupId>
+				<artifactId>ksoap2-android</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>

@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>net.sourceforge.ksoap2</groupId>
+		<artifactId>ksoap2-parent</artifactId>
+		<version>2.1.3-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ksoap2-android</artifactId>
+	<name>ksoap2-android</name>
+	<packaging>jar</packaging>
+	<description><![CDATA[
+		Addons to the ksoap2 library for the Android platform.
+		]]>
+	</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.sourceforge.ksoap2</groupId>
+			<artifactId>ksoap2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ksoap2</groupId>
+			<artifactId>ksoap2-j2se</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
