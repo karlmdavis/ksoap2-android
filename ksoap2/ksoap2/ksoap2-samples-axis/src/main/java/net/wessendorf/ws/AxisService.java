@@ -16,7 +16,7 @@
 package net.wessendorf.ws;
 
 /**
- * @author <a href="mailto:matzew@apache.org">Matthias Weﬂendorf</a> 
+ * @author <a href="mailto:matzew@apache.org">Matthias Webendorf</a> 
  */
 public class AxisService {
     

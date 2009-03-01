@@ -16,6 +16,19 @@
 	</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.sourceforge.kxml</groupId>
+			<artifactId>kxml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.kobjects</groupId>
+			<artifactId>kobjects-j2me</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

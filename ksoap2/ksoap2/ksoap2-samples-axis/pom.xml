@@ -16,6 +16,14 @@
 	</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.sourceforge.ksoap2</groupId>
+			<artifactId>ksoap2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ksoap2</groupId>
+			<artifactId>ksoap2-midp</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

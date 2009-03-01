@@ -16,6 +16,21 @@
 	</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.sourceforge.ksoap2</groupId>
+			<artifactId>ksoap2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ksoap2</groupId>
+			<artifactId>ksoap2</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>
