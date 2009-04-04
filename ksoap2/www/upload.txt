@@ -1,4 +1,0 @@
-# upload with the following command 
-# (from this directory):
-
-scp -r * shell.sourceforge.net:/home/groups/k/ks/ksoap2/htdocs/
