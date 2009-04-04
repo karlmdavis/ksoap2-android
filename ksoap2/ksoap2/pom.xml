@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>net.sourceforge.ksoap2</groupId>
+	<groupId>com.google.code.ksoap2-android</groupId>
 	<artifactId>ksoap2-parent</artifactId>
 	<version>2.1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>ksoap2-parent</name>
 	<description><![CDATA[
-		A lightweight and efficient SOAP engine suitable for J2ME or constrained java devices.
+		A lightweight and efficient SOAP library for the Android platform.
 		]]>
 	</description>
 	
-	<url>http://ksoap2.sourceforge.net</url>
+	<url>http://code.google.com/p/ksoap2-android/</url>
 	<inceptionYear>2002</inceptionYear>
 	
 <!--
@@ -24,8 +24,8 @@
 -->
 
 	<issueManagement>
-		<system>sourceforge</system>
-		<url>http://sourceforge.net/tracker/?group_id=158028</url>
+		<system>Google Code</system>
+		<url>http://code.google.com/p/ksoap2-android/issues/list</url>
 	</issueManagement>
 
 	<modules>
@@ -41,23 +41,26 @@
 	
 	<distributionManagement>
 		<repository>
-			<id>eddings</id>
-			<name>eddings</name>
-			<url>scp://eddings.davisonlinehome.name/var/www/maven/repo</url>
+			<!-- Google Code does not have any Maven repository hosting.
+			     Instead, we'll deploy to a "m2-repo" sub-directory of a local SVN working copy, which can
+			     be committed to push it onto the intertubes. -->
+			<id>karlmdavis_ksoap2-android.svn</id>
+			<name>karlmdavis_ksoap2-android.svn</name>
+			<url>file:///home/karl/workspaces/ksoap2/ksoap2-android.svn/m2-repo</url>
 		</repository>
 	</distributionManagement>
 	<repositories>
 		<repository>
-			<id>simplepersistence</id>
-			<name>Simple Persistence Repo</name>
-			<url>http://75.146.134.33:8080/maven/repo</url>
+			<id>googlecode-ksoap2-android</id>
+			<name>googlecode-ksoap2-android</name>
+			<url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>simplepersistence</id>
-			<name>Simple Persistence Repo</name>
-			<url>http://75.146.134.33:8080/maven/repo</url>
+			<id>googlecode-ksoap2-android</id>
+			<name>googlecode-ksoap2-android</name>
+			<url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
 		</pluginRepository>
 	</pluginRepositories>
 	
@@ -100,14 +103,14 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
@@ -115,14 +118,14 @@
 			</dependency>
 
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-android</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-android</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
@@ -130,14 +133,14 @@
 			</dependency>
 
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-extras</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-extras</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
@@ -145,14 +148,14 @@
 			</dependency>
 
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-j2se</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-j2se</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
@@ -160,14 +163,14 @@
 			</dependency>
 
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-midp</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-midp</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
@@ -175,14 +178,14 @@
 			</dependency>
 
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-samples</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-samples</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
@@ -191,14 +194,14 @@
 
 
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-samples-axis</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-samples-axis</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
@@ -207,14 +210,14 @@
 
 
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-servlet</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>net.sourceforge.ksoap2</groupId>
+				<groupId>com.google.code.ksoap2-android</groupId>
 				<artifactId>ksoap2-servlet</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
