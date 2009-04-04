@@ -15,13 +15,11 @@
 	<url>http://code.google.com/p/ksoap2-android/</url>
 	<inceptionYear>2002</inceptionYear>
 	
-<!--
 	<scm>
-		<connection>scm:git:TODO</connection>
-		<developerConnection>scm:svn:TODO</developerConnection>
-		<url>TODO</url>
+		<connection>scm:git:git://github.com/karlmdavis/ksoap2-android.git</connection>
+		<developerConnection>scm:git:git@github.com:karlmdavis/ksoap2-android.git</developerConnection>
+		<url>http://github.com/karlmdavis/ksoap2-android/tree/master</url>
 	</scm>
--->
 
 	<issueManagement>
 		<system>Google Code</system>
@@ -38,15 +36,12 @@
 		<module>ksoap2-samples-axis</module>
 		<module>ksoap2-servlet</module>
 	</modules>
-	
+
 	<distributionManagement>
 		<repository>
-			<!-- Google Code does not have any Maven repository hosting.
-			     Instead, we'll deploy to a "m2-repo" sub-directory of a local SVN working copy, which can
-			     be committed to push it onto the intertubes. -->
-			<id>karlmdavis_ksoap2-android.svn</id>
-			<name>karlmdavis_ksoap2-android.svn</name>
-			<url>file:///home/karl/workspaces/ksoap2/ksoap2-android.svn/m2-repo</url>
+			<uniqueVersion>false</uniqueVersion>
+			<id>googlecode</id>
+			<url>svn:https://ksoap2-android.googlecode.com/svn/m2-repo</url>
 		</repository>
 	</distributionManagement>
 	<repositories>
@@ -54,6 +49,11 @@
 			<id>googlecode-ksoap2-android</id>
 			<name>googlecode-ksoap2-android</name>
 			<url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -259,7 +259,7 @@
 	</dependencyManagement>
 	<dependencies>
 	</dependencies>
-	
+
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
@@ -268,7 +268,10 @@
 				<filtering>false</filtering>
 				<directory>src/main/java</directory>
 				<includes>
-					<!-- This override of the defaults is necessary to ensure that *.jdo, *.html, etc. files are included in builds and jars. -->
+					<!--
+						This override of the defaults is necessary to ensure that *.jdo,
+						*.html, etc. files are included in builds and jars.
+					-->
 					<include>**</include>
 				</includes>
 				<excludes>
@@ -284,6 +287,13 @@
 				<directory>src/test/resources</directory>
 			</testResource>
 		</testResources>
+		<extensions>
+			<extension>
+				<groupId>org.jvnet.wagon-svn</groupId>
+				<artifactId>wagon-svn</artifactId>
+				<version>1.8</version>
+			</extension>
+		</extensions>
 		<pluginManagement>
 			<plugins>
 				<plugin>
