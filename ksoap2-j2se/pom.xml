@@ -18,11 +18,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.google.code.ksoap2-android</groupId>
-			<artifactId>ksoap2</artifactId>
+			<artifactId>ksoap2-base</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.ksoap2-android</groupId>
-			<artifactId>ksoap2</artifactId>
+			<artifactId>ksoap2-base</artifactId>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>

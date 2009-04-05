@@ -18,10 +18,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.google.code.ksoap2-android</groupId>
-			<artifactId>ksoap2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.ksoap2-android</groupId>
 			<artifactId>ksoap2-midp</artifactId>
 		</dependency>
 	</dependencies>

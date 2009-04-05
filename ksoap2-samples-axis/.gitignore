@@ -1,5 +1,10 @@
-bin*
-.classpath
+# Project output                 
+bin/
+target*/
+*.log
+
+# Project config files
+.settings/
 .project
-.settings
-target*
+.classpath
+
