@@ -58,28 +58,38 @@ public class SoapObject implements KvmSerializable
 		this.name = name;
 	}
 
-	public boolean equals(Object o)
+	public boolean equals(Object obj)
 	{
-		if (!(o instanceof SoapObject))
+		if (!(obj instanceof SoapObject))
 			return false;
 
-		SoapObject so = (SoapObject) o;
-		int cnt = properties.size();
+		SoapObject otherSoapObject = (SoapObject) obj;
 
-		if (cnt != so.properties.size())
+		int numProperties = properties.size();
+		if (numProperties != otherSoapObject.properties.size())
+			return false;
+		int numAttributes = attributes.size();
+		if (numAttributes != otherSoapObject.attributes.size())
 			return false;
 
 		try
 		{
-			for (int i = 0; i < cnt; i++)
+			for (int propIndex = 0; propIndex < numProperties; propIndex++)
 			{
-				if (!((PropertyInfo) properties.elementAt(i)).getValue().equals(
-						so.getProperty(((PropertyInfo) properties.elementAt(i)).getName())))
+				PropertyInfo thisProp = (PropertyInfo) this.properties.elementAt(propIndex);
+				Object thisPropValue = thisProp.getValue();
+				Object otherPropValue = otherSoapObject.getProperty(thisProp.getName());
+				if (!thisPropValue.equals(otherPropValue))
 				{
 					return false;
 				}
-				if (!((PropertyInfo) attributes.elementAt(i)).getValue().equals(
-						so.getProperty(((PropertyInfo) attributes.elementAt(i)).getName())))
+			}
+			for (int attribIndex = 0; attribIndex < numAttributes; attribIndex++)
+			{
+				AttributeInfo thisAttrib = (AttributeInfo) this.properties.elementAt(attribIndex);
+				Object thisAttribValue = thisAttrib.getValue();
+				Object otherAttribValue = otherSoapObject.getProperty(thisAttrib.getName());
+				if (!thisAttribValue.equals(otherAttribValue))
 				{
 					return false;
 				}
@@ -228,14 +238,14 @@ public class SoapObject implements KvmSerializable
 	public SoapObject newInstance()
 	{
 		SoapObject o = new SoapObject(namespace, name);
-		for (int i = 0; i < properties.size(); i++)
+		for (int propIndex = 0; propIndex < properties.size(); propIndex++)
 		{
-			PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(i);
+			PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(propIndex);
 			o.addProperty(propertyInfo);
 		}
-		for (int i = 0; i < properties.size(); i++)
+		for (int attribIndex = 0; attribIndex < attributes.size(); attribIndex++)
 		{
-			AttributeInfo attributeInfo = (AttributeInfo) attributes.elementAt(i);
+			AttributeInfo attributeInfo = (AttributeInfo) attributes.elementAt(attribIndex);
 			o.addAttribute(attributeInfo);
 		}
 		return o;
