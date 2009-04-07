@@ -20,20 +20,28 @@
 
 package org.ksoap2.servlet;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Hashtable;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-// import org.kobjects.serialization.*;
-
-import org.ksoap2.*;
-import org.ksoap2.serialization.*;
-
-import org.kxml2.io.*;
-import org.xmlpull.v1.*;
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.kxml2.io.KXmlParser;
+import org.kxml2.io.KXmlSerializer;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlSerializer;
 
 /**
  * copy-paste seans interop server orb here as needed....
@@ -141,48 +149,57 @@ public class SoapServlet extends HttpServlet {
      * soap requests only
      */
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        try {
-            Object service = getInstance(req);
-            XmlPullParser parser = new KXmlParser();
-            parser.setInput(req.getInputStream(), req.getCharacterEncoding());
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-            envelope.parse(parser);
-            SoapObject soapReq = (SoapObject) envelope.bodyIn;
-            SoapObject result = invoke(service, soapReq);
-            System.out.println("result: " + result);
-            envelope.bodyOut = result;
-        } catch (SoapFault f) {
-            f.printStackTrace();
-            envelope.bodyOut = f;
-            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            SoapFault fault = new SoapFault();
-            fault.faultcode = "Server";
-            fault.faultstring = t.getMessage();
-            envelope.bodyOut = fault;
-            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } finally {
-            res.setContentType("text/xml; charset=utf-8");
-            res.setHeader("Connection", "close");
-            StringWriter sw = new StringWriter();
-            XmlSerializer writer = new KXmlSerializer();
-            writer.setOutput(sw);
-            try {
-                envelope.write(writer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            writer.flush();
-            System.out.println("result xml: " + sw);
-            Writer w = res.getWriter();
-            w.write(sw.toString());
-            w.close();
+      try {
+        Object service = getInstance(req);
+        XmlPullParser parser = new KXmlParser();
+        if ( false ) {
+          //parser.setInput(req.getInputStream(), req.getCharacterEncoding());
         }
-        res.flushBuffer();
+        else {
+          byte[] inputRequest = new byte[req.getInputStream().available()];
+          req.getInputStream().read(inputRequest);
+          System.out.println ("Request: " + new String(inputRequest));
+          ByteArrayInputStream bas = new ByteArrayInputStream(inputRequest);
+          parser.setInput(bas, null);
+        }
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        envelope.parse(parser);
+        SoapObject soapReq = (SoapObject) envelope.bodyIn;
+        SoapObject result = invoke(service, soapReq);
+        System.out.println("result: " + result);
+        envelope.bodyOut = result;
+      } catch (SoapFault f) {
+        f.printStackTrace();
+        envelope.bodyOut = f;
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      } catch (Throwable t) {
+        t.printStackTrace();
+        SoapFault fault = new SoapFault();
+        fault.faultcode = "Server";
+        fault.faultstring = t.getMessage();
+        envelope.bodyOut = fault;
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      } finally {
+        res.setContentType("text/xml; charset=utf-8");
+        res.setHeader("Connection", "close");
+        StringWriter sw = new StringWriter();
+        XmlSerializer writer = new KXmlSerializer();
+        writer.setOutput(sw);
+        try {
+          envelope.write(writer);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        writer.flush();
+        System.out.println("result xml: " + sw);
+        Writer w = res.getWriter();
+        w.write(sw.toString());
+        w.close();
+      }
+      res.flushBuffer();
     }
 
-    SoapObject invoke(Object service, SoapObject soapReq) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    protected SoapObject invoke(Object service, SoapObject soapReq) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String name = soapReq.getName();
         Class types[] = new Class[soapReq.getPropertyCount()];
         Object[] args = new Object[soapReq.getPropertyCount()];
