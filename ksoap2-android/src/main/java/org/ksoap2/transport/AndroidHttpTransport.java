@@ -1,112 +1,28 @@
 package org.ksoap2.transport;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-
-import org.apache.http.protocol.HTTP;
-import org.ksoap2.SoapEnvelope;
-import org.xmlpull.v1.XmlPullParserException;
 
 /**
- * Apache HttpComponent based HttpTransport layer.
+ * This is a simple extension of the {@link HttpTransportSE} class. It provides the exact same functionality
+ * as that class and is provided purely for backwards-compatibility purposes. It will likely be deprecated at
+ * some point in the near future.
  */
-public class AndroidHttpTransport extends Transport
+public class AndroidHttpTransport extends HttpTransportSE
 {
-	private final URI endpointUri;
-
 	/**
-	 * Creates instance of HttpTransport with set url
-	 * 
-	 * @param endpointUri
-	 *            the {@link URI} to open a connection to
+	 * @see HttpTransportSE#HttpTransportSE(String)
 	 */
-	public AndroidHttpTransport(URI endpointUri)
+	public AndroidHttpTransport(String url)
 	{
-		super();
-		this.endpointUri = endpointUri;
+		super(url);
 	}
 
 	/**
-	 * set the desired soapAction header field
-	 * 
-	 * @param soapAction
-	 *            the desired soapAction
-	 * @param envelope
-	 *            the envelope containing the information for the soap call.
+	 * @see org.ksoap2.transport.HttpTransportSE#getServiceConnection()
 	 */
-	public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException
-	{
-		if (soapAction == null)
-			soapAction = "\"\"";
-		byte[] requestData = createRequestData(envelope);
-		requestDump = debug ? new String(requestData) : null;
-		responseDump = null;
-		ServiceConnection connection = getServiceConnection();
-		connection.connect();
-		try
-		{
-			connection.setRequestProperty(HTTP.USER_AGENT, "kSOAP/2.0");
-			connection.setRequestProperty("SOAPAction", soapAction);
-			connection.setRequestProperty(HTTP.CONTENT_TYPE, "text/xml");
-			connection.setRequestProperty(HTTP.CONN_DIRECTIVE, HTTP.CONN_CLOSE);
-			// connection.setRequestProperty("Content-Length", "" + requestData.length);
-			connection.setRequestMethod("POST");
-			OutputStream os = connection.openOutputStream();
-			os.write(requestData, 0, requestData.length);
-			os.flush();
-			os.close();
-			requestData = null;
-
-			InputStream is;
-			try
-			{
-				is = connection.openInputStream();
-			}
-			catch (IOException e)
-			{
-				is = connection.getErrorStream();
-				if (is == null)
-				{
-					connection.disconnect();
-					throw (e);
-				}
-			}
-			if (debug)
-			{
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				byte[] buf = new byte[256];
-				while (true)
-				{
-					int rd = is.read(buf, 0, 256);
-					if (rd == -1)
-						break;
-					bos.write(buf, 0, rd);
-				}
-				bos.flush();
-				buf = bos.toByteArray();
-				responseDump = new String(buf);
-				is.close();
-				is = new ByteArrayInputStream(buf);
-				if (debug)
-				{
-					System.out.println("DBG:request:" + requestDump);
-					System.out.println("DBG:response:" + responseDump);
-				}
-			}
-			parseResponse(envelope, is);
-		}
-		finally
-		{
-			connection.disconnect();
-		}
-	}
-
+	@Override
 	protected ServiceConnection getServiceConnection() throws IOException
 	{
-		return new AndroidServiceConnection(endpointUri);
+		return new AndroidServiceConnection(super.url);
 	}
 }
