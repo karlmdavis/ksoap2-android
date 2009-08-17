@@ -29,6 +29,7 @@
 	<modules>
 		<module>ksoap2-base</module>
 		<module>ksoap2-android</module>
+		<module>ksoap2-android-assembly</module>
 		<module>ksoap2-extras</module>
 		<module>ksoap2-j2se</module>
 		<module>ksoap2-midp</module>
