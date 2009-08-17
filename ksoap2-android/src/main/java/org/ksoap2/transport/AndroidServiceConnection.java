@@ -3,74 +3,97 @@ package org.ksoap2.transport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpConnection;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.HttpState;
-import org.apache.commons.httpclient.HttpURL;
-import org.apache.commons.httpclient.SimpleHttpConnectionManager;
-import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.ksoap2.transport.ServiceConnection;
-
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 /**
  * Connection using apache HttpComponent
  */
-public class AndroidServiceConnection implements ServiceConnection {
-	private static HttpConnectionManager connectionManager = new SimpleHttpConnectionManager();
-    private HttpConnection connection;
-    private PostMethod postMethod;
-    private java.io.ByteArrayOutputStream bufferStream = null;
-    
-    /**
-     * Constructor taking the url to the endpoint for this soap communication
-     * @param url the url to open the connection to.
-     */
-    public AndroidServiceConnection(String url) throws IOException {
-    	HttpURL httpURL = new HttpURL(url);
-    	HostConfiguration host = new HostConfiguration();
-    	host.setHost(httpURL.getHost(), httpURL.getPort());
-        connection = connectionManager.getConnection(host);
-        postMethod = new PostMethod(url);
-    }
+public class AndroidServiceConnection implements ServiceConnection
+{
+	private final HttpPost httpPost;
+	private final HttpClient httpClient;
+	private java.io.ByteArrayOutputStream bufferStream = null;
 
-    public void connect() throws IOException {
-        if (!connection.isOpen()) {
-        	connection.open();
-        }
-    }
+	/**
+	 * Constructor taking the {@link URI} to the endpoint for this soap communication.
+	 * 
+	 * @param endpointUri
+	 *            the {@link URI} to open a connection to
+	 */
+	public AndroidServiceConnection(URI endpointUri) throws IOException
+	{
+		this.httpPost = new HttpPost(endpointUri);
+		this.httpClient = new DefaultHttpClient();
+	}
 
-    public void disconnect() {
-        connection.releaseConnection();
-    }
+	/**
+	 * @see org.ksoap2.transport.ServiceConnection#connect()
+	 */
+	public void connect() throws IOException
+	{
+		// Do nothing; connection will be made when request is executed
+	}
 
-    public void setRequestProperty(String name, String value) {
-    	postMethod.setRequestHeader(name, value);
-    }
+	/**
+	 * @see org.ksoap2.transport.ServiceConnection#disconnect()
+	 */
+	public void disconnect()
+	{
+		this.httpClient.getConnectionManager().shutdown();
+	}
 
-    public void setRequestMethod(String requestMethod) throws IOException {
-        if (!requestMethod.toLowerCase().equals("post")) {
-        	throw(new IOException("Only POST method is supported"));
-        }
-    }
+	/**
+	 * @see org.ksoap2.transport.ServiceConnection#setRequestProperty(java.lang.String, java.lang.String)
+	 */
+	public void setRequestProperty(String name, String value)
+	{
+		httpPost.setHeader(name, value);
+	}
 
-    public OutputStream openOutputStream() throws IOException {
-    	bufferStream = new java.io.ByteArrayOutputStream();
-    	return bufferStream;
-    }
+	/**
+	 * @see org.ksoap2.transport.ServiceConnection#setRequestMethod(java.lang.String)
+	 */
+	public void setRequestMethod(String requestMethod) throws IOException
+	{
+		if (!requestMethod.toLowerCase().equals("post"))
+		{
+			throw (new IOException("Only POST method is supported"));
+		}
+	}
 
-    public InputStream openInputStream() throws IOException {
-    	RequestEntity re = new ByteArrayRequestEntity(bufferStream.toByteArray());
-    	postMethod.setRequestEntity(re);
-    	postMethod.execute(new HttpState(), connection);
-    	return postMethod.getResponseBodyAsStream();
-    }
+	/**
+	 * @see org.ksoap2.transport.ServiceConnection#openOutputStream()
+	 */
+	public OutputStream openOutputStream() throws IOException
+	{
+		bufferStream = new java.io.ByteArrayOutputStream();
+		return bufferStream;
+	}
 
-    public InputStream getErrorStream() {
-    	return null;
-    }
-    
+	/**
+	 * @see org.ksoap2.transport.ServiceConnection#openInputStream()
+	 */
+	public InputStream openInputStream() throws IOException
+	{
+		HttpEntity entity = new ByteArrayEntity(bufferStream.toByteArray());
+		httpPost.setEntity(entity);
+		HttpResponse response = this.httpClient.execute(this.httpPost);
+		return response.getEntity().getContent();
+	}
+
+	/**
+	 * @see org.ksoap2.transport.ServiceConnection#getErrorStream()
+	 */
+	public InputStream getErrorStream()
+	{
+		return null;
+	}
+
 }
