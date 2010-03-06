@@ -223,7 +223,7 @@
 			<dependency>
 				<groupId>net.sourceforge.kxml</groupId>
 				<artifactId>kxml</artifactId>
-				<version>2.2.2</version>
+				<version>2.2.4</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -231,7 +231,7 @@
 			<dependency>
 				<groupId>net.sourceforge.kobjects</groupId>
 				<artifactId>kobjects-j2me</artifactId>
-				<version>0.0-SNAPSHOT-20040926</version>
+				<version>0.0-SNAPSHOT-20040926-2</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
