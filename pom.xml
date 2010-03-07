@@ -1,23 +1,26 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>com.google.code.ksoap2-android</groupId>
 	<artifactId>ksoap2-parent</artifactId>
 	<version>2.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<name>ksoap2-parent</name>
 	<description><![CDATA[
 		A lightweight and efficient SOAP library for the Android platform.
 		]]>
 	</description>
-	
+
 	<url>http://code.google.com/p/ksoap2-android/</url>
 	<inceptionYear>2002</inceptionYear>
-	
+
 	<scm>
-		<connection>scm:git:git://github.com/karlmdavis/ksoap2-android.git</connection>
-		<developerConnection>scm:git:git@github.com:karlmdavis/ksoap2-android.git</developerConnection>
+		<connection>scm:git:git://github.com/karlmdavis/ksoap2-android.git
+		</connection>
+		<developerConnection>scm:git:git@github.com:karlmdavis/ksoap2-android.git
+		</developerConnection>
 		<url>http://github.com/karlmdavis/ksoap2-android/tree/master</url>
 	</scm>
 
@@ -59,10 +62,13 @@
 			<url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
 	<profiles>
 		<profile>
-			<!-- The "release" profile ensures that the source and javadoc JARs are included in deployments -->
+			<!--
+				The "release" profile ensures that the source and javadoc JARs are
+				included in deployments
+			-->
 			<id>release</id>
 			<build>
 				<plugins>
@@ -95,7 +101,7 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -302,19 +308,8 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<executions>
-						<execution>
-							<goals>
-								<goal>test-jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.0-beta-9</version>
+					<version>2.0</version>
 					<dependencies>
 						<dependency>
 							<groupId>org.apache.maven.scm</groupId>
@@ -324,6 +319,12 @@
 					</dependencies>
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<!--
+							The preparationGoals setting is a workarounf for
+							http://jira.codehaus.org/browse/MJAR-68 and
+							http://jira.codehaus.org/browse/MRELEASE-285
+						-->
+						<preparationGoals>clean install</preparationGoals>
 						<useReleaseProfile>false</useReleaseProfile>
 						<arguments>-Prelease</arguments>
 					</configuration>
