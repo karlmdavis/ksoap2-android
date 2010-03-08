@@ -58,6 +58,8 @@ public class SoapFault extends IOException {
                 throw new RuntimeException("unexpected tag:" + name);
             parser.require(XmlPullParser.END_TAG, null, name);
         }
+        parser.require(XmlPullParser.END_TAG, SoapEnvelope.ENV, "Fault");
+        parser.nextTag();
     }
 
     /** Writes the fault to the given XML stream */
