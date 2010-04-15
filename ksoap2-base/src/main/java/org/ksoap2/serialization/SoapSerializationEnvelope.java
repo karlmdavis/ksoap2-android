@@ -19,11 +19,16 @@
 
 package org.ksoap2.serialization;
 
-import java.io.*;
-import java.util.*;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
-import org.ksoap2.*;
-import org.xmlpull.v1.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * @author Stefan Haustein
@@ -207,6 +212,19 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	{
 		String name = parser.getName();
 		String namespace = parser.getNamespace();
+
+        // cache the attribute info list from the current element before we move on
+        ArrayList<AttributeInfo> attributeInfoArrayList = new ArrayList<AttributeInfo>();
+        for (int attributeCount = 0; attributeCount < parser.getAttributeCount(); attributeCount ++)
+        {
+            AttributeInfo attributeInfo = new AttributeInfo();
+            attributeInfo.setName(parser.getAttributeName(attributeCount));
+            attributeInfo.setValue(parser.getAttributeValue(attributeCount));
+            attributeInfo.setNamespace(parser.getAttributeNamespace(attributeCount));
+            attributeInfo.setType(parser.getAttributeType(attributeCount));
+            attributeInfoArrayList.add(attributeInfo);
+        }
+
 		parser.next(); // move to text, inner start tag or end tag
 		Object result = null;
 		String text = null;
@@ -228,6 +246,11 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 				throw new RuntimeException("Malformed input: Mixed content");
 			}
 			SoapObject so = new SoapObject(typeNamespace, typeName);
+            // apply all the cached attribute info list before we add the property and descend further for parsing
+            for (int i = 0; i < attributeInfoArrayList.size(); i++) {
+                so.addAttribute(attributeInfoArrayList.get(i));
+            }
+
 			while (parser.getEventType() != XmlPullParser.END_TAG)
 			{
 				so.addProperty(parser.getName(), read(parser, so, so.getPropertyCount(), null, null,
