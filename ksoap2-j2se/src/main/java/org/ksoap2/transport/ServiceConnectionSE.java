@@ -29,7 +29,7 @@ import java.net.*;
  */
 public class ServiceConnectionSE implements ServiceConnection {
 
-    private HttpURLConnection connection;
+    protected HttpURLConnection connection;
 
     /**
      * Constructor taking the url to the endpoint for this soap communication
