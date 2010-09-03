@@ -134,6 +134,36 @@ public class SoapObject implements KvmSerializable
 		throw new RuntimeException("illegal property: " + name);
 	}
 
+  /**
+   * Knows whether the given property exists
+   *
+   * @param name the name of the property
+   * @return true if the property exists; false if not
+   */
+  public boolean hasProperty(final String name) {
+    if (propertyIndex(name) != null) return true;
+    else return false;
+  }
+
+  public Object safeGetProperty(final String name) {
+    Integer i = propertyIndex(name);
+    if (i != null) return getProperty(i);
+    else return new NullSoapObject();
+  }
+
+  public Object safeGetProperty(final String name, final Object defaultThing) {
+    Integer i = propertyIndex(name);
+    if (i != null) return getProperty(i);
+    else return defaultThing;
+  }
+  
+  private Integer propertyIndex(String name) {
+    for (int i = 0; i < properties.size(); i++) {
+      if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) return i;
+    }
+    return null;
+  }
+
 	/**
 	 * Returns the number of properties
 	 * 
@@ -149,7 +179,7 @@ public class SoapObject implements KvmSerializable
 	 * 
 	 * @param index
 	 *            index of desired attribute
-	 * @param propertyInfo
+	 * @param attributeInfo
 	 *            designated retainer of desired attribute
 	 */
 	public void getAttributeInfo(int index, AttributeInfo attributeInfo)
@@ -169,23 +199,59 @@ public class SoapObject implements KvmSerializable
 	 * @param index
 	 *            the index of the desired attribute
 	 * @return the value of the desired attribute
-	 * 
+	 *
 	 */
 	public Object getAttribute(int index)
 	{
 		return ((AttributeInfo) attributes.elementAt(index)).getValue();
 	}
 
-	/** Returns a property with the given name. */
+  /**
+   * Returns the attribute with the given name
+   *
+   * @param name
+   *            the name of the desired attribute
+   * @return the value of the attribute if it exists.
+   * @exception java.lang.RuntimeException if the attribute does not exist
+   *
+   */
 	public Object getAttribute(String name)
 	{
-		for (int i = 0; i < attributes.size(); i++)
-		{
-			if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName()))
-				return getAttribute(i);
-		}
-		throw new RuntimeException("illegal property: " + name);
+    Integer i = attributeIndex(name);
+    if (i != null) return getAttribute(i);
+    else throw new RuntimeException("illegal property: " + name);
 	}
+
+  /** Knows if the given attribute exists
+   *
+   * @param name the name of the attribute
+   * @return true if the attribute exists; false if not
+   */
+  public boolean hasAttribute(final String name) {
+    if (attributeIndex(name) != null) return true;
+    else return false;
+  }
+
+  /**
+   * Returns the attribute with the given name
+   *
+   * @param name
+   *            the name of the desired attribute
+   * @return the value of the attribute if it exists. null if it does not exist
+   *
+   */
+  public Object safeGetAttribute(String name) {
+    Integer i = attributeIndex(name);
+    if (i != null) return getAttribute(i);
+    else return null;
+  }
+
+  private Integer attributeIndex(String name) {
+    for (int i = 0; i < attributes.size(); i++) {
+      if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName())) return i;
+    }
+    return null;
+  }
 
 	/**
 	 * Returns the number of attributes
@@ -329,7 +395,7 @@ public class SoapObject implements KvmSerializable
 	/**
 	 * Adds a attribute (parameter) to the object. This is essentially a sub element.
 	 * 
-	 * @param propertyInfo
+	 * @param attributeInfo
 	 *            designated retainer of desired attribute
 	 */
 	public SoapObject addAttribute(AttributeInfo attributeInfo)
@@ -348,5 +414,4 @@ public class SoapObject implements KvmSerializable
 		buf.append("}");
 		return buf.toString();
 	}
-
 }
