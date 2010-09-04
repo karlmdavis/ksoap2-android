@@ -43,6 +43,8 @@ public class SoapObject implements KvmSerializable
 	/** The Vector of attributes. */
 	protected Vector attributes = new Vector();
 
+  // TODO: accessing properties and attributes would work much better if we kept a list of known properties instead of iterating through the list each time
+
 	/**
 	 * Creates a new <code>SoapObject</code> instance.
 	 * 
@@ -127,12 +129,9 @@ public class SoapObject implements KvmSerializable
    */
 	public Object getProperty(String name)
 	{
-		for (int i = 0; i < properties.size(); i++)
-		{
-			if (name.equals(((PropertyInfo) properties.elementAt(i)).getName()))
-				return getProperty(i);
-		}
-		throw new RuntimeException("illegal property: " + name);
+    Integer index = propertyIndex(name);
+    if (index != null) return getProperty(index);
+    else throw new RuntimeException("illegal property: " + name);
 	}
 
   /**
