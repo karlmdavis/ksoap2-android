@@ -5,7 +5,8 @@ import junit.framework.*;
 public class SoapPrimitiveTest extends TestCase {
 
     private SoapPrimitive soapPrimitive;
-     protected void setUp() throws Exception {
+
+    protected void setUp() throws Exception {
         super.setUp();
         soapPrimitive = new SoapPrimitive("namespace", "name", "theValue");
     }
@@ -47,54 +48,52 @@ public class SoapPrimitiveTest extends TestCase {
     }
 
     public void testGetAttribute_AttributesExist() {
-         soapPrimitive.addAttribute("First", "one");
-         soapPrimitive.addAttribute("Second", "two");
+        soapPrimitive.addAttribute("First", "one");
+        soapPrimitive.addAttribute("Second", "two");
 
-         assertEquals("two", soapPrimitive.getAttribute("Second"));
-         assertEquals("one", soapPrimitive.getAttribute("First"));
-     }
+        assertEquals("two", soapPrimitive.getAttribute("Second"));
+        assertEquals("one", soapPrimitive.getAttribute("First"));
+    }
 
-     public void testGetAttribute_AttributeDoesNotExist() {
-         soapPrimitive.addAttribute("First", "one");
+    public void testGetAttribute_AttributeDoesNotExist() {
+        soapPrimitive.addAttribute("First", "one");
 
-         try {
-             soapPrimitive.getAttribute("Second");
-             fail("should have thrown");
-         } catch (RuntimeException e) {
-             assertEquals(RuntimeException.class.getName(), e.getClass().getName());
-             assertEquals("illegal property: Second", e.getMessage());
-         }
-     }
+        try {
+            soapPrimitive.getAttribute("Second");
+            fail("should have thrown");
+        } catch (RuntimeException e) {
+            assertEquals(RuntimeException.class.getName(), e.getClass().getName());
+            assertEquals("illegal property: Second", e.getMessage());
+        }
+    }
 
-     public void testHasAttribute_KnowsIfTheAttributeExists() {
-         soapPrimitive.addAttribute("Second", "two");
-         assertTrue(soapPrimitive.hasAttribute("Second"));
-         assertFalse(soapPrimitive.hasAttribute("First"));
-     }
+    public void testHasAttribute_KnowsIfTheAttributeExists() {
+        soapPrimitive.addAttribute("Second", "two");
+        assertTrue(soapPrimitive.hasAttribute("Second"));
+        assertFalse(soapPrimitive.hasAttribute("First"));
+    }
 
-     public void testSafeGetAttribute_GivesAttributeWhenItExists() {
-         soapPrimitive.addAttribute("First", "one");
-         soapPrimitive.addAttribute("Second", "two");
+    public void testSafeGetAttribute_GivesAttributeWhenItExists() {
+        soapPrimitive.addAttribute("First", "one");
+        soapPrimitive.addAttribute("Second", "two");
 
-         assertEquals("two", soapPrimitive.safeGetAttribute("Second"));
-         assertEquals("one", soapPrimitive.safeGetAttribute("First"));
-     }
+        assertEquals("two", soapPrimitive.safeGetAttribute("Second"));
+        assertEquals("one", soapPrimitive.safeGetAttribute("First"));
+    }
 
-     public void testSafeGetAttribute_GivesNullWhenTheAttributeDoesNotExist() {
-         soapPrimitive.addAttribute("Second", "two");
+    public void testSafeGetAttribute_GivesNullWhenTheAttributeDoesNotExist() {
+        soapPrimitive.addAttribute("Second", "two");
 
-         assertEquals("two", soapPrimitive.safeGetAttribute("Second"));
-         assertNull(soapPrimitive.safeGetAttribute("First"));
-     }
-
-
+        assertEquals("two", soapPrimitive.safeGetAttribute("Second"));
+        assertNull(soapPrimitive.safeGetAttribute("First"));
+    }
 
 
-
-
-
-
-
+    public void testReturnTypeOfAddAttribute() {
+        SoapPrimitive result = soapPrimitive.addAttribute("Key", "Value");
+        assertTrue(result instanceof SoapPrimitive);
+        assertTrue(result == soapPrimitive);
+    }
 
 
 

@@ -79,38 +79,37 @@ public class AttributeContainer {
         return attributes.size();
     }
 
-    public AttributeContainer addAttribute(AttributeInfo attributeInfo)
-    {
-        attributes.addElement(attributeInfo);
-        return this;
-    }
-
-
-    protected boolean attributesAreEqual(AttributeContainer other)
-    {
+    /**
+     * Checks that the two objects have identical sets of attributes.
+     *
+     * @param other
+     * @return {@code true} of the attrubte sets are equal, {@code false} otherwise.
+     */
+    protected boolean attributesAreEqual(AttributeContainer other) {
         int numAttributes = getAttributeCount();
         if (numAttributes != other.getAttributeCount())
             return false;
 
         for (int attribIndex = 0; attribIndex < numAttributes; attribIndex++) {
-                AttributeInfo thisAttrib = (AttributeInfo) this.attributes.elementAt(attribIndex);
-                Object thisAttribValue = thisAttrib.getValue();
-                if (!other.hasAttribute(thisAttrib.getName())) return false;
-                Object otherAttribValue = other.safeGetAttribute(thisAttrib.getName());
-                if (!thisAttribValue.equals(otherAttribValue)) {
-                    return false;
-                }
+            AttributeInfo thisAttrib = (AttributeInfo) this.attributes.elementAt(attribIndex);
+            Object thisAttribValue = thisAttrib.getValue();
+            if (!other.hasAttribute(thisAttrib.getName())) return false;
+            Object otherAttribValue = other.safeGetAttribute(thisAttrib.getName());
+            if (!thisAttribValue.equals(otherAttribValue)) {
+                return false;
             }
+        }
         return true;
 
     }
 
 
     /**
-     * Adds a attribute (parameter) to the object. This is essentially a sub element.
+     * Adds a attribute (parameter) to the object.
      *
      * @param name  The name of the attribute
      * @param value the value of the attribute
+     * @return {@code this} object.
      */
     public AttributeContainer addAttribute(String name, Object value) {
         AttributeInfo attributeInfo = new AttributeInfo();
@@ -119,4 +118,20 @@ public class AttributeContainer {
         attributeInfo.value = value;
         return addAttribute(attributeInfo);
     }
+
+
+    /**
+     * Add a new attribute by providing an {@link AttributeInfo} object.  {@code AttributeInfo}
+     * contains all data about the attribute, including name and value.}
+     *
+     * @param attributeInfo the {@code AttributeInfo} object to add.
+     * @return {@code this} object.
+     */
+    public AttributeContainer addAttribute(AttributeInfo attributeInfo) {
+        attributes.addElement(attributeInfo);
+        return this;
+    }
+
+
+
 }

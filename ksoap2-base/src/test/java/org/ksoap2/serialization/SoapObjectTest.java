@@ -70,9 +70,8 @@ public class SoapObjectTest extends TestCase {
         //assertTrue(multipleAddresses.equals(multipleAddresses));
 
         // Different number of attributes should result in equals returning false
-        soapObject.addAttribute("Attribute1", 14);
+        soapObject2.addAttribute("Attribute1", 14);        
         assertFalse(soapObject.equals(soapObject2));
-
 
         // Different values of attributes should return false;
         soapObject2.addAttribute("Attribute1", 19);
@@ -84,6 +83,14 @@ public class SoapObjectTest extends TestCase {
         assertTrue(soapObject.newInstance().equals(soapObject));
 
     }
+
+    public void testReturnTypeOfAddAttribute()
+    {
+        SoapObject result = soapObject.addAttribute("Key", "Value");
+        assertTrue(result instanceof SoapObject);
+        assertTrue(result == soapObject);
+    }
+
 
     public void testSameNumberProperties_DifferentNames() {
         SoapObject soapObject2 = soapObject.newInstance();

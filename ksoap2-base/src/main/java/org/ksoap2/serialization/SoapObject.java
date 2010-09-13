@@ -269,23 +269,28 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return this;
     }
 
+
+
     /**
-     * Adds a attribute (parameter) to the object. This is essentially a sub element.
-     *
-     * @param attributeInfo designated retainer of desired attribute
+     * @inheritDoc
      */
     public SoapObject addAttribute(AttributeInfo attributeInfo) {
-        super.addAttribute(attributeInfo);
-        return this;
+        return (SoapObject) super.addAttribute(attributeInfo);
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public SoapObject addAttribute(String name, Object value) {
-        super.addAttribute(name, value);
-        return this;
+        return (SoapObject) super.addAttribute(name, value);
     }
 
 
+    /**
+     * Generate a {@code String} describing this object.
+     * @return
+     */
     public String toString() {
         StringBuffer buf = new StringBuffer("" + name + "{");
         for (int i = 0; i < getPropertyCount(); i++) {
