@@ -231,7 +231,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		if (parser.getEventType() == XmlPullParser.TEXT)
 		{
 			text = parser.getText();
-			result = new SoapPrimitive(typeNamespace, typeName, text);
+            SoapPrimitive sp = new SoapPrimitive(typeNamespace, typeName, text);
+			result = sp;
+              // apply all the cached attribute info list before we add the property and descend further for parsing
+            for (int i = 0; i < attributeInfoArrayList.size(); i++) {
+                sp.addAttribute(attributeInfoArrayList.get(i));
+            }
 			parser.next();
 		}
 		else if (parser.getEventType() == XmlPullParser.END_TAG)

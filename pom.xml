@@ -38,7 +38,8 @@
 		<module>ksoap2-samples</module>
 		<module>ksoap2-samples-axis</module>
 		<module>ksoap2-servlet</module>
-	</modules>
+        <module>driver</module>
+    </modules>
 
 	<distributionManagement>
 		<repository>
