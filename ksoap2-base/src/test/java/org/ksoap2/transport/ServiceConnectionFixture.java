@@ -58,7 +58,6 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "      </soapenv:Body>"+
     "   </soapenv:Envelope>";
     
-    
     public static String STRING_ARRAY_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
         "   <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"+
         "      <soapenv:Body>"+
@@ -157,6 +156,26 @@ public class ServiceConnectionFixture implements ServiceConnection {
     "       </" + RESPONSE_CLASS_NAME + ">" + "\n" + 
     "    </soapenv:Body>" + "\n" + 
     "</soapenv:Envelope>";
+
+
+    private static final String UNKNOWN_CLASS_NAME = "Unknown";
+    public static final String WORKING_NOMULTIREF_WITH_ATTRIBUTES = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" +
+    "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" +
+    "    <soapenv:Body>" + "\n" + 
+    "       <" + UNKNOWN_CLASS_NAME + " soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "\n" +
+    "          <ComplexFunctionReturn xsi:type=\"ns1:" + UNKNOWN_CLASS_NAME + "\" xmlns:ns1=\"" + NAMESPACE +"\">" + "\n" +
+    "             <longResponse attrFoo=\"valueBar\">"+theLongResponse+"</longResponse>" + "\n" +
+    "             <stringResponse xsi:type=\"xsd:string\">"+theStringResponse+"</stringResponse>" + "\n" +
+    "             <"+ComplexResponse.INTEGER_REPONSE_NAME+" xsi:type=\"xsd:int\">" + theIntegerResponse + "</"+ComplexResponse.INTEGER_REPONSE_NAME+"> \n" +
+    "             <"+ComplexResponse.BOOLEAN_RESPONSE_NAME+" xsi:type=\"xsd:boolean\">" + theBooleanResponse + "</"+ComplexResponse.BOOLEAN_RESPONSE_NAME+"> \n" +
+    "          </ComplexFunctionReturn>" + "\n" +
+    "       </" + UNKNOWN_CLASS_NAME + ">" + "\n" +
+    "    </soapenv:Body>" + "\n" +
+    "</soapenv:Envelope>";
+
+
+
+
     public static final String WORKING_NOMULTIREF_REVERSED_RESPONSE_PARAMETERS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + 
     "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" + 
     "    <soapenv:Body>" + "\n" + 
@@ -231,6 +250,12 @@ public class ServiceConnectionFixture implements ServiceConnection {
     public static InputStream createWorkingNoMultirefAsStream() {
         return messsageAsStream(WORKING_NOMULTIREF);
     }
+
+     public static InputStream createWorkingNoMultirefWithAttributesAsStream() {
+        return messsageAsStream(WORKING_NOMULTIREF_WITH_ATTRIBUTES);
+    }
+
+
     
     public static InputStream createWorkingNoMultirefAsStream_reversedResponseParameters() {
         return messsageAsStream(WORKING_NOMULTIREF_REVERSED_RESPONSE_PARAMETERS);
@@ -284,6 +309,5 @@ public class ServiceConnectionFixture implements ServiceConnection {
     public static InputStream createTwoDimensionalStringArrayResponseAsStream() {
         return messsageAsStream(TWO_DIMENSIONAL_STRING_ARRAY);
     }
-
 
 }
