@@ -73,6 +73,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
 
 
     // Test that we can parse a response as an "unknown" type an include attributes on primitives.
+
     public void testInboundWithAttributesOnPrimitives() throws Throwable {
         myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefWithAttributesAsStream());
         SoapObject cfr = (SoapObject) envelope.getResponse();
@@ -80,12 +81,12 @@ public class SoapSerializationEnvelopeTest extends TestCase {
 
 
         SoapPrimitive longResp = (SoapPrimitive) cfr.getProperty("longResponse");
-        assertEquals(ServiceConnectionFixture.theLongResponse+"", longResp.toString());
+        assertEquals(ServiceConnectionFixture.theLongResponse + "", longResp.toString());
         assertEquals("valueBar", longResp.safeGetAttribute("attrFoo"));
 
         assertEquals(ServiceConnectionFixture.theStringResponse, cfr.getProperty("stringResponse").toString());
-        assertEquals(ServiceConnectionFixture.theIntegerResponse+"", cfr.getProperty(ComplexResponse.INTEGER_REPONSE_NAME).toString());
-        assertEquals(ServiceConnectionFixture.theBooleanResponse+"", cfr.getProperty(ComplexResponse.BOOLEAN_RESPONSE_NAME).toString());
+        assertEquals(ServiceConnectionFixture.theIntegerResponse + "", cfr.getProperty(ComplexResponse.INTEGER_REPONSE_NAME).toString());
+        assertEquals(ServiceConnectionFixture.theBooleanResponse + "", cfr.getProperty(ComplexResponse.BOOLEAN_RESPONSE_NAME).toString());
 
 
     }
@@ -113,6 +114,18 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         // result);
 
     }
+
+    public void testRealLifeResponse() throws Exception {
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createRealLifeResponse());
+        SoapObject result = (SoapObject) envelope.getResponse();
+
+        SoapPrimitive item = (SoapPrimitive) result.getProperty(0);
+        assertEquals("Alpine Urgent Care", item.safeGetAttribute("GetCensusByUrgentCarePROD2ResultKey"));
+        assertEquals("1", item.toString());
+
+
+    }
+
 
     public void testReadInstance_SoapObject_Reversed() throws Throwable {
         KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
@@ -491,65 +504,63 @@ public class SoapSerializationEnvelopeTest extends TestCase {
             assertEquals("Should be two attributes. ", 2, in.getAttributeCount());
             assertEquals("LocaleID ", "de-AT", in.getAttribute("LocaleID"));
             assertEquals("ClientRequestHandle ", "ClientHandle", in.getAttribute("ClientRequestHandle"));
-			return null;
-		}
-	};
+            return null;
+        }
+    }
 
+    ;
 
 
     public void testAttributesOnPrimitives() throws Exception {
-          String testXML = "<body><response><result name=\"fred\" anotherAttr=\"anotherValue\">Barney</result></response></body>";
-          InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
-          SoapSerializationEnvelope sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        String testXML = "<body><response><result name=\"fred\" anotherAttr=\"anotherValue\">Barney</result></response></body>";
+        InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
+        SoapSerializationEnvelope sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 
-          KXmlParser parser = new KXmlParser();
-          parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-          parser.setInput(inputStream, null);
-          parser.nextTag();
+        KXmlParser parser = new KXmlParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        parser.setInput(inputStream, null);
+        parser.nextTag();
 
-          sse.parseBody(parser);
+        sse.parseBody(parser);
 
-          SoapPrimitive result = (SoapPrimitive) sse.getResponse();
-          assertEquals("fred", result.safeGetAttribute("name"));
-          assertEquals("anotherValue", result.safeGetAttribute("anotherAttr"));
-          assertEquals("Barney", result.toString());
-      }
+        SoapPrimitive result = (SoapPrimitive) sse.getResponse();
+        assertEquals("fred", result.safeGetAttribute("name"));
+        assertEquals("anotherValue", result.safeGetAttribute("anotherAttr"));
+        assertEquals("Barney", result.toString());
+    }
+
+    public void testAttributesOnPrimitives2() throws Exception {
+        String testXML = "<body><response><result>" +
+                "<person grade=\"F\">Fred</person>" +
+                "<person grade=\"C\">Chris</person>" +
+                "<person grade=\"A\">Allison</person>" +
+                "</result></response></body>";
+        InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
+        SoapSerializationEnvelope sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 
-      public void testAttributesOnPrimitives2() throws Exception {
-          String testXML = "<body><response><result>" +
-                  "<person grade=\"F\">Fred</person>" +
-                  "<person grade=\"C\">Chris</person>" +
-                  "<person grade=\"A\">Allison</person>" +
-                  "</result></response></body>";
-          InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
-          SoapSerializationEnvelope sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        KXmlParser parser = new KXmlParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        parser.setInput(inputStream, null);
+        parser.nextTag();
 
+        sse.parseBody(parser);
 
-          KXmlParser parser = new KXmlParser();
-          parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-          parser.setInput(inputStream, null);
-          parser.nextTag();
+        SoapObject result = (SoapObject) sse.getResponse();
+        SoapPrimitive fred = (SoapPrimitive) result.getProperty(0);
 
-          sse.parseBody(parser);
+        assertEquals("F", fred.safeGetAttribute("grade"));
+        assertEquals("Fred", fred.toString());
 
-          SoapObject result = (SoapObject) sse.getResult();
-          SoapPrimitive fred = (SoapPrimitive) result.getProperty(0);
+        SoapPrimitive chris = (SoapPrimitive) result.getProperty(1);
+        assertEquals("C", chris.safeGetAttribute("grade"));
+        assertEquals("Chris", chris.toString());
 
-          assertEquals("F", fred.safeGetAttribute("grade"));
-          assertEquals("Fred", fred.toString());
-
-          SoapPrimitive chris = (SoapPrimitive) result.getProperty(1);
-          assertEquals("C", chris.safeGetAttribute("grade"));
-          assertEquals("Chris", chris.toString());
-
-          SoapPrimitive allison = (SoapPrimitive) result.getProperty(2);
-          assertEquals("A", allison.safeGetAttribute("grade"));
-          assertEquals("Allison", allison.toString());
-      }
-    
-
+        SoapPrimitive allison = (SoapPrimitive) result.getProperty(2);
+        assertEquals("A", allison.safeGetAttribute("grade"));
+        assertEquals("Allison", allison.toString());
+    }
 
 
 }

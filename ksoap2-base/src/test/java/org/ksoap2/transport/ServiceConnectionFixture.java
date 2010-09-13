@@ -176,6 +176,22 @@ public class ServiceConnectionFixture implements ServiceConnection {
             "    </soapenv:Body>" + "\n" +
             "</soapenv:Envelope>";
 
+   public static final String REAL_LIFE_QUERY =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> <SOAP-ENV:Envelope xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:s='http://www.w3.org/2001/XMLSchema'>"
+  + "<SOAP-ENV:Body>"
+  + "<GetCensusByUrgentCarePROD2Response xmlns=\"http://default.org\">"
+  + "<GetCensusByUrgentCarePROD2Result>"
+  +"    <GetCensusByUrgentCarePROD2ResultItem GetCensusByUrgentCarePROD2ResultKey=\"Alpine Urgent Care\">1</GetCensusByUrgentCarePROD2ResultItem>"
+  +"    <GetCensusByUrgentCarePROD2ResultItem GetCensusByUrgentCarePROD2ResultKey=\"Broadmoor Urgent Care\">1</GetCensusByUrgentCarePROD2ResultItem>"
+  +"    <GetCensusByUrgentCarePROD2ResultItem GetCensusByUrgentCarePROD2ResultKey=\"Plainfield Urgent Care\">2</GetCensusByUrgentCarePROD2ResultItem>"
+  +"    <GetCensusByUrgentCarePROD2ResultItem GetCensusByUrgentCarePROD2ResultKey=\"South Pavilion Urgent Care\">1</GetCensusByUrgentCarePROD2ResultItem>"
+  +"    <GetCensusByUrgentCarePROD2ResultItem GetCensusByUrgentCarePROD2ResultKey=\"West Pavilion Urgent Care\">0</GetCensusByUrgentCarePROD2ResultItem>"
+  +" </GetCensusByUrgentCarePROD2Result>"
+  +"</GetCensusByUrgentCarePROD2Response>  </SOAP-ENV:Body>"
+  +"</SOAP-ENV:Envelope>";
+
+
+
 
     public static final String WORKING_NOMULTIREF_REVERSED_RESPONSE_PARAMETERS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" +
             "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + "\n" +
@@ -307,6 +323,10 @@ public class ServiceConnectionFixture implements ServiceConnection {
 
     public static InputStream createTwoDimensionalStringArrayResponseAsStream() {
         return messsageAsStream(TWO_DIMENSIONAL_STRING_ARRAY);
+    }
+
+    public static InputStream createRealLifeResponse() {
+        return messsageAsStream(REAL_LIFE_QUERY);
     }
 
 }

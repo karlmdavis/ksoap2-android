@@ -2,6 +2,8 @@
 bin/
 target*/
 *.log
+out
+*~
 
 # Project config files
 .settings/
