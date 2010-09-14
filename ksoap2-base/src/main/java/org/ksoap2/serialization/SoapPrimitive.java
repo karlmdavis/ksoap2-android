@@ -33,7 +33,7 @@ package org.ksoap2.serialization;
  * namespace, name and string value (this is how the stockquote example works).
  */
 
-public class SoapPrimitive {
+public class SoapPrimitive extends AttributeContainer {
     String namespace;
     String name;
     String value;
@@ -49,7 +49,8 @@ public class SoapPrimitive {
             return false;
         }
         SoapPrimitive p = (SoapPrimitive) o;
-        return name.equals(p.name) && (namespace == null ? p.namespace == null:namespace.equals(p.namespace)) && (value == null ? (p.value == null) : value.equals(p.value));
+        boolean varsEqual = name.equals(p.name) && (namespace == null ? p.namespace == null:namespace.equals(p.namespace)) && (value == null ? (p.value == null) : value.equals(p.value));
+        return varsEqual && attributesAreEqual(p);
     }
 
     public int hashCode() {
@@ -68,4 +69,18 @@ public class SoapPrimitive {
         return name;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public SoapPrimitive addAttribute(AttributeInfo attributeInfo) {
+        return (SoapPrimitive) super.addAttribute(attributeInfo);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public SoapPrimitive addAttribute(String name, Object value) {
+        return (SoapPrimitive) super.addAttribute(name, value);
+    }
 }
