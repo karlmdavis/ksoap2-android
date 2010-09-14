@@ -3,11 +3,6 @@ package org.ksoap2.serialization;
 import java.util.Vector;
 
 public class AttributeContainer {
-
-
-    /**
-     * The Vector of attributes.
-     */
     private Vector attributes = new Vector();
 
     /**
@@ -100,9 +95,7 @@ public class AttributeContainer {
             }
         }
         return true;
-
     }
-
 
     /**
      * Adds a attribute (parameter) to the object.
@@ -119,7 +112,6 @@ public class AttributeContainer {
         return addAttribute(attributeInfo);
     }
 
-
     /**
      * Add a new attribute by providing an {@link AttributeInfo} object.  {@code AttributeInfo}
      * contains all data about the attribute, including name and value.}
@@ -131,7 +123,4 @@ public class AttributeContainer {
         attributes.addElement(attributeInfo);
         return this;
     }
-
-
-
 }

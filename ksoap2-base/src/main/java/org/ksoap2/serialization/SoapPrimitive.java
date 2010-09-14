@@ -69,9 +69,7 @@ public class SoapPrimitive extends AttributeContainer {
         return name;
     }
 
-
-
-      /**
+    /**
      * @inheritDoc
      */
     public SoapPrimitive addAttribute(AttributeInfo attributeInfo) {
@@ -85,6 +83,4 @@ public class SoapPrimitive extends AttributeContainer {
     public SoapPrimitive addAttribute(String name, Object value) {
         return (SoapPrimitive) super.addAttribute(name, value);
     }
-
-
 }
