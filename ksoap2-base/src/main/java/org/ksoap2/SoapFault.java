@@ -89,7 +89,6 @@ public class SoapFault extends IOException
 	/**
 	 * @see java.lang.Throwable#getMessage()
 	 */
-	@Override
 	public String getMessage()
 	{
 		return faultstring;

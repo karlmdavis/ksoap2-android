@@ -35,7 +35,7 @@ public class AttributeContainer {
      */
     public Object getAttribute(String name) {
         Integer i = attributeIndex(name);
-        if (i != null) return getAttribute(i);
+        if (i != null) return getAttribute(i.intValue());
         else throw new RuntimeException("illegal property: " + name);
     }
 
@@ -54,13 +54,13 @@ public class AttributeContainer {
      */
     public Object safeGetAttribute(String name) {
         Integer i = attributeIndex(name);
-        if (i != null) return getAttribute(i);
+        if (i != null) return getAttribute(i.intValue());
         else return null;
     }
 
     private Integer attributeIndex(String name) {
         for (int i = 0; i < attributes.size(); i++) {
-            if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName())) return i;
+            if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName())) return new Integer(i);
         }
         return null;
     }
@@ -104,12 +104,12 @@ public class AttributeContainer {
      * @param value the value of the attribute
      * @return {@code this} object.
      */
-    public AttributeContainer addAttribute(String name, Object value) {
+    public void addAttribute(String name, Object value) {
         AttributeInfo attributeInfo = new AttributeInfo();
         attributeInfo.name = name;
         attributeInfo.type = value == null ? PropertyInfo.OBJECT_CLASS : value.getClass();
         attributeInfo.value = value;
-        return addAttribute(attributeInfo);
+        addAttribute(attributeInfo);
     }
 
     /**
@@ -119,8 +119,7 @@ public class AttributeContainer {
      * @param attributeInfo the {@code AttributeInfo} object to add.
      * @return {@code this} object.
      */
-    public AttributeContainer addAttribute(AttributeInfo attributeInfo) {
+    public void addAttribute(AttributeInfo attributeInfo) {
         attributes.addElement(attributeInfo);
-        return this;
     }
 }

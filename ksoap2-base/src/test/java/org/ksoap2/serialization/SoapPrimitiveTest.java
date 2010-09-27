@@ -87,14 +87,4 @@ public class SoapPrimitiveTest extends TestCase {
         assertEquals("two", soapPrimitive.safeGetAttribute("Second"));
         assertNull(soapPrimitive.safeGetAttribute("First"));
     }
-
-
-    public void testReturnTypeOfAddAttribute() {
-        SoapPrimitive result = soapPrimitive.addAttribute("Key", "Value");
-        assertTrue(result instanceof SoapPrimitive);
-        assertTrue(result == soapPrimitive);
-    }
-
-
-
 }

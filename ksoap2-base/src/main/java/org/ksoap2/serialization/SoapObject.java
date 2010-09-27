@@ -123,7 +123,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      */
     public Object getProperty(String name) {
         Integer index = propertyIndex(name);
-        if (index != null) return getProperty(index);
+        if (index != null) return getProperty(index.intValue());
         else throw new RuntimeException("illegal property: " + name);
     }
 
@@ -142,7 +142,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      */
     public Object safeGetProperty(final String name) {
         Integer i = propertyIndex(name);
-        if (i != null) return getProperty(i);
+        if (i != null) return getProperty(i.intValue());
         else return new NullSoapObject();
     }
 
@@ -155,13 +155,13 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      */
     public Object safeGetProperty(final String name, final Object defaultThing) {
         Integer i = propertyIndex(name);
-        if (i != null) return getProperty(i);
+        if (i != null) return getProperty(i.intValue());
         else return defaultThing;
     }
 
     private Integer propertyIndex(String name) {
         for (int i = 0; i < properties.size(); i++) {
-            if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) return i;
+            if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) return new Integer(i);
         }
         return null;
     }
@@ -268,24 +268,6 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         properties.addElement(propertyInfo);
         return this;
     }
-
-
-
-    /**
-     * @inheritDoc
-     */
-    public SoapObject addAttribute(AttributeInfo attributeInfo) {
-        return (SoapObject) super.addAttribute(attributeInfo);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public SoapObject addAttribute(String name, Object value) {
-        return (SoapObject) super.addAttribute(name, value);
-    }
-
 
     /**
      * Generate a {@code String} describing this object.

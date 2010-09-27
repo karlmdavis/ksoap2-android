@@ -68,19 +68,4 @@ public class SoapPrimitive extends AttributeContainer {
     public String getName() {
         return name;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public SoapPrimitive addAttribute(AttributeInfo attributeInfo) {
-        return (SoapPrimitive) super.addAttribute(attributeInfo);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public SoapPrimitive addAttribute(String name, Object value) {
-        return (SoapPrimitive) super.addAttribute(name, value);
-    }
 }
