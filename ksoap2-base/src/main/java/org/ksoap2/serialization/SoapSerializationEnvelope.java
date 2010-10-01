@@ -221,7 +221,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
             attributeInfo.setValue(parser.getAttributeValue(attributeCount));
             attributeInfo.setNamespace(parser.getAttributeNamespace(attributeCount));
             attributeInfo.setType(parser.getAttributeType(attributeCount));
-            attributeInfoVector.add(attributeInfo);
+            attributeInfoVector.addElement(attributeInfo);
         }
 
 		parser.next(); // move to text, inner start tag or end tag
@@ -234,7 +234,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			result = sp;
               // apply all the cached attribute info list before we add the property and descend further for parsing
             for (int i = 0; i < attributeInfoVector.size(); i++) {
-                sp.addAttribute((AttributeInfo) attributeInfoVector.get(i));
+                sp.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
             }
 			parser.next();
 		}
@@ -243,7 +243,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
             SoapObject so = new SoapObject(typeNamespace, typeName);
             // apply all the cached attribute info list before we add the property and descend further for parsing
             for (int i = 0; i < attributeInfoVector.size(); i++) {
-                so.addAttribute((AttributeInfo) attributeInfoVector.get(i));
+                so.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
             }
 			result = so;
 		}
@@ -257,7 +257,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			SoapObject so = new SoapObject(typeNamespace, typeName);
             // apply all the cached attribute info list before we add the property and descend further for parsing
             for (int i = 0; i < attributeInfoVector.size(); i++) {
-                so.addAttribute((AttributeInfo) attributeInfoVector.get(i));
+                so.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
             }
 
 			while (parser.getEventType() != XmlPullParser.END_TAG)
