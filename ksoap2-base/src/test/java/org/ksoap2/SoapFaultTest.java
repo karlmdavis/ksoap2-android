@@ -31,6 +31,11 @@ import java.io.StringReader;
 public class SoapFaultTest extends TestCase {
     private static final String FAULT_STRING = "<faultstring>The ISBN value contains invalid characters</faultstring>";
 
+    public void testPlaceHolder() {
+        // Just here so JUnit doesn't complain.
+        return;
+    }
+
 //    public void testFaultDeserialize() throws Throwable {
 //        SoapFault fault = generateFaultFromFaultString(ServiceConnectionFixture.FAULT_STRING);
 //        assertEquals(ServiceConnectionFixture.FAULT_MESSAGE_STRING, fault.faultstring);
