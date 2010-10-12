@@ -53,6 +53,9 @@ public class SoapFault extends IOException
 			{
 				detail = new Node();
 				detail.parse(parser);
+				// Handle case '...<detail/></soap:Fault>'
+				if ( parser.getNamespace().equals( SoapEnvelope.ENV ) && parser.getName().equals( "Fault" ) )
+					break;
 				continue;
 			}
 			else if (name.equals("faultcode"))

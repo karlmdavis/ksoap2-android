@@ -26,3 +26,4 @@ Karl Michael Davis <karlmdavis@gmail.com>
 Manfred Moser <manfred@simpligility.com> http://www.simpligility.com
 Matt Fletcher <fletcher@atomicobject.com>  http://www.atomicobject.com
 Zachary Kurmasz <?> http://github.com/kurmasz
+Juraj Ivančić" <juraj.ivancic@gmail.com>
