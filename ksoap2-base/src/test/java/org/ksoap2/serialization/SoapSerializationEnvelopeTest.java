@@ -36,476 +36,531 @@ import org.kxml2.io.KXmlSerializer;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-public class SoapSerializationEnvelopeTest extends TestCase
-{
-	private static final String PARAMETER_NAME = "aParameter";
-	private static String FUNCTION_NAME = "FunctionName";
-	private static String NAMESPACE_NAME = ServiceConnectionFixture.NAMESPACE;
-	private static final String BODY_XML_STRING = "<n0:" + FUNCTION_NAME
-			+ " id=\"o0\" n1:root=\"1\" xmlns:n0=\"" + NAMESPACE_NAME
-			+ "\" xmlns:n1=\"http://schemas.xmlsoap.org/soap/encoding/\"";
-	private static final String END_XML_STRING = " />";
-	private static final String END_XML_FUNCTION_STRING = "</n0:" + FUNCTION_NAME + ">";
-	private KXmlSerializer xmlWriter;
-	private SoapSerializationEnvelope envelope;
-	private ByteArrayOutputStream outputStream;
-	private SoapObject soapObject;
-	private MockTransport myTransport;
+public class SoapSerializationEnvelopeTest extends TestCase {
+    private static final String PARAMETER_NAME = "aParameter";
+    private static String FUNCTION_NAME = "FunctionName";
+    private static String NAMESPACE_NAME = ServiceConnectionFixture.NAMESPACE;
+    private static final String BODY_XML_STRING = "<n0:" + FUNCTION_NAME
+            + " id=\"o0\" n1:root=\"1\" xmlns:n0=\"" + NAMESPACE_NAME
+            + "\" xmlns:n1=\"http://schemas.xmlsoap.org/soap/encoding/\"";
+    private static final String END_XML_STRING = " />";
+    private static final String END_XML_FUNCTION_STRING = "</n0:" + FUNCTION_NAME + ">";
+    private KXmlSerializer xmlWriter;
+    private SoapSerializationEnvelope envelope;
+    private ByteArrayOutputStream outputStream;
+    private SoapObject soapObject;
+    private MockTransport myTransport;
 
-	protected void setUp() throws Exception
-	{
-		super.setUp();
-		xmlWriter = new KXmlSerializer();
-		outputStream = new ByteArrayOutputStream();
-		xmlWriter.setOutput(outputStream, "UTF-8");
-		envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		envelope.addMapping(NAMESPACE_NAME, ServiceConnectionFixture.RESPONSE_CLASS_NAME,
-				ServiceConnectionFixture.RESPONSE_CLASS);
-		soapObject = new SoapObject(NAMESPACE_NAME, FUNCTION_NAME);
-		myTransport = new MockTransport();
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
+        xmlWriter = new KXmlSerializer();
+        outputStream = new ByteArrayOutputStream();
+        xmlWriter.setOutput(outputStream, "UTF-8");
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.addMapping(NAMESPACE_NAME, ServiceConnectionFixture.RESPONSE_CLASS_NAME,
+                ServiceConnectionFixture.RESPONSE_CLASS);
+        soapObject = new SoapObject(NAMESPACE_NAME, FUNCTION_NAME);
+        myTransport = new MockTransport();
+    }
 
-	// public void xx_testTwoDimensionalStringArrays() throws Throwable {
-	// // can't handle two dimensional arrays.
-	// myTransport.parseResponse(envelope,
-	// ServiceConnectionFixture.createTwoDimensionalStringArrayResponseAsStream());
-	// Object result = envelope.getResponse();
-	// ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
-	// }
+    // public void xx_testTwoDimensionalStringArrays() throws Throwable {
+    // // can't handle two dimensional arrays.
+    // myTransport.parseResponse(envelope,
+    // ServiceConnectionFixture.createTwoDimensionalStringArrayResponseAsStream());
+    // Object result = envelope.getResponse();
+    // ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+    // }
 
-	public void testInbound() throws Throwable
-	{
-		myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
-		Object result = envelope.getResponse();
-		ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
 
-		myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingAsStream());
-		result = envelope.getResponse();
-		ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+    // Test that we can parse a response as an "unknown" type an include attributes on primitives.
 
-		myTransport.parseResponse(envelope, ServiceConnectionFixture
-				.createWorkingNoMultirefAsStream_reversedResponseParameters());
-		result = envelope.getResponse();
-		ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
+    public void testInboundWithAttributesOnPrimitives() throws Throwable {
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefWithAttributesAsStream());
+        SoapObject cfr = (SoapObject) envelope.getResponse();
+        assertEquals(4, cfr.getPropertyCount());
 
-		// Can't handle multirefs yet
-		//
-		// myTransport.parseResponse(envelope,
-		// ServiceConnectionFixture.createMultirefAsStream());
-		// result = envelope.getResult();
-		// ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse)
-		// result);
 
-	}
+        SoapPrimitive longResp = (SoapPrimitive) cfr.getProperty("longResponse");
+        assertEquals(ServiceConnectionFixture.theLongResponse + "", longResp.toString());
+        assertEquals("valueBar", longResp.safeGetAttribute("attrFoo"));
 
-	public void testReadInstance_SoapObject_Reversed() throws Throwable
-	{
-		KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
-				.createWorkingNoMultirefAsStream_reversedResponseParameters());
-		SoapSerializationEnvelope localEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		SoapObject aSoapObject = (SoapObject) localEnvelope.readUnknown(parser, NAMESPACE_NAME,
-				ServiceConnectionFixture.RESPONSE_CLASS_NAME);
-		assertEquals(ServiceConnectionFixture.theStringResponse, aSoapObject.getProperty(0));
-		assertEquals("" + ServiceConnectionFixture.theLongResponse, aSoapObject.getProperty(1).toString());
-	}
+        assertEquals(ServiceConnectionFixture.theStringResponse, cfr.getProperty("stringResponse").toString());
+        assertEquals(ServiceConnectionFixture.theIntegerResponse + "", cfr.getProperty(ComplexResponse.INTEGER_REPONSE_NAME).toString());
+        assertEquals(ServiceConnectionFixture.theBooleanResponse + "", cfr.getProperty(ComplexResponse.BOOLEAN_RESPONSE_NAME).toString());
 
-	public void testReadInstance_SoapObject() throws Throwable
-	{
-		KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
-				.createWorkingNoMultirefAsStream());
-		SoapSerializationEnvelope localEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		SoapObject aSoapObject = (SoapObject) localEnvelope.readUnknown(parser, NAMESPACE_NAME,
-				ServiceConnectionFixture.RESPONSE_CLASS_NAME);
-		assertEquals(ServiceConnectionFixture.theStringResponse, aSoapObject.getProperty(1));
-		assertEquals("" + ServiceConnectionFixture.theLongResponse, aSoapObject.getProperty(0).toString());
-	}
 
-	public void testReadSerializable_ParameterOrderReverse() throws Throwable
-	{
-		ComplexResponse complexResponse = new ComplexResponse();
-		KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
-				.createWorkingNoMultirefAsStream_reversedResponseParameters());
-		envelope.readSerializable(parser, complexResponse);
-		ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
-	}
+    }
 
-	public void testReadSerializable_ParameterOrderNormal() throws Throwable
-	{
-		ComplexResponse complexResponse = new ComplexResponse();
-		KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
-				.createWorkingNoMultirefAsStream());
-		envelope.readSerializable(parser, complexResponse);
-		ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
-	}
+    public void testInbound() throws Throwable {
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingNoMultirefAsStream());
+        Object result = envelope.getResponse();
+        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
 
-	public void testReadSerializable_ParameterOrderNormal_NullNamespace() throws Throwable
-	{
-		ComplexResponse complexResponse = new ComplexResponse();
-		complexResponse.namespace = null;
-		KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
-				.createWorkingNoMultirefAsStream());
-		envelope.readSerializable(parser, complexResponse);
-		ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
-	}
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createWorkingAsStream());
+        result = envelope.getResponse();
+        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
 
-	public void testReadSerializable_ParameterOrderNormal_NullNamespace_NullName()
-	{
-		// SF Bug # 1442028
-		try
-		{
-			ComplexResponse complexResponse = new ComplexResponse();
-			complexResponse.namespace = null;
-			complexResponse.parameterCount = 2;
-			complexResponse.responseOne_Name = null;
-			KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
-					.createWorkingNoMultirefAsStream());
-			envelope.readSerializable(parser, complexResponse);
-			ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
-		}
-		catch (Throwable e)
-		{
-			assertFalse(e instanceof NullPointerException);
-		}
-	}
+        myTransport.parseResponse(envelope, ServiceConnectionFixture
+                .createWorkingNoMultirefAsStream_reversedResponseParameters());
+        result = envelope.getResponse();
+        ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse) result);
 
-	private KXmlParser primedParserForSerializableParameterTest(InputStream inputStream) throws Throwable
-	{
-		KXmlParser parser = new KXmlParser();
-		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-		parser.setInput(inputStream, null);
-		parser.nextTag();
-		parser.nextTag();
-		parser.nextTag();
-		parser.nextTag();
-		return parser;
-	}
+        // Can't handle multirefs yet
+        //
+        // myTransport.parseResponse(envelope,
+        // ServiceConnectionFixture.createMultirefAsStream());
+        // result = envelope.getResult();
+        // ServiceConnectionFixture.assertComplexResponseCorrect((ComplexResponse)
+        // result);
 
-	public void testWriteHashtable() throws IOException
-	{
-		Hashtable hashtable = new Hashtable();
-		hashtable.put("key1", "value1");
-		soapObject.addProperty("hashthingy", hashtable);
-		new MarshalHashtable().register(envelope);
-		writeBodyWithSoapObject(soapObject);
-		assertEquals(
-				BODY_XML_STRING
-						+ ">"
-						+ "<hashthingy n3:type=\"n2:Map\" xmlns:n2=\"http://xml.apache.org/xml-soap\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema-instance\"><item><key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key><value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value></item></hashthingy></n0:FunctionName>",
-				new String(outputStream.toByteArray()));
-	}
+    }
 
-	public void testReadHashtable() throws XmlPullParserException, IOException
-	{
-		new MarshalHashtable().register(envelope);
-		myTransport.parseResponse(envelope, ServiceConnectionFixture.hashTableAsStream());
-		Hashtable result = (Hashtable) envelope.bodyIn;
-		assertEquals("value1", result.get("key1"));
-	}
+    public void testRealLifeResponse() throws Exception {
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.createRealLifeResponse());
+        SoapObject result = (SoapObject) envelope.getResponse();
 
-	public void testReadHashtable_dupkeyvalueandnulls() throws XmlPullParserException, IOException
-	{
-		new MarshalHashtable().register(envelope);
-		myTransport.parseResponse(envelope, ServiceConnectionFixture.hashTableWithDupAsStream());
-		Hashtable result = (Hashtable) envelope.bodyIn;
-		assertEquals("value1", result.get("key1"));
-		assertEquals(1, result.values().size());
-	}
+        SoapPrimitive item = (SoapPrimitive) result.getProperty(0);
+        assertEquals("Alpine Urgent Care", item.safeGetAttribute("GetCensusByUrgentCarePROD2ResultKey"));
+        assertEquals("1", item.toString());
 
-	public void testWritingBody_WithNullParameter() throws Exception
-	{
-		soapObject.addProperty(PARAMETER_NAME, null);
-		writeBodyWithSoapObject(soapObject);
-		assertEquals(BODY_XML_STRING + ">" + "<" + PARAMETER_NAME + " n2:null=\"true\" xmlns:n2=\""
-				+ envelope.xsi + "\" />" + END_XML_FUNCTION_STRING, new String(outputStream.toByteArray()));
-	}
 
-	public void testWritingBody_WithPrimitiveBooleanParameters() throws Exception
-	{
-		assertPrimitiveParameterCorrect(Boolean.TRUE, "boolean");
-	}
+    }
 
-	public void testWritingBody_WithPrimitiveStringParameters() throws Exception
-	{
-		assertPrimitiveParameterCorrect("aStringValue", "string");
-	}
 
-	public void testWritingBody_WithPrimitiveIntegerParameters() throws Exception
-	{
-		assertPrimitiveParameterCorrect(new Integer(2), "int");
-	}
+    public void testReadInstance_SoapObject_Reversed() throws Throwable {
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
+                .createWorkingNoMultirefAsStream_reversedResponseParameters());
+        SoapSerializationEnvelope localEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapObject aSoapObject = (SoapObject) localEnvelope.readUnknown(parser, NAMESPACE_NAME,
+                ServiceConnectionFixture.RESPONSE_CLASS_NAME);
+        assertEquals(ServiceConnectionFixture.theStringResponse, aSoapObject.getProperty(0));
+        assertEquals("" + ServiceConnectionFixture.theLongResponse, aSoapObject.getProperty(1).toString());
+    }
 
-	public void testWritingBody_WithPrimitiveLongParameters() throws Exception
-	{
-		assertPrimitiveParameterCorrect(new Long(2), "long");
-	}
+    public void testReadInstance_SoapObject() throws Throwable {
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
+                .createWorkingNoMultirefAsStream());
+        SoapSerializationEnvelope localEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapObject aSoapObject = (SoapObject) localEnvelope.readUnknown(parser, NAMESPACE_NAME,
+                ServiceConnectionFixture.RESPONSE_CLASS_NAME);
+        assertEquals(ServiceConnectionFixture.theStringResponse, aSoapObject.getProperty(1));
+        assertEquals("" + ServiceConnectionFixture.theLongResponse, aSoapObject.getProperty(0).toString());
+    }
 
-	private void assertPrimitiveParameterCorrect(Object primtiveValue, String type) throws IOException
-	{
-		soapObject.addProperty(PARAMETER_NAME, primtiveValue);
-		writeBodyWithSoapObject(soapObject);
-		assertEquals(BODY_XML_STRING + ">" + getParameterBody(type, primtiveValue) + END_XML_FUNCTION_STRING,
-				new String(outputStream.toByteArray()));
-	}
+    public void testReadSerializable_ParameterOrderReverse() throws Throwable {
+        ComplexResponse complexResponse = new ComplexResponse();
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
+                .createWorkingNoMultirefAsStream_reversedResponseParameters());
+        envelope.readSerializable(parser, complexResponse);
+        ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
+    }
 
-	public void testWritingBody_NullBody() throws IOException
-	{
-		envelope.setOutputSoapObject(null);
-		try
-		{
-			envelope.writeBody(xmlWriter);
-			fail();
-		}
-		catch (NullPointerException e)
-		{
-			// TODO: This should probably do something intelligent instead of
-			// throwing a null pointer exception
-		}
-	}
+    public void testReadSerializable_ParameterOrderNormal() throws Throwable {
+        ComplexResponse complexResponse = new ComplexResponse();
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
+                .createWorkingNoMultirefAsStream());
+        envelope.readSerializable(parser, complexResponse);
+        ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
+    }
 
-	public void testWritingBody_EmptyBody() throws Exception
-	{
-		writeBodyWithSoapObject(soapObject);
-		assertEquals(BODY_XML_STRING + END_XML_STRING, new String(outputStream.toByteArray()));
-	}
+    public void testReadSerializable_ParameterOrderNormal_NullNamespace() throws Throwable {
+        ComplexResponse complexResponse = new ComplexResponse();
+        complexResponse.namespace = null;
+        KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
+                .createWorkingNoMultirefAsStream());
+        envelope.readSerializable(parser, complexResponse);
+        ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
+    }
 
-	private String getParameterBody(String type, Object aValue)
-	{
-		return "<" + PARAMETER_NAME + " n3:type=\"n2:" + type + "\" xmlns:n2=\"" + envelope.xsd
-				+ "\" xmlns:n3=\"" + envelope.xsi + "\">" + aValue + "</" + PARAMETER_NAME + ">";
-	}
+    public void testReadSerializable_ParameterOrderNormal_NullNamespace_NullName() {
+        // SF Bug # 1442028
+        try {
+            ComplexResponse complexResponse = new ComplexResponse();
+            complexResponse.namespace = null;
+            complexResponse.parameterCount = 2;
+            complexResponse.responseOne_Name = null;
+            KXmlParser parser = primedParserForSerializableParameterTest(ServiceConnectionFixture
+                    .createWorkingNoMultirefAsStream());
+            envelope.readSerializable(parser, complexResponse);
+            ServiceConnectionFixture.assertComplexResponseCorrect(complexResponse);
+        }
+        catch (Throwable e) {
+            assertFalse(e instanceof NullPointerException);
+        }
+    }
 
-	private void writeBodyWithSoapObject(SoapObject soapObject) throws IOException
-	{
-		envelope.setOutputSoapObject(soapObject);
-		envelope.writeBody(xmlWriter);
-		xmlWriter.flush();
-	}
+    private KXmlParser primedParserForSerializableParameterTest(InputStream inputStream) throws Throwable {
+        KXmlParser parser = new KXmlParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        parser.setInput(inputStream, null);
+        parser.nextTag();
+        parser.nextTag();
+        parser.nextTag();
+        parser.nextTag();
+        return parser;
+    }
 
-	/** Proof that the service was called, and how often. */
-	static protected int serviceCallCount;
+    public void testWriteHashtable() throws IOException {
+        Hashtable hashtable = new Hashtable();
+        hashtable.put("key1", "value1");
+        soapObject.addProperty("hashthingy", hashtable);
+        new MarshalHashtable().register(envelope);
+        writeBodyWithSoapObject(soapObject);
+        assertEquals(
+                BODY_XML_STRING
+                        + ">"
+                        + "<hashthingy n3:type=\"n2:Map\" xmlns:n2=\"http://xml.apache.org/xml-soap\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema-instance\"><item><key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key><value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value></item></hashthingy></n0:FunctionName>",
+                new String(outputStream.toByteArray()));
+    }
 
-	/*
-	 * We're going to execute "GetStatus" according to the following WSDL snippet. This is done in pieces as
-	 * unit tests. The definition is from the OPCFoundation OPC XML DA WSDL
-	 * (http://opcfoundation.org/webservices/XMLDA/1.0/). The document from http://www.opcfoundation.com also
-	 * provides examples of the transactions.
-	 * 
-	 * <types><s:schema elementFormDefault="qualified"
-	 * targetNamespace="http://opcfoundation.org/webservices/XMLDA/1.0/"> <s:element name="getStatus">
-	 * <s:complexType> <s:attribute name="LocaleID" type="s:string"/> <s:attribute name="ClientRequestHandle"
-	 * type="s:string"/> </s:complexType> </s:element> <s:element name="GetStatusResponse"> <s:complexType>
-	 * <s:sequence> <s:element minOccurs="0" maxOccurs="1" name="GetStatusResult" type="s0:ReplyBase"/>
-	 * <s:element minOccurs="0" maxOccurs="1" name="Status" type="s0:ServerStatus"/> </s:sequence>
-	 * </s:complexType> </s:element><s:complexType name="ReplyBase"> <s:attribute name="RcvTime"
-	 * type="s:dateTime" use="required"/> <s:attribute name="ReplyTime" type="s:dateTime" use="required"/>
-	 * <s:attribute name="ClientRequestHandle" type="s:string"/> <s:attribute name="RevisedLocaleID"
-	 * type="s:string"/> <s:attribute name="ServerState" type="s0:serverState" use="required"/>
-	 * </s:complexType><s:simpleType name="serverState"> <s:restriction base="s:string"> <s:enumeration
-	 * value="running"/> <s:enumeration value="failed"/> <s:enumeration value="noConfig"/> <s:enumeration
-	 * value="suspended"/> <s:enumeration value="test"/> <s:enumeration value="commFault"/> </s:restriction>
-	 * </s:simpleType> <s:complexType name="ServerStatus"> <s:sequence> <s:element minOccurs="0" maxOccurs="1"
-	 * name="StatusInfo" type="s:string"/> <s:element minOccurs="0" maxOccurs="1" name="VendorInfo"
-	 * type="s:string"/> <s:element minOccurs="0" maxOccurs="unbounded" name="SupportedLocaleIDs"
-	 * type="s:string"/> <s:element minOccurs="0" maxOccurs="unbounded" name="SupportedInterfaceVersions"
-	 * type="s0:interfaceVersion"/> </s:sequence> <s:attribute name="StartTime" type="s:dateTime"
-	 * use="required"/> <s:attribute name="ProductVersion" type="s:string"/> </s:complexType> <s:simpleType
-	 * name="interfaceVersion"> <s:restriction base="s:string"> <s:enumeration value="XML_DA_Version_1_0"/>
-	 * </s:restriction> </s:simpleType>
-	 * 
-	 * In other words, we call "getStatus" on the service, with "LocaleID" and "ClientRequestHandle" available
-	 * as attributes. The response has two objects "ReplyBase" and "ServerStatus". Each of these have a
-	 * hodgepog of attributes, sequences and enumerations.
-	 * 
-	 * The output message should look, more or less like this (from the specification):
-	 * 
-	 * <soap:Body> <getStatus LocaleID="de-AT" xmlns="http://opcfoundation.org/webservices/XMLDA/1.0/" />
-	 * </soap:Body>
-	 * 
-	 * and the response more or less like this (from the specification):
-	 * 
-	 * <soap:Body> <GetStatusResponse xmlns="http://opcfoundation.org/webservices/XMLDA/1.0/">
-	 * <GetStatusResult RcvTime="2003-05-26T20:17:42.4781250-07:00"
-	 * ReplyTime="2003-05-26T20:17:42.5781250-07:00" RevisedLocaleID="de" ServerState="running" /> <Status
-	 * StartTime="2003-05-26T20:16:45.0937500-07:00" ProductVersion="1.00.1.00" > <VendorInfo>OPC XML Data
-	 * Access 1.00 Sample Server</VendorInfo> <SupportedLocaleIDs>en</SupportedLocaleIDs>
-	 * <SupportedLocaleIDs>en-US</SupportedLocaleIDs> <SupportedLocaleIDs>de</SupportedLocaleIDs>
-	 * <SupportedInterfaceVersions>XML_DA_Version_1_0</SupportedInterfaceVersions> </Status>
-	 * </GetStatusResponse></soap:Body>
-	 */
+    public void testReadHashtable() throws XmlPullParserException, IOException {
+        new MarshalHashtable().register(envelope);
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.hashTableAsStream());
+        Hashtable result = (Hashtable) envelope.bodyIn;
+        assertEquals("value1", result.get("key1"));
+    }
 
-	/**
-	 * This will generate an XML string from a SoapObject/SoapEnvelope that represents the "getStatus" call in
-	 * the WSDL above. The resulting XML will be passed to "public void testGetStatus(String xmlString)" to
-	 * ensure AXIS compatibility (and compatibility with the published standards).
-	 */
-	public void testGetStatusSoapObject() throws Throwable
-	{
-		SoapObject getStatus = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/", "getStatus");
-		getStatus.addAttribute("LocaleID", "de-AT");
-		getStatus.addAttribute("ClientRequestHandle", "ClientHandle");
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		envelope.bodyOut = getStatus;
-		envelope.setAddAdornments(false);
+    public void testReadHashtable_dupkeyvalueandnulls() throws XmlPullParserException, IOException {
+        new MarshalHashtable().register(envelope);
+        myTransport.parseResponse(envelope, ServiceConnectionFixture.hashTableWithDupAsStream());
+        Hashtable result = (Hashtable) envelope.bodyIn;
+        assertEquals("value1", result.get("key1"));
+        assertEquals(1, result.values().size());
+    }
 
-		byte[] request = myTransport.createRequestData(envelope);
-		String xmlString = new String(request);
-		assertGetStatus(xmlString);
-	}
+    public void testWritingBody_WithNullParameter() throws Exception {
+        soapObject.addProperty(PARAMETER_NAME, null);
+        writeBodyWithSoapObject(soapObject);
+        assertEquals(BODY_XML_STRING + ">" + "<" + PARAMETER_NAME + " n2:null=\"true\" xmlns:n2=\""
+                + envelope.xsi + "\" />" + END_XML_FUNCTION_STRING, new String(outputStream.toByteArray()));
+    }
 
-	/** The string that represents the "getStatus". This is copied from an Axis call. */
-	protected static final String getStatusRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-			+ "<soapenv:Body><getStatus ClientRequestHandle=\"ClientHandle\" LocaleID=\"de-AT\" xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\"/></soapenv:Body>"
-			+ "</soapenv:Envelope>";
+    public void testWritingBody_WithPrimitiveBooleanParameters() throws Exception {
+        assertPrimitiveParameterCorrect(Boolean.TRUE, "boolean");
+    }
 
-	/**
-	 * Test the status using the AXIS generated xml.
-	 * 
-	 * @throws Throwable
-	 */
-	public void testGetStatus() throws Throwable
-	{
-		assertGetStatus(getStatusRequest);
-	}
+    public void testWritingBody_WithPrimitiveStringParameters() throws Exception {
+        assertPrimitiveParameterCorrect("aStringValue", "string");
+    }
 
-	/**
-	 * Test getStatus by passing in an xmlString. The result should be the same with an Axis or ksoap
-	 * generated string (clearly).
-	 * 
-	 * @param xmlString
-	 *            the xml string to test.
-	 * @throws Throwable
-	 */
-	public void assertGetStatus(String xmlString) throws Throwable
-	{
-		serviceCallCount = 0; // zero this
-		Object service = new GetStatus();
-		envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "getStatus", SoapObject.class);
-		envelope.setAddAdornments(false);
-		ByteArrayInputStream bis = new ByteArrayInputStream(xmlString.getBytes());
-		XmlPullParser parser = new KXmlParser();
-		parser.setInput(bis, "UTF-8");
-		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-		envelope.parse(parser);
-		SoapObject soapReq = (SoapObject) envelope.bodyIn;
-		assertEquals("ClientHandle", soapReq.getAttribute("ClientRequestHandle"));
-		SoapObject result = null;
-		result = MockTransport.invoke(service, soapReq);
+    public void testWritingBody_WithPrimitiveIntegerParameters() throws Exception {
+        assertPrimitiveParameterCorrect(new Integer(2), "int");
+    }
 
-		assertEquals("Service Called ", 1, serviceCallCount);
-		// assert contents of result;
-	}
+    public void testWritingBody_WithPrimitiveLongParameters() throws Exception {
+        assertPrimitiveParameterCorrect(new Long(2), "long");
+    }
 
-	/**
-	 * This will generate an XML string from a SoapObject/SoapEnvelope that represents the "GetStatusResponse"
-	 * call in the WSDL above. The resulting XML will be passed to
-	 * "public void testGetStatusResponse(String xmlString)" to ensure AXIS compatibility (and compatibility
-	 * with the published standards).
-	 */
-	public void testGetStatusResponseSoapObject() throws Throwable
-	{
-		SoapObject getStatusResponse = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/",
-				"GetStatusResponse");
-		SoapObject getStatusResult = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/",
-				"GetStatusResult");
-		getStatusResult.addAttribute("RcvTime", "2003-05-26T20:17:42.4781250-07:00");
-		getStatusResult.addAttribute("ReplyTime", "2003-05-26T20:17:42.5781250-07:00");
-		getStatusResult.addAttribute("RevisedLocaleID", "de");
-		getStatusResult.addAttribute("ServerState", "running");
-		SoapObject status = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/", "Status");
-		status.addAttribute("StartTime", "2003-05-26T20:16:45.0937500-07:00");
-		status.addAttribute("ProductVersion", "1.00.1.00");
-		status.addProperty("VendorInfo", "OPC XML Data Access 1.00 Sample Server");
-		status.addProperty("SupportedLocaleIDs", "en");
-		status.addProperty("SupportedLocaleIDs", "en-US");
-		status.addProperty("SupportedLocaleIDs", "de");
-		status.addProperty("SupportedInterfaceVersions", "XML_DA_Version_1_0");
-		getStatusResponse.addProperty("GetStatusResult", getStatusResult);
-		getStatusResponse.addProperty("Status", status);
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		envelope.bodyOut = getStatusResponse;
-		envelope.implicitTypes = true;
-		envelope.setAddAdornments(false);
-		byte[] request = null;
-		request = myTransport.createRequestData(envelope);
-		String xmlString = new String(request);
-		assertGetStatusResponse(xmlString);
-	}
+    private void assertPrimitiveParameterCorrect(Object primtiveValue, String type) throws IOException {
+        soapObject.addProperty(PARAMETER_NAME, primtiveValue);
+        writeBodyWithSoapObject(soapObject);
+        assertEquals(BODY_XML_STRING + ">" + getParameterBody(type, primtiveValue) + END_XML_FUNCTION_STRING,
+                new String(outputStream.toByteArray()));
+    }
 
-	/**
-	 * GetStatusResponse XML. The body is from the OPC Foundation manual, the envelope is from the AXIS
-	 * envelope above.
-	 */
-	protected static final String getStatusResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-			+ "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-			+ "  <soapenv:Body>"
-			+ "  <GetStatusResponse xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\">"
-			+ "    <GetStatusResult" + "       RcvTime=\"2003-05-26T20:17:42.4781250-07:00\""
-			+ "       ReplyTime=\"2003-05-26T20:17:42.5781250-07:00\"" + "       RevisedLocaleID=\"de\""
-			+ "       ServerState=\"running\"" + "    />" + "    <Status"
-			+ "       StartTime=\"2003-05-26T20:16:45.0937500-07:00\""
-			+ "       ProductVersion=\"1.00.1.00\"" + "    >"
-			+ "      <VendorInfo>OPC XML Data Access 1.00 Sample Server</VendorInfo>"
-			+ "      <SupportedLocaleIDs>en</SupportedLocaleIDs>"
-			+ "      <SupportedLocaleIDs>en-US</SupportedLocaleIDs>"
-			+ "      <SupportedLocaleIDs>de</SupportedLocaleIDs>"
-			+ "      <SupportedInterfaceVersions>XML_DA_Version_1_0</SupportedInterfaceVersions>"
-			+ "    </Status>" + "  </GetStatusResponse>" + "</soapenv:Body>" + "</soapenv:Envelope>";
+    public void testWritingBody_NullBody() throws IOException {
+        envelope.setOutputSoapObject(null);
+        try {
+            envelope.writeBody(xmlWriter);
+            fail();
+        }
+        catch (NullPointerException e) {
+            // TODO: This should probably do something intelligent instead of
+            // throwing a null pointer exception
+        }
+    }
 
-	/**
-	 * Test the response from "getStatus". The body is from the OPC Foundation manual, the envelope is from
-	 * the AXIS envelope above.
-	 * 
-	 * @throws Throwable
-	 */
-	public void testGetStatusResponse() throws Throwable
-	{
-		assertGetStatusResponse(getStatusResponse);
-	}
+    public void testWritingBody_EmptyBody() throws Exception {
+        writeBodyWithSoapObject(soapObject);
+        assertEquals(BODY_XML_STRING + END_XML_STRING, new String(outputStream.toByteArray()));
+    }
 
-	/**
-	 * Test the response from "getStatus".
-	 * 
-	 * @throws Throwable
-	 */
-	public void assertGetStatusResponse(String xmlString) throws Throwable
-	{
-		ByteArrayInputStream is = new ByteArrayInputStream(xmlString.toString().getBytes());
-		envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "GetStatusResponse",
-				SoapObject.class);
-		envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "Status", SoapObject.class);
-		envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "GetStatusResult",
-				SoapObject.class);
-		myTransport.parseResponse(envelope, is);
-		is.close();
-		SoapObject response = (SoapObject) envelope.bodyIn;
-		assertEquals(" Two Parameter (GetStatusResponse)", 2, ((SoapObject) response).getPropertyCount());
-		assertEquals(" No Attributes (GetStatusResponse)", 0, ((SoapObject) response).getAttributeCount());
-		// first property is "GetStatusResult"
-		SoapObject getStatusResult = (SoapObject) response.getProperty("GetStatusResult");
-		assertNotNull(" GetStatusResult ", getStatusResult);
-		assertEquals(" No Parameters (GetStatusResult)", 0, getStatusResult.getPropertyCount());
-		assertEquals(" Four Attributes (GetStatusResult)", 4, getStatusResult.getAttributeCount());
-		assertEquals("2003-05-26T20:17:42.4781250-07:00", getStatusResult.getAttribute("RcvTime"));
-		assertEquals("2003-05-26T20:17:42.5781250-07:00", getStatusResult.getAttribute("ReplyTime"));
-		assertEquals("running", getStatusResult.getAttribute("ServerState"));
-		// first property is "Status"
-		SoapObject status = (SoapObject) response.getProperty("Status");
-		assertEquals(" Five Parameters (Status)", 5, status.getPropertyCount());
-		assertEquals(" Two Attributes (Status)", 2, status.getAttributeCount());
-		assertEquals("2003-05-26T20:16:45.0937500-07:00", status.getAttribute("StartTime"));
-		assertEquals("1.00.1.00", status.getAttribute("ProductVersion"));
-	}
+    private String getParameterBody(String type, Object aValue) {
+        return "<" + PARAMETER_NAME + " n3:type=\"n2:" + type + "\" xmlns:n2=\"" + envelope.xsd
+                + "\" xmlns:n3=\"" + envelope.xsi + "\">" + aValue + "</" + PARAMETER_NAME + ">";
+    }
 
-	public static class GetStatus
-	{
-		public SoapObject getStatus(SoapObject in)
-		{
-			serviceCallCount++;
-			assertEquals("Should be two attributes. ", 2, in.getAttributeCount());
-			assertEquals("LocaleID ", "de-AT", in.getAttribute("LocaleID"));
-			assertEquals("ClientRequestHandle ", "ClientHandle", in.getAttribute("ClientRequestHandle"));
-			return null;
-		}
-	};
+    private void writeBodyWithSoapObject(SoapObject soapObject) throws IOException {
+        envelope.setOutputSoapObject(soapObject);
+        envelope.writeBody(xmlWriter);
+        xmlWriter.flush();
+    }
+
+    /**
+     * Proof that the service was called, and how often.
+     */
+    static protected int serviceCallCount;
+
+    /*
+      * We're going to execute "GetStatus" according to the following WSDL snippet. This is done in pieces as
+      * unit tests. The definition is from the OPCFoundation OPC XML DA WSDL
+      * (http://opcfoundation.org/webservices/XMLDA/1.0/). The document from http://www.opcfoundation.com also
+      * provides examples of the transactions.
+      *
+      * <types><s:schema elementFormDefault="qualified"
+      * targetNamespace="http://opcfoundation.org/webservices/XMLDA/1.0/"> <s:element name="getStatus">
+      * <s:complexType> <s:attribute name="LocaleID" type="s:string"/> <s:attribute name="ClientRequestHandle"
+      * type="s:string"/> </s:complexType> </s:element> <s:element name="GetStatusResponse"> <s:complexType>
+      * <s:sequence> <s:element minOccurs="0" maxOccurs="1" name="GetStatusResult" type="s0:ReplyBase"/>
+      * <s:element minOccurs="0" maxOccurs="1" name="Status" type="s0:ServerStatus"/> </s:sequence>
+      * </s:complexType> </s:element><s:complexType name="ReplyBase"> <s:attribute name="RcvTime"
+      * type="s:dateTime" use="required"/> <s:attribute name="ReplyTime" type="s:dateTime" use="required"/>
+      * <s:attribute name="ClientRequestHandle" type="s:string"/> <s:attribute name="RevisedLocaleID"
+      * type="s:string"/> <s:attribute name="ServerState" type="s0:serverState" use="required"/>
+      * </s:complexType><s:simpleType name="serverState"> <s:restriction base="s:string"> <s:enumeration
+      * value="running"/> <s:enumeration value="failed"/> <s:enumeration value="noConfig"/> <s:enumeration
+      * value="suspended"/> <s:enumeration value="test"/> <s:enumeration value="commFault"/> </s:restriction>
+      * </s:simpleType> <s:complexType name="ServerStatus"> <s:sequence> <s:element minOccurs="0" maxOccurs="1"
+      * name="StatusInfo" type="s:string"/> <s:element minOccurs="0" maxOccurs="1" name="VendorInfo"
+      * type="s:string"/> <s:element minOccurs="0" maxOccurs="unbounded" name="SupportedLocaleIDs"
+      * type="s:string"/> <s:element minOccurs="0" maxOccurs="unbounded" name="SupportedInterfaceVersions"
+      * type="s0:interfaceVersion"/> </s:sequence> <s:attribute name="StartTime" type="s:dateTime"
+      * use="required"/> <s:attribute name="ProductVersion" type="s:string"/> </s:complexType> <s:simpleType
+      * name="interfaceVersion"> <s:restriction base="s:string"> <s:enumeration value="XML_DA_Version_1_0"/>
+      * </s:restriction> </s:simpleType>
+      *
+      * In other words, we call "getStatus" on the service, with "LocaleID" and "ClientRequestHandle" available
+      * as attributes. The response has two objects "ReplyBase" and "ServerStatus". Each of these have a
+      * hodgepog of attributes, sequences and enumerations.
+      *
+      * The output message should look, more or less like this (from the specification):
+      *
+      * <soap:Body> <getStatus LocaleID="de-AT" xmlns="http://opcfoundation.org/webservices/XMLDA/1.0/" />
+      * </soap:Body>
+      *
+      * and the response more or less like this (from the specification):
+      *
+      * <soap:Body> <GetStatusResponse xmlns="http://opcfoundation.org/webservices/XMLDA/1.0/">
+      * <GetStatusResult RcvTime="2003-05-26T20:17:42.4781250-07:00"
+      * ReplyTime="2003-05-26T20:17:42.5781250-07:00" RevisedLocaleID="de" ServerState="running" /> <Status
+      * StartTime="2003-05-26T20:16:45.0937500-07:00" ProductVersion="1.00.1.00" > <VendorInfo>OPC XML Data
+      * Access 1.00 Sample Server</VendorInfo> <SupportedLocaleIDs>en</SupportedLocaleIDs>
+      * <SupportedLocaleIDs>en-US</SupportedLocaleIDs> <SupportedLocaleIDs>de</SupportedLocaleIDs>
+      * <SupportedInterfaceVersions>XML_DA_Version_1_0</SupportedInterfaceVersions> </Status>
+      * </GetStatusResponse></soap:Body>
+      */
+
+    /**
+     * This will generate an XML string from a SoapObject/SoapEnvelope that represents the "getStatus" call in
+     * the WSDL above. The resulting XML will be passed to "public void testGetStatus(String xmlString)" to
+     * ensure AXIS compatibility (and compatibility with the published standards).
+     */
+    public void testGetStatusSoapObject() throws Throwable {
+        SoapObject getStatus = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/", "getStatus");
+        getStatus.addAttribute("LocaleID", "de-AT");
+        getStatus.addAttribute("ClientRequestHandle", "ClientHandle");
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.bodyOut = getStatus;
+        envelope.setAddAdornments(false);
+
+        byte[] request = myTransport.createRequestData(envelope);
+        String xmlString = new String(request);
+        assertGetStatus(xmlString);
+    }
+
+    /**
+     * The string that represents the "getStatus". This is copied from an Axis call.
+     */
+    protected static final String getStatusRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+            + "<soapenv:Body><getStatus ClientRequestHandle=\"ClientHandle\" LocaleID=\"de-AT\" xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\"/></soapenv:Body>"
+            + "</soapenv:Envelope>";
+
+    /**
+     * Test the status using the AXIS generated xml.
+     *
+     * @throws Throwable
+     */
+    public void testGetStatus() throws Throwable {
+        assertGetStatus(getStatusRequest);
+    }
+
+    /**
+     * Test getStatus by passing in an xmlString. The result should be the same with an Axis or ksoap
+     * generated string (clearly).
+     *
+     * @param xmlString the xml string to test.
+     * @throws Throwable
+     */
+    public void assertGetStatus(String xmlString) throws Throwable {
+        serviceCallCount = 0; // zero this
+        Object service = new GetStatus();
+        envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "getStatus", SoapObject.class);
+        envelope.setAddAdornments(false);
+        ByteArrayInputStream bis = new ByteArrayInputStream(xmlString.getBytes());
+        XmlPullParser parser = new KXmlParser();
+        parser.setInput(bis, "UTF-8");
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        envelope.parse(parser);
+        SoapObject soapReq = (SoapObject) envelope.bodyIn;
+        assertEquals("ClientHandle", soapReq.getAttribute("ClientRequestHandle"));
+        SoapObject result = null;
+        result = MockTransport.invoke(service, soapReq);
+
+        assertEquals("Service Called ", 1, serviceCallCount);
+        // assert contents of result;
+    }
+
+    /**
+     * This will generate an XML string from a SoapObject/SoapEnvelope that represents the "GetStatusResponse"
+     * call in the WSDL above. The resulting XML will be passed to
+     * "public void testGetStatusResponse(String xmlString)" to ensure AXIS compatibility (and compatibility
+     * with the published standards).
+     */
+    public void testGetStatusResponseSoapObject() throws Throwable {
+        SoapObject getStatusResponse = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/",
+                "GetStatusResponse");
+        SoapObject getStatusResult = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/",
+                "GetStatusResult");
+        getStatusResult.addAttribute("RcvTime", "2003-05-26T20:17:42.4781250-07:00");
+        getStatusResult.addAttribute("ReplyTime", "2003-05-26T20:17:42.5781250-07:00");
+        getStatusResult.addAttribute("RevisedLocaleID", "de");
+        getStatusResult.addAttribute("ServerState", "running");
+        SoapObject status = new SoapObject("http://opcfoundation.org/webservices/XMLDA/1.0/", "Status");
+        status.addAttribute("StartTime", "2003-05-26T20:16:45.0937500-07:00");
+        status.addAttribute("ProductVersion", "1.00.1.00");
+        status.addProperty("VendorInfo", "OPC XML Data Access 1.00 Sample Server");
+        status.addProperty("SupportedLocaleIDs", "en");
+        status.addProperty("SupportedLocaleIDs", "en-US");
+        status.addProperty("SupportedLocaleIDs", "de");
+        status.addProperty("SupportedInterfaceVersions", "XML_DA_Version_1_0");
+        getStatusResponse.addProperty("GetStatusResult", getStatusResult);
+        getStatusResponse.addProperty("Status", status);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.bodyOut = getStatusResponse;
+        envelope.implicitTypes = true;
+        envelope.setAddAdornments(false);
+        byte[] request = null;
+        request = myTransport.createRequestData(envelope);
+        String xmlString = new String(request);
+        assertGetStatusResponse(xmlString);
+    }
+
+    /**
+     * GetStatusResponse XML. The body is from the OPC Foundation manual, the envelope is from the AXIS
+     * envelope above.
+     */
+    protected static final String getStatusResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            + "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+            + "  <soapenv:Body>"
+            + "  <GetStatusResponse xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\">"
+            + "    <GetStatusResult" + "       RcvTime=\"2003-05-26T20:17:42.4781250-07:00\""
+            + "       ReplyTime=\"2003-05-26T20:17:42.5781250-07:00\"" + "       RevisedLocaleID=\"de\""
+            + "       ServerState=\"running\"" + "    />" + "    <Status"
+            + "       StartTime=\"2003-05-26T20:16:45.0937500-07:00\""
+            + "       ProductVersion=\"1.00.1.00\"" + "    >"
+            + "      <VendorInfo>OPC XML Data Access 1.00 Sample Server</VendorInfo>"
+            + "      <SupportedLocaleIDs>en</SupportedLocaleIDs>"
+            + "      <SupportedLocaleIDs>en-US</SupportedLocaleIDs>"
+            + "      <SupportedLocaleIDs>de</SupportedLocaleIDs>"
+            + "      <SupportedInterfaceVersions>XML_DA_Version_1_0</SupportedInterfaceVersions>"
+            + "    </Status>" + "  </GetStatusResponse>" + "</soapenv:Body>" + "</soapenv:Envelope>";
+
+    /**
+     * Test the response from "getStatus". The body is from the OPC Foundation manual, the envelope is from
+     * the AXIS envelope above.
+     *
+     * @throws Throwable
+     */
+    public void testGetStatusResponse() throws Throwable {
+        assertGetStatusResponse(getStatusResponse);
+    }
+
+    /**
+     * Test the response from "getStatus".
+     *
+     * @throws Throwable
+     */
+    public void assertGetStatusResponse(String xmlString) throws Throwable {
+        ByteArrayInputStream is = new ByteArrayInputStream(xmlString.toString().getBytes());
+        envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "GetStatusResponse",
+                SoapObject.class);
+        envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "Status", SoapObject.class);
+        envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "GetStatusResult",
+                SoapObject.class);
+        myTransport.parseResponse(envelope, is);
+        is.close();
+        SoapObject response = (SoapObject) envelope.bodyIn;
+        assertEquals(" Two Parameter (GetStatusResponse)", 2, ((SoapObject) response).getPropertyCount());
+        assertEquals(" No Attributes (GetStatusResponse)", 0, ((SoapObject) response).getAttributeCount());
+        // first property is "GetStatusResult"
+        SoapObject getStatusResult = (SoapObject) response.getProperty("GetStatusResult");
+        assertNotNull(" GetStatusResult ", getStatusResult);
+        assertEquals(" No Parameters (GetStatusResult)", 0, getStatusResult.getPropertyCount());
+        assertEquals(" Four Attributes (GetStatusResult)", 4, getStatusResult.getAttributeCount());
+        assertEquals("2003-05-26T20:17:42.4781250-07:00", getStatusResult.getAttribute("RcvTime"));
+        assertEquals("2003-05-26T20:17:42.5781250-07:00", getStatusResult.getAttribute("ReplyTime"));
+        assertEquals("running", getStatusResult.getAttribute("ServerState"));
+        // first property is "Status"
+        SoapObject status = (SoapObject) response.getProperty("Status");
+        assertEquals(" Five Parameters (Status)", 5, status.getPropertyCount());
+        assertEquals(" Two Attributes (Status)", 2, status.getAttributeCount());
+        assertEquals("2003-05-26T20:16:45.0937500-07:00", status.getAttribute("StartTime"));
+        assertEquals("1.00.1.00", status.getAttribute("ProductVersion"));
+    }
+
+    public static class GetStatus {
+        public SoapObject getStatus(SoapObject in) {
+            serviceCallCount++;
+            assertEquals("Should be two attributes. ", 2, in.getAttributeCount());
+            assertEquals("LocaleID ", "de-AT", in.getAttribute("LocaleID"));
+            assertEquals("ClientRequestHandle ", "ClientHandle", in.getAttribute("ClientRequestHandle"));
+            return null;
+        }
+    }
+
+    ;
+
+
+    public void testAttributesOnPrimitives() throws Exception {
+        String testXML = "<body><response><result name=\"fred\" anotherAttr=\"anotherValue\">Barney</result></response></body>";
+        InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
+        SoapSerializationEnvelope sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+
+
+        KXmlParser parser = new KXmlParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        parser.setInput(inputStream, null);
+        parser.nextTag();
+
+        sse.parseBody(parser);
+
+        SoapPrimitive result = (SoapPrimitive) sse.getResponse();
+        assertEquals("fred", result.safeGetAttribute("name"));
+        assertEquals("anotherValue", result.safeGetAttribute("anotherAttr"));
+        assertEquals("Barney", result.toString());
+    }
+
+    public void testAttributesOnPrimitives2() throws Exception {
+        String testXML = "<body><response><result>" +
+                "<person grade=\"F\">Fred</person>" +
+                "<person grade=\"C\">Chris</person>" +
+                "<person grade=\"A\">Allison</person>" +
+                "</result></response></body>";
+        InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
+        SoapSerializationEnvelope sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+
+
+        KXmlParser parser = new KXmlParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        parser.setInput(inputStream, null);
+        parser.nextTag();
+
+        sse.parseBody(parser);
+
+        SoapObject result = (SoapObject) sse.getResponse();
+        SoapPrimitive fred = (SoapPrimitive) result.getProperty(0);
+
+        assertEquals("F", fred.safeGetAttribute("grade"));
+        assertEquals("Fred", fred.toString());
+
+        SoapPrimitive chris = (SoapPrimitive) result.getProperty(1);
+        assertEquals("C", chris.safeGetAttribute("grade"));
+        assertEquals("Chris", chris.toString());
+
+        SoapPrimitive allison = (SoapPrimitive) result.getProperty(2);
+        assertEquals("A", allison.safeGetAttribute("grade"));
+        assertEquals("Allison", allison.toString());
+    }
+
 
 }

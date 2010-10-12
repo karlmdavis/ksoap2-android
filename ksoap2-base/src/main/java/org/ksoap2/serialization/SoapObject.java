@@ -25,328 +25,260 @@ import java.util.*;
 
 /**
  * A simple dynamic object that can be used to build soap calls without implementing KvmSerializable
- * 
+ * <p/>
  * Essentially, this is what goes inside the body of a soap envelope - it is the direct subelement of the body
  * and all further subelements
- * 
+ * <p/>
  * Instead of this this class, custom classes can be used if they implement the KvmSerializable interface.
  */
 
-public class SoapObject implements KvmSerializable
-{
-	/** The namespace of this soap object. */
-	protected String namespace;
-	/** The name of this soap object. */
-	protected String name;
-	/** The Vector of properties. */
-	protected Vector properties = new Vector();
-	/** The Vector of attributes. */
-	protected Vector attributes = new Vector();
+public class SoapObject extends AttributeContainer implements KvmSerializable {
+    /**
+     * The namespace of this soap object.
+     */
+    protected String namespace;
+    /**
+     * The name of this soap object.
+     */
+    protected String name;
+    /**
+     * The Vector of properties.
+     */
+    protected Vector properties = new Vector();
 
-	/**
-	 * Creates a new <code>SoapObject</code> instance.
-	 * 
-	 * @param namespace
-	 *            the namespace for the soap object
-	 * @param name
-	 *            the name of the soap object
-	 */
+    // TODO: accessing properties and attributes would work much better if we kept a list of known properties instead of iterating through the list each time
 
-	public SoapObject(String namespace, String name)
-	{
-		this.namespace = namespace;
-		this.name = name;
-	}
+    /**
+     * Creates a new <code>SoapObject</code> instance.
+     *
+     * @param namespace the namespace for the soap object
+     * @param name      the name of the soap object
+     */
 
-	public boolean equals(Object obj)
-	{
-		if (!(obj instanceof SoapObject))
-			return false;
+    public SoapObject(String namespace, String name) {
+        this.namespace = namespace;
+        this.name = name;
+    }
 
-		SoapObject otherSoapObject = (SoapObject) obj;
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SoapObject))
+            return false;
 
-		int numProperties = properties.size();
-		if (numProperties != otherSoapObject.properties.size())
-			return false;
-		int numAttributes = attributes.size();
-		if (numAttributes != otherSoapObject.attributes.size())
-			return false;
+        SoapObject otherSoapObject = (SoapObject) obj;
 
-		try
-		{
-			for (int propIndex = 0; propIndex < numProperties; propIndex++)
-			{
-				PropertyInfo thisProp = (PropertyInfo) this.properties.elementAt(propIndex);
-				Object thisPropValue = thisProp.getValue();
-				Object otherPropValue = otherSoapObject.getProperty(thisProp.getName());
-				if (!thisPropValue.equals(otherPropValue))
-				{
-					return false;
-				}
-			}
-			for (int attribIndex = 0; attribIndex < numAttributes; attribIndex++)
-			{
-				AttributeInfo thisAttrib = (AttributeInfo) this.properties.elementAt(attribIndex);
-				Object thisAttribValue = thisAttrib.getValue();
-				Object otherAttribValue = otherSoapObject.getProperty(thisAttrib.getName());
-				if (!thisAttribValue.equals(otherAttribValue))
-				{
-					return false;
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			return false;
-		}
-		return true;
-	}
+        if (!name.equals(otherSoapObject.name) || !namespace.equals(otherSoapObject.namespace)) {
+            return false;
+        }
 
-	public String getName()
-	{
-		return name;
-	}
 
-	public String getNamespace()
-	{
-		return namespace;
-	}
+        int numProperties = properties.size();
+        if (numProperties != otherSoapObject.properties.size())
+            return false;
 
-	/**
-	 * Returns a specific property at a certain index.
-	 * 
-	 * @param index
-	 *            the index of the desired property
-	 * @return the desired property
-	 */
-	public Object getProperty(int index)
-	{
-		return ((PropertyInfo) properties.elementAt(index)).getValue();
-	}
 
-	public Object getProperty(String name)
-	{
-		for (int i = 0; i < properties.size(); i++)
-		{
-			if (name.equals(((PropertyInfo) properties.elementAt(i)).getName()))
-				return getProperty(i);
-		}
-		throw new RuntimeException("illegal property: " + name);
-	}
+        // TODO:  The code below doesn't correctly compare the following <name> element to itself.
+        // calling otherSoapObject.getProperty(thisProp.getName()) will return the first child with the given name
+        // Perhaps we need to define two SoapObject to be equal if it has the same children *in the same order*
+        /*<name>
+           <address>941 Wealthy</address>
+           <address>942 Wealthy</address>
+         </name>
+        */
 
-	/**
-	 * Returns the number of properties
-	 * 
-	 * @return the number of properties
-	 */
-	public int getPropertyCount()
-	{
-		return properties.size();
-	}
+        for (int propIndex = 0; propIndex < numProperties; propIndex++) {
+            PropertyInfo thisProp = (PropertyInfo) this.properties.elementAt(propIndex);
+            Object thisPropValue = thisProp.getValue();
+            if (!otherSoapObject.hasProperty(thisProp.getName())) {
+                return false;
+            }
+            Object otherPropValue = otherSoapObject.getProperty(thisProp.getName());
+            if (!thisPropValue.equals(otherPropValue)) {
+                return false;
+            }
+        }
 
-	/**
-	 * Places AttributeInfo of desired attribute into a designated AttributeInfo object
-	 * 
-	 * @param index
-	 *            index of desired attribute
-	 * @param propertyInfo
-	 *            designated retainer of desired attribute
-	 */
-	public void getAttributeInfo(int index, AttributeInfo attributeInfo)
-	{
-		AttributeInfo p = (AttributeInfo) attributes.elementAt(index);
-		attributeInfo.name = p.name;
-		attributeInfo.namespace = p.namespace;
-		attributeInfo.flags = p.flags;
-		attributeInfo.type = p.type;
-		attributeInfo.elementType = p.elementType;
-		attributeInfo.value = p.getValue();
-	}
+        return attributesAreEqual(otherSoapObject);
 
-	/**
-	 * Returns a specific attribute at a certain index.
-	 * 
-	 * @param index
-	 *            the index of the desired attribute
-	 * @return the value of the desired attribute
-	 * 
-	 */
-	public Object getAttribute(int index)
-	{
-		return ((AttributeInfo) attributes.elementAt(index)).getValue();
-	}
+    }
 
-	/** Returns a property with the given name. */
-	public Object getAttribute(String name)
-	{
-		for (int i = 0; i < attributes.size(); i++)
-		{
-			if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName()))
-				return getAttribute(i);
-		}
-		throw new RuntimeException("illegal property: " + name);
-	}
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Returns the number of attributes
-	 * 
-	 * @return the number of attributes
-	 */
-	public int getAttributeCount()
-	{
-		return attributes.size();
-	}
+    public String getNamespace() {
+        return namespace;
+    }
 
-	/**
-	 * Places PropertyInfo of desired property into a designated PropertyInfo object
-	 * 
-	 * @param index
-	 *            index of desired property
-	 * @param propertyInfo
-	 *            designated retainer of desired property
-	 * @deprecated
-	 */
-	public void getPropertyInfo(int index, Hashtable properties, PropertyInfo propertyInfo)
-	{
-		getPropertyInfo(index, propertyInfo);
-	}
+    /**
+     * @inheritDoc
+     */
+    public Object getProperty(int index) {
+        return ((PropertyInfo) properties.elementAt(index)).getValue();
+    }
 
-	/**
-	 * Places PropertyInfo of desired property into a designated PropertyInfo object
-	 * 
-	 * @param index
-	 *            index of desired property
-	 * @param propertyInfo
-	 *            designated retainer of desired property
-	 */
-	public void getPropertyInfo(int index, PropertyInfo propertyInfo)
-	{
-		PropertyInfo p = (PropertyInfo) properties.elementAt(index);
-		propertyInfo.name = p.name;
-		propertyInfo.namespace = p.namespace;
-		propertyInfo.flags = p.flags;
-		propertyInfo.type = p.type;
-		propertyInfo.elementType = p.elementType;
-	}
+    /**
+     * Get the property with the given name
+     *
+     * @throws java.lang.RuntimeException if the property does not exist
+     */
+    public Object getProperty(String name) {
+        Integer index = propertyIndex(name);
+        if (index != null) return getProperty(index.intValue());
+        else throw new RuntimeException("illegal property: " + name);
+    }
 
-	/**
-	 * Creates a new SoapObject based on this, allows usage of SoapObjects as templates. One application is to
-	 * set the expected return type of a soap call if the server does not send explicit type information.
-	 * 
-	 * @return a copy of this.
-	 */
-	public SoapObject newInstance()
-	{
-		SoapObject o = new SoapObject(namespace, name);
-		for (int propIndex = 0; propIndex < properties.size(); propIndex++)
-		{
-			PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(propIndex);
-			o.addProperty(propertyInfo);
-		}
-		for (int attribIndex = 0; attribIndex < attributes.size(); attribIndex++)
-		{
-			AttributeInfo attributeInfo = (AttributeInfo) attributes.elementAt(attribIndex);
-			o.addAttribute(attributeInfo);
-		}
-		return o;
-	}
+    /**
+     * Knows whether the given property exists
+     */
+    public boolean hasProperty(final String name) {
+        if (propertyIndex(name) != null) return true;
+        else return false;
+    }
 
-	/**
-	 * Sets a specified property to a certain value.
-	 * 
-	 * @param index
-	 *            the index of the specified property
-	 * @param value
-	 *            the new value of the property
-	 */
-	public void setProperty(int index, Object value)
-	{
-		((PropertyInfo) properties.elementAt(index)).setValue(value);
-	}
+    /**
+     * Get a property without chance of throwing an exception
+     *
+     * @return the property if it exists; if not, {@link NullSoapObject} is returned
+     */
+    public Object safeGetProperty(final String name) {
+        Integer i = propertyIndex(name);
+        if (i != null) return getProperty(i.intValue());
+        else return new NullSoapObject();
+    }
 
-	/**
-	 * Adds a property (parameter) to the object. This is essentially a sub element.
-	 * 
-	 * @param name
-	 *            The name of the property
-	 * @param value
-	 *            the value of the property
-	 */
-	public SoapObject addProperty(String name, Object value)
-	{
-		PropertyInfo propertyInfo = new PropertyInfo();
-		propertyInfo.name = name;
-		propertyInfo.type = value == null ? PropertyInfo.OBJECT_CLASS : value.getClass();
-		propertyInfo.value = value;
-		return addProperty(propertyInfo);
-	}
+    /**
+     * Get a property without chance of throwing an exception. An object can be provided
+     * to this method; if the property is not found, this object will be returned.
+     *
+     * @param defaultThing the object to return if the property is not found
+     * @return the property if it exists; defaultThing if the property does not exist
+     */
+    public Object safeGetProperty(final String name, final Object defaultThing) {
+        Integer i = propertyIndex(name);
+        if (i != null) return getProperty(i.intValue());
+        else return defaultThing;
+    }
 
-	/**
-	 * Adds a property (parameter) to the object. This is essentially a sub element.
-	 * 
-	 * @param propertyInfo
-	 *            designated retainer of desired property
-	 * @param value
-	 *            the value of the property
-	 * @deprecated property info now contains the value
-	 */
-	public SoapObject addProperty(PropertyInfo propertyInfo, Object value)
-	{
-		propertyInfo.setValue(value);
-		addProperty(propertyInfo);
-		return this;
-	}
+    private Integer propertyIndex(String name) {
+        for (int i = 0; i < properties.size(); i++) {
+            if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) return new Integer(i);
+        }
+        return null;
+    }
 
-	/**
-	 * Adds a property (parameter) to the object. This is essentially a sub element.
-	 * 
-	 * @param propertyInfo
-	 *            designated retainer of desired property
-	 */
-	public SoapObject addProperty(PropertyInfo propertyInfo)
-	{
-		properties.addElement(propertyInfo);
-		return this;
-	}
+    /**
+     * Returns the number of properties
+     *
+     * @return the number of properties
+     */
+    public int getPropertyCount() {
+        return properties.size();
+    }
 
-	/**
-	 * Adds a attribute (parameter) to the object. This is essentially a sub element.
-	 * 
-	 * @param name
-	 *            The name of the attribute
-	 * @param value
-	 *            the value of the attribute
-	 */
-	public SoapObject addAttribute(String name, Object value)
-	{
-		AttributeInfo attributeInfo = new AttributeInfo();
-		attributeInfo.name = name;
-		attributeInfo.type = value == null ? PropertyInfo.OBJECT_CLASS : value.getClass();
-		attributeInfo.value = value;
-		return addAttribute(attributeInfo);
-	}
+    /**
+     * Places PropertyInfo of desired property into a designated PropertyInfo object
+     *
+     * @param index        index of desired property
+     * @param propertyInfo designated retainer of desired property
+     * @deprecated
+     */
+    public void getPropertyInfo(int index, Hashtable properties, PropertyInfo propertyInfo) {
+        getPropertyInfo(index, propertyInfo);
+    }
 
-	/**
-	 * Adds a attribute (parameter) to the object. This is essentially a sub element.
-	 * 
-	 * @param propertyInfo
-	 *            designated retainer of desired attribute
-	 */
-	public SoapObject addAttribute(AttributeInfo attributeInfo)
-	{
-		attributes.addElement(attributeInfo);
-		return this;
-	}
+    /**
+     * Places PropertyInfo of desired property into a designated PropertyInfo object
+     *
+     * @param index        index of desired property
+     * @param propertyInfo designated retainer of desired property
+     */
+    public void getPropertyInfo(int index, PropertyInfo propertyInfo) {
+        PropertyInfo p = (PropertyInfo) properties.elementAt(index);
+        propertyInfo.name = p.name;
+        propertyInfo.namespace = p.namespace;
+        propertyInfo.flags = p.flags;
+        propertyInfo.type = p.type;
+        propertyInfo.elementType = p.elementType;
+    }
 
-	public String toString()
-	{
-		StringBuffer buf = new StringBuffer("" + name + "{");
-		for (int i = 0; i < getPropertyCount(); i++)
-		{
-			buf.append("" + ((PropertyInfo) properties.elementAt(i)).getName() + "=" + getProperty(i) + "; ");
-		}
-		buf.append("}");
-		return buf.toString();
-	}
+    /**
+     * Creates a new SoapObject based on this, allows usage of SoapObjects as templates. One application is to
+     * set the expected return type of a soap call if the server does not send explicit type information.
+     *
+     * @return a copy of this.
+     */
+    public SoapObject newInstance() {
+        SoapObject o = new SoapObject(namespace, name);
+        for (int propIndex = 0; propIndex < properties.size(); propIndex++) {
+            PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(propIndex);
+            o.addProperty(propertyInfo);
+        }
+        for (int attribIndex = 0; attribIndex < getAttributeCount(); attribIndex++) {
+            AttributeInfo newAI = new AttributeInfo();
+            getAttributeInfo(attribIndex, newAI);
+            AttributeInfo attributeInfo = newAI; //(AttributeInfo) attributes.elementAt(attribIndex);
+            o.addAttribute(attributeInfo);
+        }
+        return o;
+    }
 
+    /**
+     * Sets a specified property to a certain value.
+     *
+     * @param index the index of the specified property
+     * @param value the new value of the property
+     */
+    public void setProperty(int index, Object value) {
+        ((PropertyInfo) properties.elementAt(index)).setValue(value);
+    }
+
+    /**
+     * Adds a property (parameter) to the object. This is essentially a sub element.
+     *
+     * @param name  The name of the property
+     * @param value the value of the property
+     */
+    public SoapObject addProperty(String name, Object value) {
+        PropertyInfo propertyInfo = new PropertyInfo();
+        propertyInfo.name = name;
+        propertyInfo.type = value == null ? PropertyInfo.OBJECT_CLASS : value.getClass();
+        propertyInfo.value = value;
+        return addProperty(propertyInfo);
+    }
+
+    /**
+     * Adds a property (parameter) to the object. This is essentially a sub element.
+     *
+     * @param propertyInfo designated retainer of desired property
+     * @param value        the value of the property
+     * @deprecated property info now contains the value
+     */
+    public SoapObject addProperty(PropertyInfo propertyInfo, Object value) {
+        propertyInfo.setValue(value);
+        addProperty(propertyInfo);
+        return this;
+    }
+
+    /**
+     * Adds a property (parameter) to the object. This is essentially a sub element.
+     *
+     * @param propertyInfo designated retainer of desired property
+     */
+    public SoapObject addProperty(PropertyInfo propertyInfo) {
+        properties.addElement(propertyInfo);
+        return this;
+    }
+
+    /**
+     * Generate a {@code String} describing this object.
+     * @return
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer("" + name + "{");
+        for (int i = 0; i < getPropertyCount(); i++) {
+            buf.append("" + ((PropertyInfo) properties.elementAt(i)).getName() + "=" + getProperty(i) + "; ");
+        }
+        buf.append("}");
+        return buf.toString();
+    }
 }

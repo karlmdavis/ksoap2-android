@@ -26,7 +26,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -214,7 +213,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		String namespace = parser.getNamespace();
 
         // cache the attribute info list from the current element before we move on
-        ArrayList<AttributeInfo> attributeInfoArrayList = new ArrayList<AttributeInfo>();
+        Vector attributeInfoVector = new Vector();
         for (int attributeCount = 0; attributeCount < parser.getAttributeCount(); attributeCount ++)
         {
             AttributeInfo attributeInfo = new AttributeInfo();
@@ -222,7 +221,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
             attributeInfo.setValue(parser.getAttributeValue(attributeCount));
             attributeInfo.setNamespace(parser.getAttributeNamespace(attributeCount));
             attributeInfo.setType(parser.getAttributeType(attributeCount));
-            attributeInfoArrayList.add(attributeInfo);
+            attributeInfoVector.addElement(attributeInfo);
         }
 
 		parser.next(); // move to text, inner start tag or end tag
@@ -231,15 +230,20 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		if (parser.getEventType() == XmlPullParser.TEXT)
 		{
 			text = parser.getText();
-			result = new SoapPrimitive(typeNamespace, typeName, text);
+            SoapPrimitive sp = new SoapPrimitive(typeNamespace, typeName, text);
+			result = sp;
+              // apply all the cached attribute info list before we add the property and descend further for parsing
+            for (int i = 0; i < attributeInfoVector.size(); i++) {
+                sp.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
+            }
 			parser.next();
 		}
 		else if (parser.getEventType() == XmlPullParser.END_TAG)
 		{
             SoapObject so = new SoapObject(typeNamespace, typeName);
             // apply all the cached attribute info list before we add the property and descend further for parsing
-            for (int i = 0; i < attributeInfoArrayList.size(); i++) {
-                so.addAttribute(attributeInfoArrayList.get(i));
+            for (int i = 0; i < attributeInfoVector.size(); i++) {
+                so.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
             }
 			result = so;
 		}
@@ -252,8 +256,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			}
 			SoapObject so = new SoapObject(typeNamespace, typeName);
             // apply all the cached attribute info list before we add the property and descend further for parsing
-            for (int i = 0; i < attributeInfoArrayList.size(); i++) {
-                so.addAttribute(attributeInfoArrayList.get(i));
+            for (int i = 0; i < attributeInfoVector.size(); i++) {
+                so.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
             }
 
 			while (parser.getEventType() != XmlPullParser.END_TAG)

@@ -35,11 +35,7 @@ import java.util.Hashtable;
 public interface KvmSerializable {
 
     /**
-     * Returns the property at a specified index (for serialization)
-     * 
-     * @param index
-     *            the specified index
-     * @return the serialized property
+     * Get the property at the given index
      */
     Object getProperty(int index);
 

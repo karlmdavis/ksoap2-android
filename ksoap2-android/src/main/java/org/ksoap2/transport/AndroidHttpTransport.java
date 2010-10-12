@@ -20,7 +20,6 @@ public class AndroidHttpTransport extends HttpTransportSE
 	/**
 	 * @see org.ksoap2.transport.HttpTransportSE#getServiceConnection()
 	 */
-	@Override
 	protected ServiceConnection getServiceConnection() throws IOException
 	{
 		return new AndroidServiceConnection(super.url);
