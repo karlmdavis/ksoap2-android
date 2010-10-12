@@ -3,7 +3,7 @@
 
 	<groupId>com.google.code.ksoap2-android</groupId>
 	<artifactId>ksoap2-parent</artifactId>
-	<version>2.5.0</version>
+	<version>2.5.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>ksoap2-parent</name>
@@ -16,11 +16,11 @@
 	<inceptionYear>2002</inceptionYear>
 
 	<scm>
-		<connection>scm:git:git://github.com/karlmdavis/ksoap2-android.git
+		<connection>scm:git:git://github.com/mosabua/ksoap2-android.git
 		</connection>
-		<developerConnection>scm:git:git@github.com:karlmdavis/ksoap2-android.git
+		<developerConnection>scm:git:git@github.com:mosabua/ksoap2-android.git
 		</developerConnection>
-		<url>http://github.com/karlmdavis/ksoap2-android/tree/master</url>
+		<url>http://github.com/mosabua/ksoap2-android/tree/master</url>
 	</scm>
 
 	<issueManagement>
@@ -258,8 +258,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<dependencies>
-	</dependencies>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
