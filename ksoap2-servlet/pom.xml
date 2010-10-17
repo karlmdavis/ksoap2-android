@@ -22,7 +22,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>servletapi</groupId>
+			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.4</version>
 			<type>jar</type>
