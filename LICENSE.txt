@@ -19,11 +19,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE. 
 
-Further patches have been included under an Apache V2 license from the following contributors:
+Further patches have been contributed by:
 
 Jorge Jimenez <jota@tuxpan.com> http://groups.google.com/groups/profile?enc_user=Ey3jEg8AAACg1wBgVrjM04pX08V0u_rp
-Karl Michael Davis <karlmdavis@gmail.com>
+Karl Michael Davis <karl.michael.davis@gmail.com>
 Manfred Moser <manfred@simpligility.com> http://www.simpligility.com
-Matt Fletcher <fletcher@atomicobject.com>  http://www.atomicobject.com
-Zachary Kurmasz <?> http://github.com/kurmasz
+Matt Fletcher <fletcher@atomicobject.com>  http://www.atomicobject.com/pages/Matt+Fletcher
+Zachary Kurmasz <zachary.kurmas@atomicobject.com> http://www.cis.gvsu.edu/~kurmasz/
 Juraj Ivančić" <juraj.ivancic@gmail.com>
