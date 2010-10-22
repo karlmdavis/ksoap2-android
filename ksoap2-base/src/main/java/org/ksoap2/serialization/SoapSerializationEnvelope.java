@@ -664,8 +664,22 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	protected void writeVectorBody(XmlSerializer writer, Vector vector, PropertyInfo elementType)
 			throws IOException
 	{
+		String itemsTagName = ITEM_LABEL;
+		String itemsNamespace = null;
+	
 		if (elementType == null)
+		{
 			elementType = PropertyInfo.OBJECT_TYPE;
+		}
+		else if (elementType instanceof PropertyInfo)
+		{
+			if (elementType.name != null)
+			{
+				itemsTagName = elementType.name;
+				itemsNamespace = elementType.namespace;
+			}
+		}
+		
 		int cnt = vector.size();
 		Object[] arrType = getInfo(elementType.type, null);
 		// I think that this needs an implicitTypes check, but don't have a failure case for that
@@ -678,14 +692,14 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 				skipped = true;
 			else
 			{
-				writer.startTag(null, ITEM_LABEL);
+				writer.startTag(itemsNamespace, itemsTagName);
 				if (skipped)
 				{
 					writer.attribute(enc, "position", "[" + i + "]");
 					skipped = false;
 				}
 				writeProperty(writer, vector.elementAt(i), elementType);
-				writer.endTag(null, ITEM_LABEL);
+				writer.endTag(itemsNamespace, itemsTagName);
 			}
 		}
 	}
