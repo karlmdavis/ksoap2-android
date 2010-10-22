@@ -28,3 +28,4 @@ Matt Fletcher <fletcher@atomicobject.com>  http://www.atomicobject.com/pages/Mat
 Zachary Kurmasz <zachary.kurmas@atomicobject.com> http://www.cis.gvsu.edu/~kurmasz/
 Juraj Ivančić" <juraj.ivancic@gmail.com>
 Hz Edgar <hz.edgar@gmail.com>
+Jim Redman <ergouser@sourceforge.net>
