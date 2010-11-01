@@ -12,7 +12,7 @@ For documentation, links, issues, wiki and so on:
 
 For discussions with others users, questions and more:
 
- [http://groups.google.com/group/ksoap2-android]
+ [http://groups.google.com/group/ksoap2-android](http://groups.google.com/group/ksoap2-android)
 
 
 
