@@ -542,7 +542,19 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			throw (SoapFault) bodyIn;
 		}
 		KvmSerializable ks = (KvmSerializable) bodyIn;
-		return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
+		
+		if(ks.getPropertyCount()==0){
+			return null;
+		}else if(ks.getPropertyCount()==1){
+			return ks.getProperty(0);
+		}else{
+			Vector ret = new Vector();
+			for(int i=0;i<ks.getPropertyCount();i++){
+				ret.add(ks.getProperty(i));
+			}
+			return ret;
+		}
+		//return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
 	}
 
 	/**
