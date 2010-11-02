@@ -29,3 +29,4 @@ Zachary Kurmasz <zachary.kurmas@atomicobject.com> http://www.cis.gvsu.edu/~kurma
 Juraj Ivančić" <juraj.ivancic@gmail.com>
 Hz Edgar <hz.edgar@gmail.com>
 Jim Redman <ergouser@sourceforge.net>
+http://github.com/nebe-daredevil
