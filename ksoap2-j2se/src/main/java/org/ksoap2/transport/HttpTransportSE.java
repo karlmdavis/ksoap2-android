@@ -34,6 +34,8 @@ import org.xmlpull.v1.*;
  */
 public class HttpTransportSE extends Transport {
 
+    private ServiceConnection connection;
+
     /**
      * Creates instance of HttpTransportSE with set url
      * 
@@ -58,7 +60,7 @@ public class HttpTransportSE extends Transport {
         byte[] requestData = createRequestData(envelope);
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
-        ServiceConnection connection = getServiceConnection();
+        connection = getServiceConnection();
         connection.setRequestProperty("User-Agent", "kSOAP/2.0");
         connection.setRequestProperty("SOAPAction", soapAction);
         connection.setRequestProperty("Content-Type", "text/xml");
@@ -99,6 +101,15 @@ public class HttpTransportSE extends Transport {
         }
         parseResponse(envelope, is);
     }
+
+    /**
+	 * Returns the HttpsServiceConnectionSE that was created in getServiceConnection or null
+	 * if getServiceConnection was not called or failed.
+	 * @return ServiceConnection
+	 */
+	public ServiceConnectionSE getConnection() {
+		return (ServiceConnectionSE) connection;
+	}
 
     protected ServiceConnection getServiceConnection() throws IOException {
         return new ServiceConnectionSE(url);
