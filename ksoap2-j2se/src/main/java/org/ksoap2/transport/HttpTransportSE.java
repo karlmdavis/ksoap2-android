@@ -107,7 +107,7 @@ public class HttpTransportSE extends Transport {
 	 * if getServiceConnection was not called or failed.
 	 * @return ServiceConnection
 	 */
-	public ServiceConnectionSE getConnection() {
+	public ServiceConnection getConnection() {
 		return (ServiceConnectionSE) connection;
 	}
 
