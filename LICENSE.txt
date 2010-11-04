@@ -27,6 +27,6 @@ Manfred Moser <manfred@simpligility.com> http://www.simpligility.com
 Matt Fletcher <fletcher@atomicobject.com>  http://www.atomicobject.com/pages/Matt+Fletcher
 Zachary Kurmasz <zachary.kurmas@atomicobject.com> http://www.cis.gvsu.edu/~kurmasz/
 Juraj Ivančić" <juraj.ivancic@gmail.com>
-Hz Edgar <hz.edgar@gmail.com>
+Edgar Hernández García <edgar_hz@yahoo.com>
 Jim Redman <ergouser@sourceforge.net>
 Nebojsa Licina <nebe.daredevil@gmail.com>
