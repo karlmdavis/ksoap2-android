@@ -22,10 +22,22 @@
 package org.ksoap2.transport;
 
 import java.io.*;
-
+import java.util.LinkedList;
+import java.util.List;
 import javax.microedition.io.*;
 
+import org.apache.http.Header;
+import org.apache.http.cookie.CookieOrigin;
+import org.apache.http.message.BasicHeader;
+import org.ksoap2.cookiemanagement.CookieJar;
+
+import javax.microedition.io.*;
+import android.util.log;
+
 public class ServiceConnectionMidp implements ServiceConnection {
+	
+	private static final String TAG = "SERVICECONNECTIONMIDP";
+	
     private HttpConnection connection;
 
     public ServiceConnectionMidp(String url) throws IOException {
@@ -60,4 +72,58 @@ public class ServiceConnectionMidp implements ServiceConnection {
         throw new RuntimeException("ServiceConnectionMidp.getErrorStream is not available.");
     }
 
+    @Override
+    public CookieJar saveCookies(CookieJar cookieJar) {
+    	
+    	CookieOrigin origin = new CookieOrigin(
+    			connection.getHost(), 
+    			connection.getPort(),
+    			connection.getFile(),
+    			false);
+    	List<Header> headers = new LinkedList<Header>();
+    	int i = 0;
+    	String key;
+    	
+    	try {
+	    	while (null != (key = connection.getHeaderFieldKey(i++))) {
+	    		if (key.equalsIgnoreCase("set-cookie")) {
+	    			headers.add(new BasicHeader("set-cookie", connection.getHeaderField(i)));
+	    		}
+	    		else if (key.equalsIgnoreCase("set-cookie2")) {
+	    			headers.add(new BasicHeader("set-cookie2", connection.getHeaderField(i)));
+	    		}
+	    	}
+	    	
+			for (i = 0; i < headers.size(); i++) {
+				cookieJar.saveCookies(headers.get(i), origin);
+	    	}
+    	} catch (IOException exp) {
+    		// Absorb errors - if this fails then cookies are the the least of our worries
+    		Log.e(TAG, exp.getMessage());
+    	}
+    	
+    	return cookieJar;
+    }
+    
+    @Override
+    public void sendCookies(CookieJar cookieJar) {
+
+    	CookieOrigin origin = new CookieOrigin(
+    			connection.getHost(), 
+    			connection.getPort(),
+    			connection.getFile(),
+    			false);
+    	
+    	List<Header> cookies = cookieJar.sendCookies(origin);
+    	
+    	try {
+	    	for (int i = 0; i < cookies.size(); i++) {
+	    		Header cookie = cookies.get(i);
+	    		connection.setRequestProperty(cookie.getName(), cookie.getValue());
+	    	}
+    	} catch (IOException exp) {
+    		// Absorb errors - if this fails then cookies are the the least of our worries
+    		Log.e(TAG, exp.getMessage());
+    	}
+    }
 }

@@ -31,6 +31,8 @@ import javax.microedition.io.*;
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
+import java.net.Proxy;
+
 /**
  * Methods to facilitate SOAP calls over HTTP using the J2ME generic connection
  * framework.
@@ -117,6 +119,10 @@ public class HttpTransport extends Transport {
      */
     public HttpTransport(String url) {
         super(url);
+    }
+    
+    public HttpTransport(Proxy proxy, String url) {
+    	super(proxy, url);
     }
 
     /**

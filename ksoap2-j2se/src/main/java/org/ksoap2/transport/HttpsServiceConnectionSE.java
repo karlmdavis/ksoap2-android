@@ -1,10 +1,20 @@
 package org.ksoap2.transport;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.apache.http.Header;
+import org.apache.http.cookie.CookieOrigin;
+import org.apache.http.message.BasicHeader;
+import org.ksoap2.cookiemanagement.CookieJar;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.List;
+import java.util.Set;
 
 /**
  * HttpsServiceConnectionSE is a service connection that uses a https url connection and requires explicit setting of
@@ -72,5 +82,48 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
 
     public InputStream getErrorStream() {
         return connection.getErrorStream();
+    }
+
+    @Override
+    public CookieJar saveCookies(CookieJar cookieJar) {
+    	
+    	Map<String, List<String>> headers = connection.getHeaderFields();
+    	Set<String> keys = headers.keySet();
+    	CookieOrigin origin = new CookieOrigin(
+    			connection.getURL().getHost(), 
+    			connection.getURL().getPort(), 
+    			connection.getURL().getPath(), 
+    			true);
+    	
+    	for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+    		String key = iter.next();
+    		
+    		if (key.equalsIgnoreCase("set-cookie") || key.equalsIgnoreCase("set-cookie2")) {
+    			
+    			List<String> values = headers.get(key);
+    			
+    			for (int i = 0; i < values.size(); i++) {
+        			cookieJar.saveCookies(new BasicHeader(key, values.get(i)), origin);
+    			}
+    		}
+    	}
+    	
+    	return cookieJar;
+    }
+    
+    @Override
+    public void sendCookies(CookieJar cookieJar) {
+
+    	CookieOrigin origin = new CookieOrigin(
+    			connection.getURL().getHost(), 
+    			connection.getURL().getPort(), 
+    			connection.getURL().getPath(), 
+    			true);
+    	List<Header> cookies = cookieJar.sendCookies(origin);
+    	
+    	for (int i = 0; i < cookies.size(); i++) {
+    		Header cookie = cookies.get(i);
+    		connection.addRequestProperty(cookie.getName(), cookie.getValue());
+    	}
     }
 }

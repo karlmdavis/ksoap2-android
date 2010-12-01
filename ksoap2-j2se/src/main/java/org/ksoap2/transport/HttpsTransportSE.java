@@ -31,8 +31,8 @@ public class HttpsTransportSE extends HttpTransportSE{
 	 * if getServiceConnection was not called or failed.
 	 * @return ServiceConnection
 	 */
-    public ServiceConnection getConnection() {
-		return (HttpsServiceConnectionSE) conn;
+	public HttpsServiceConnectionSE getConnection() {
+		return conn;
 	}
 
 	/**

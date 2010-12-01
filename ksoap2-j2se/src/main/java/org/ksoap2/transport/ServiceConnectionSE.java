@@ -23,6 +23,15 @@ package org.ksoap2.transport;
 
 import java.io.*;
 import java.net.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.http.Header;
+import org.apache.http.cookie.CookieOrigin;
+import org.apache.http.message.BasicHeader;
+import org.ksoap2.cookiemanagement.*;
 
 /**
  * Connection for J2SE environments.
@@ -36,7 +45,14 @@ public class ServiceConnectionSE implements ServiceConnection {
      * @param url the url to open the connection to.
      */
     public ServiceConnectionSE(String url) throws IOException {
-        connection = (HttpURLConnection) new URL(url).openConnection();
+    	this(null, url);
+    }
+
+    public ServiceConnectionSE(Proxy proxy, String url) throws IOException {
+    	
+    	connection = (proxy == null)
+    		? (HttpURLConnection) new URL(url).openConnection()
+    		: (HttpURLConnection) new URL(url).openConnection(proxy);
         connection.setUseCaches(false);
         connection.setDoOutput(true);
         connection.setDoInput(true);
@@ -56,6 +72,55 @@ public class ServiceConnectionSE implements ServiceConnection {
 
     public void setRequestMethod(String requestMethod) throws IOException {
         connection.setRequestMethod(requestMethod);
+    }
+
+    @Override
+    public CookieJar saveCookies(CookieJar cookieJar) {
+    	
+		if (cookieJar == null)
+			throw new IllegalArgumentException("CookieJar cannot be null");
+		
+    	Map<String, List<String>> headers = connection.getHeaderFields();
+    	Set<String> keys = headers.keySet();
+    	CookieOrigin origin = new CookieOrigin(
+    			connection.getURL().getHost(), 
+    			connection.getURL().getPort(), 
+    			connection.getURL().getPath(), 
+    			false);
+    	
+    	for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+    		String key = iter.next();
+    		
+    		if (key.equalsIgnoreCase("set-cookie") || key.equalsIgnoreCase("set-cookie2")) {
+    			
+    			List<String> values = headers.get(key);
+    			
+    			for (int i = 0; i < values.size(); i++) {
+        			cookieJar.saveCookies(new BasicHeader(key, values.get(i)), origin);
+    			}
+    		}
+    	}
+    	
+    	return cookieJar;
+    }
+    
+    @Override
+    public void sendCookies(CookieJar cookieJar) {
+
+		if (cookieJar == null)
+			throw new IllegalArgumentException("CookieJar cannot be null");
+		
+    	CookieOrigin origin = new CookieOrigin(
+    			connection.getURL().getHost(), 
+    			connection.getURL().getPort(), 
+    			connection.getURL().getPath(), 
+    			true);
+    	List<Header> cookies = cookieJar.sendCookies(origin);
+    	
+    	for (int i = 0; i < cookies.size(); i++) {
+    		Header cookie = cookies.get(i);
+    		connection.addRequestProperty(cookie.getName(), cookie.getValue());
+    	}
     }
 
     public OutputStream openOutputStream() throws IOException {

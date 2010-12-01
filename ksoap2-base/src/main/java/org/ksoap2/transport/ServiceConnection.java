@@ -23,6 +23,9 @@ package org.ksoap2.transport;
 
 import java.io.*;
 
+import org.apache.http.cookie.MalformedCookieException;
+import org.ksoap2.cookiemanagement.*;
+
 /**
  * Interface to allow the abstraction of the raw transport information
  */
@@ -62,6 +65,31 @@ public interface ServiceConnection {
      * @exception IOException
      */
     public void setRequestMethod(String requestMethodType) throws IOException;
+    
+    /**
+     * Offers the caller an opportunity to extract any cookies that the web
+     * service sent with its response. These are typically used for session
+     * management.
+     * 
+     * @param cookieJar
+     * 			the collection of cookies to which the new cookies will
+     * 			be added or cookies of the same name will be replaced.
+     * @return Collection of cookies encapsulated in a <code>CookieJar</code>.
+     * @throws MalformedCookieException 
+     * 			Bad cookie was found in the data returned by the web server.
+     */
+    public CookieJar saveCookies(CookieJar cookieJar);
+    
+    /**
+     * Offers the caller an opportunity to send cookies to the web service.
+     * Typically these would be session cookies that were returned by another
+     * method of the same web service. 
+     * This method must be called before the connection has been made.
+     * 
+     * @param cookieJar
+     * 				the collection of cookies to send.
+     */
+    public void sendCookies(CookieJar cookieJar);
 
     /**
      * Open and return the outputStream to the endpoint.
