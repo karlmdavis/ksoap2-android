@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
  * following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
  * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
  * EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
@@ -31,7 +31,7 @@ import java.util.Vector;
 
 /**
  * @author Stefan Haustein
- * 
+ *
  *         This class extends the SoapEnvelope with Soap Serialization functionality.
  */
 public class SoapSerializationEnvelope extends SoapEnvelope
@@ -55,6 +55,11 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	Hashtable idMap = new Hashtable();
 	Vector multiRef; // = new Vector();
 
+	/**
+	 * Set this variable to true if you don't want that type definitions for complex types/objects
+	 * are automatically generated (with type "anyType") in the XML-Request, if you don't call the
+	 * Method addMapping. This is needed by some Servers which have problems with these type-definitions.
+	 */
 	public boolean implicitTypes;
 
 	/**
@@ -122,6 +127,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			while (parser.getEventType() == XmlPullParser.START_TAG)
 			{
 				String rootAttr = parser.getAttributeValue(enc, ROOT_LABEL);
+
 				Object o = read(parser, null, -1, parser.getNamespace(), parser.getName(),
 						PropertyInfo.OBJECT_TYPE);
 				if ("1".equals(rootAttr) || bodyIn == null)
@@ -197,7 +203,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	/**
 	 * If the type of the object cannot be determined, and thus no Marshal class can handle the object, this
 	 * method is called. It will build either a SoapPrimitive or a SoapObject
-	 * 
+	 *
 	 * @param parser
 	 * @param typeNamespace
 	 * @param typeName
@@ -530,7 +536,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 
 	/**
 	 * Response from the soap call. Pulls the object from the wrapper object and returns it.
-	 * 
+	 *
 	 * @since 2.0.3
 	 * @return response from the soap call.
 	 * @throws SoapFault
@@ -542,7 +548,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			throw (SoapFault) bodyIn;
 		}
 		KvmSerializable ks = (KvmSerializable) bodyIn;
-		
+
 		if(ks.getPropertyCount()==0){
 			return null;
 		}else if(ks.getPropertyCount()==1){
@@ -569,7 +575,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 
 	/**
 	 * Serializes the request object to the given XmlSerliazer object
-	 * 
+	 *
 	 * @param writer
 	 *            XmlSerializer object to write the body into.
 	 */
@@ -678,7 +684,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	{
 		String itemsTagName = ITEM_LABEL;
 		String itemsNamespace = null;
-	
+
 		if (elementType == null)
 		{
 			elementType = PropertyInfo.OBJECT_TYPE;
@@ -691,7 +697,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 				itemsNamespace = elementType.namespace;
 			}
 		}
-		
+
 		int cnt = vector.size();
 		Object[] arrType = getInfo(elementType.type, null);
 		// I think that this needs an implicitTypes check, but don't have a failure case for that
