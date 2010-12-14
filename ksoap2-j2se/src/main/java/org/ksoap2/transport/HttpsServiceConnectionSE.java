@@ -2,16 +2,14 @@ package org.ksoap2.transport;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.http.Header;
-import org.apache.http.cookie.CookieOrigin;
-import org.apache.http.message.BasicHeader;
-import org.ksoap2.cookiemanagement.CookieJar;
+import org.ksoap2.HeaderProperty;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
@@ -64,6 +62,23 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
         connection.disconnect();
     }
 
+    public List getResponseProperties() {
+    	Map properties = connection.getHeaderFields();
+    	Set keys = properties.keySet();
+    	List retList = new LinkedList();
+    	
+    	for (Iterator i = keys.iterator(); i.hasNext();) {
+    		String key = (String) i.next();
+    		List values = (List) properties.get(key);
+    		
+    		for (int j = 0; j < values.size(); j++) {
+    			retList.add(new HeaderProperty(key, (String) values.get(j)));
+    		}
+    	}
+    	
+    	return retList;
+    }
+
     public void setRequestProperty(String key, String value) {
         connection.setRequestProperty(key, value);
     }
@@ -84,46 +99,15 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
         return connection.getErrorStream();
     }
 
-    @Override
-    public CookieJar saveCookies(CookieJar cookieJar) {
-    	
-    	Map<String, List<String>> headers = connection.getHeaderFields();
-    	Set<String> keys = headers.keySet();
-    	CookieOrigin origin = new CookieOrigin(
-    			connection.getURL().getHost(), 
-    			connection.getURL().getPort(), 
-    			connection.getURL().getPath(), 
-    			true);
-    	
-    	for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
-    		String key = iter.next();
-    		
-    		if (key.equalsIgnoreCase("set-cookie") || key.equalsIgnoreCase("set-cookie2")) {
-    			
-    			List<String> values = headers.get(key);
-    			
-    			for (int i = 0; i < values.size(); i++) {
-        			cookieJar.saveCookies(new BasicHeader(key, values.get(i)), origin);
-    			}
-    		}
-    	}
-    	
-    	return cookieJar;
-    }
-    
-    @Override
-    public void sendCookies(CookieJar cookieJar) {
+	public String getHost() {
+		return connection.getURL().getHost();
+	}
 
-    	CookieOrigin origin = new CookieOrigin(
-    			connection.getURL().getHost(), 
-    			connection.getURL().getPort(), 
-    			connection.getURL().getPath(), 
-    			true);
-    	List<Header> cookies = cookieJar.sendCookies(origin);
-    	
-    	for (int i = 0; i < cookies.size(); i++) {
-    		Header cookie = cookies.get(i);
-    		connection.addRequestProperty(cookie.getName(), cookie.getValue());
-    	}
-    }
+	public int getPort() {
+		return connection.getURL().getPort();
+	}
+
+	public String getPath() {
+		return connection.getURL().getPath();
+	}
 }

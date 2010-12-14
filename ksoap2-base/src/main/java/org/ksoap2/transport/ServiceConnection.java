@@ -21,10 +21,8 @@
 
 package org.ksoap2.transport;
 
+import java.util.List;
 import java.io.*;
-
-import org.apache.http.cookie.MalformedCookieException;
-import org.ksoap2.cookiemanagement.*;
 
 /**
  * Interface to allow the abstraction of the raw transport information
@@ -44,6 +42,17 @@ public interface ServiceConnection {
      * @exception IOException
      */
     public void disconnect() throws IOException;
+    
+    /**
+     * Returns to the caller all of the headers that were returned with the
+     * response to the SOAP request. Primarily this gives the caller an 
+     * opportunity to save the cookies for later use.
+     * 
+     * @return List of HeaderProperty instances
+     * 
+     * @exception IOException
+     */
+    public List getResponseProperties() throws IOException;
 
     /**
      * Set properties on the outgoing connection.
@@ -67,31 +76,6 @@ public interface ServiceConnection {
     public void setRequestMethod(String requestMethodType) throws IOException;
     
     /**
-     * Offers the caller an opportunity to extract any cookies that the web
-     * service sent with its response. These are typically used for session
-     * management.
-     * 
-     * @param cookieJar
-     * 			the collection of cookies to which the new cookies will
-     * 			be added or cookies of the same name will be replaced.
-     * @return Collection of cookies encapsulated in a <code>CookieJar</code>.
-     * @throws MalformedCookieException 
-     * 			Bad cookie was found in the data returned by the web server.
-     */
-    public CookieJar saveCookies(CookieJar cookieJar);
-    
-    /**
-     * Offers the caller an opportunity to send cookies to the web service.
-     * Typically these would be session cookies that were returned by another
-     * method of the same web service. 
-     * This method must be called before the connection has been made.
-     * 
-     * @param cookieJar
-     * 				the collection of cookies to send.
-     */
-    public void sendCookies(CookieJar cookieJar);
-
-    /**
      * Open and return the outputStream to the endpoint.
      * 
      * @exception IOException
@@ -114,4 +98,24 @@ public interface ServiceConnection {
      */
     public InputStream getErrorStream();
 
+	/**
+	 * Return the name of the host that is specified as the web service target
+	 * 
+	 * @return Host name
+	 */
+	abstract public String getHost();
+
+	/**
+	 * Return the port number of the host that is specified as the web service target
+	 * 
+	 * @return Port number
+	 */
+	abstract public int getPort();
+
+	/**
+	 * Return the path to the web service target
+	 * 
+	 * @return The URL's path
+	 */
+	abstract public String getPath();
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
@@ -30,9 +32,17 @@ public class MockTransport extends Transport
 		return super.createRequestData(envelope);
 	}
 
-	public void call(String targetNamespace, SoapEnvelope envelope) throws IOException,
+	public List call(String targetNamespace, SoapEnvelope envelope, List headers) throws IOException,
 			XmlPullParserException
 	{
+		throw new RuntimeException("call not currently implemented");
+	}
+	
+	public void AddHeaders(List headers) {
+		throw new RuntimeException("call not currently implemented");
+	}
+	
+	public List RetrieveHeaders() {
 		throw new RuntimeException("call not currently implemented");
 	}
 
@@ -73,4 +83,16 @@ public class MockTransport extends Transport
 			response.addProperty("return", result);
 		return response;
 	}
+
+	public String getHost() {
+		throw new RuntimeException("call not currently implemented");
+    }
+    
+	public int getPort() {
+		throw new RuntimeException("call not currently implemented");
+    }
+    
+	public String getPath() {
+		throw new RuntimeException("call not currently implemented");
+    }
 }

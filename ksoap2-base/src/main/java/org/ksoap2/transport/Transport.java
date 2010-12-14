@@ -23,6 +23,7 @@
 
 package org.ksoap2.transport;
 
+import java.util.List;
 import java.io.*;
 import java.net.Proxy;
 
@@ -52,7 +53,7 @@ abstract public class Transport {
     /** String dump of response for debugging */
     public String responseDump;
     private String xmlVersionTag = "";
-
+    
     public Transport() {
     }
 
@@ -125,6 +126,24 @@ abstract public class Transport {
      */
     public void reset() {
     }
+    
+    /**
+     * Perform a soap call with a given namespace and the given envelope providing
+     * any extra headers that the user requires such as cookies. Headers that are
+     * returned by the web service will be returned to the caller in the form of a
+     * <code>List</code> of <code>HeaderProperty</code> instances.
+     * 
+     * @param targetNamespace
+     *            the namespace with which to perform the call in.
+     * @param envelope
+     *            the envelope the contains the information for the call.
+     * @param headers
+     * 			  <code>List</code> of <code>HeaderProperty</code> headers to send with the SOAP request.
+     * 
+     * @return Headers returned by the web service as a <code>List</code> of
+     * <code>HeaderProperty</code> instances.
+     */
+    abstract public List call(String targetNamespace, SoapEnvelope envelope, List headers) throws IOException, XmlPullParserException;
 
     /**
      * Perform a soap call with a given namespace and the given envelope.
@@ -134,6 +153,28 @@ abstract public class Transport {
      * @param envelope
      *            the envelope the contains the information for the call.
      */
-    abstract public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException;
+    public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException {
+		call(targetNamespace, envelope, null);
+     }
 
+	/**
+	 * Return the name of the host that is specified as the web service target
+	 * 
+	 * @return Host name
+	 */
+	abstract public String getHost();
+
+	/**
+	 * Return the port number of the host that is specified as the web service target
+	 * 
+	 * @return Port number
+	 */
+	abstract public int getPort();
+
+	/**
+	 * Return the path to the web service target
+	 * 
+	 * @return The URL's path
+	 */
+	abstract public String getPath();
 }

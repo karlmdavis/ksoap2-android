@@ -24,6 +24,7 @@
 
 package org.ksoap2.transport;
 
+import java.util.List;
 import java.io.*;
 
 import javax.microedition.io.*;
@@ -131,10 +132,12 @@ public class HttpTransport extends Transport {
      * @param soapAction
      *            the desired soapAction
      */
-    public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
+    public List call(String soapAction, SoapEnvelope envelope, List headers) throws IOException, XmlPullParserException {
         if (soapAction == null)
             soapAction = "\"\"";
         byte[] requestData = createRequestData(envelope);
+        List retHeaders = null; 
+
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
         try {
@@ -144,6 +147,14 @@ public class HttpTransport extends Transport {
             connection.setRequestProperty("Content-Type", "text/xml");
             connection.setRequestProperty("Content-Length", "" + requestData.length);
             connection.setRequestProperty("User-Agent", "kSOAP/2.0");
+            
+            if (headers != null) {
+            	for (int i = 0; i < headers.size(); i++) {
+            		HeaderProperty hp = (HeaderProperty) headers.get(i);
+            		
+            		connection.setRequestProperty(hp.getKey(), hp.getValue());
+            	}
+            }
             connection.setRequestMethod(HttpConnection.POST);
             os = connection.openOutputStream();
             os.write(requestData, 0, requestData.length);
@@ -165,6 +176,8 @@ public class HttpTransport extends Transport {
                 is.close();
                 is = new ByteArrayInputStream(buf);
             }
+            
+            retHeaders = connection.getResponseProperties();
             parseResponse(envelope, is);
         } finally {
             if (!connected)
@@ -173,6 +186,8 @@ public class HttpTransport extends Transport {
         }
         if (envelope.bodyIn instanceof SoapFault)
             throw ((SoapFault) envelope.bodyIn);
+        
+        return retHeaders;
     }
 
     /**
@@ -206,5 +221,16 @@ public class HttpTransport extends Transport {
     protected ServiceConnection getServiceConnection() throws IOException {
         return new ServiceConnectionMidp(url);
     }
+	
+	public String getHost() {
+		return connection.getHost();
+	}
 
+	public int getPort() {
+		return connection.getPort();
+	}
+
+	public String getPath() {
+		return connection.getPath();
+	}
 }

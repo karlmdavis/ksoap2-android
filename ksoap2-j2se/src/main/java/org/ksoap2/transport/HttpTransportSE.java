@@ -24,13 +24,12 @@
  * */
 package org.ksoap2.transport;
 
+import java.util.List;
 import java.io.*;
 import java.net.Proxy;
 
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
-
-import org.ksoap2.cookiemanagement.*;
 
 /**
  * A J2SE based HttpTransport layer.
@@ -89,7 +88,7 @@ public class HttpTransportSE extends Transport {
      * @return <code>CookieJar</code> with any cookies sent by the server
 	 * @throws MalformedCookieException Cookie is invalid
 	 */
-    public CookieJar call(String soapAction, SoapEnvelope envelope, CookieJar cookieJar) 
+    public List call(String soapAction, SoapEnvelope envelope, List headers) 
 		throws IOException, XmlPullParserException {
 
 		if (soapAction == null)
@@ -107,12 +106,16 @@ public class HttpTransportSE extends Transport {
 	    connection.setRequestProperty("Content-Type", "text/xml");
 	    connection.setRequestProperty("Connection", "close");
 	    connection.setRequestProperty("Content-Length", "" + requestData.length);
+	    
+	    // Pass the headers provided by the user along with the call
+	    if (headers != null) {
+		    for (int i = 0; i < headers.size(); i++) {
+		    	HeaderProperty hp = (HeaderProperty) headers.get(i);
+		    	connection.setRequestProperty(hp.getKey(), hp.getValue());
+		    }
+	    }
+	    
 	    connection.setRequestMethod("POST");
-	    
-	    // Only send cookies if we appear to have some
-	    if (cookieJar != null)
-	    	connection.sendCookies(cookieJar);
-	    
 	    connection.connect();
     
 
@@ -123,13 +126,12 @@ public class HttpTransportSE extends Transport {
 	    os.close();
 	    requestData = null;
 	    InputStream is;
+	    List retHeaders = null;
+	    
 	    try {
 	    	connection.connect();
 	    	is = connection.openInputStream();
-	    	
-	    	if (cookieJar != null)
-	    		connection.saveCookies(cookieJar);
-	    	
+		    retHeaders = connection.getResponseProperties();
 	    } catch (IOException e) {
 	    	is = connection.getErrorStream();
 
@@ -158,7 +160,7 @@ public class HttpTransportSE extends Transport {
 	    }
    
 	    parseResponse(envelope, is);
-	    return cookieJar;
+	    return retHeaders;
 	}
 
 	public ServiceConnection getConnection() {
@@ -167,5 +169,17 @@ public class HttpTransportSE extends Transport {
 
     protected ServiceConnection getServiceConnection() throws IOException {
         return new ServiceConnectionSE(proxy, url);
+    }
+
+	public String getHost() {
+		return connection.getHost();
+    }
+    
+	public int getPort() {
+		return connection.getPort();
+    }
+    
+	public String getPath() {
+		return connection.getPath();
     }
 }
