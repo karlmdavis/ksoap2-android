@@ -1,12 +1,15 @@
 package org.ksoap2;
 
+/**
+ * HeaderProperty is a key - value pojo for storing http header properties.
+ */
 public class HeaderProperty {
 	private String key;
 	private String value;
 	
 	public HeaderProperty(String key, String value) {
-		setKey(key);
-		setValue(value);
+		this.key = key;
+        this.value = value;
 	}
 	
 	public String getKey() {

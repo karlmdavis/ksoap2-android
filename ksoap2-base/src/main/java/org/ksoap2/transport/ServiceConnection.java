@@ -48,7 +48,7 @@ public interface ServiceConnection {
      * response to the SOAP request. Primarily this gives the caller an 
      * opportunity to save the cookies for later use.
      * 
-     * @return List of HeaderProperty instances
+     * @return List of HeaderProperty instances that were returned as part of the http response as http header properties
      * 
      * @exception IOException
      */

@@ -68,7 +68,8 @@ public class HttpTransportSE extends Transport {
      *            the desired soapAction
      * @param envelope
      *            the envelope containing the information for the soap call.
-     * @throws MalformedCookieException 
+     * @throws IOException
+     * @throws XmlPullParserException
      */
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
     	
@@ -83,10 +84,12 @@ public class HttpTransportSE extends Transport {
      *            	the desired soapAction
      * @param envelope
      *            	the envelope containing the information for the soap call.
-     * @param cookieJar
+     * @param headers
+     *              a list of HeaderProperties to be http header properties when establishing the connection
      * 				           
      * @return <code>CookieJar</code> with any cookies sent by the server
-	 * @throws MalformedCookieException Cookie is invalid
+     * @throws IOException
+     * @throws XmlPullParserException
 	 */
     public List call(String soapAction, SoapEnvelope envelope, List headers) 
 		throws IOException, XmlPullParserException {
