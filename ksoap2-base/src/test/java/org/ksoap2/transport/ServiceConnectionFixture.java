@@ -297,6 +297,10 @@ public class ServiceConnectionFixture implements ServiceConnection {
         throw new RuntimeException("ServiceConnectionFixture.disconnect is not implemented yet");
     }
 
+    public List getResponseProperties() {
+    	return new LinkedList();
+    }
+    
     public void setRequestProperty(String propertyName, String value) throws IOException {
         requestPropertyMap.put(propertyName, value);
     }
@@ -329,4 +333,15 @@ public class ServiceConnectionFixture implements ServiceConnection {
         return messsageAsStream(REAL_LIFE_QUERY);
     }
 
+	public String getHost() {
+		return "";
+	}
+	
+	public int getPort() {
+		return 80;
+	}
+	
+	public String getPath() {
+		return "";
+	}
 }

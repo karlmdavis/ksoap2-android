@@ -31,7 +31,7 @@ public class HttpsTransportSE extends HttpTransportSE{
 	 * if getServiceConnection was not called or failed.
 	 * @return ServiceConnection
 	 */
-    public ServiceConnection getConnection() {
+	public ServiceConnection getConnection() {
 		return (HttpsServiceConnectionSE) conn;
 	}
 
@@ -45,4 +45,16 @@ public class HttpsTransportSE extends HttpTransportSE{
         conn = new HttpsServiceConnectionSE(host, port, file, timeout);
         return conn;
 	}
+
+	public String getHost() {
+		return conn.getHost();
+    }
+    
+	public int getPort() {
+		return conn.getPort();
+    }
+    
+	public String getPath() {
+		return conn.getPath();
+    }
 }

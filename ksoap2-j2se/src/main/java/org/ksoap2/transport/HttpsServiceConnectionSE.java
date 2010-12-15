@@ -1,10 +1,18 @@
 package org.ksoap2.transport;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.ksoap2.HeaderProperty;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.List;
+import java.util.Set;
 
 /**
  * HttpsServiceConnectionSE is a service connection that uses a https url connection and requires explicit setting of
@@ -54,6 +62,23 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
         connection.disconnect();
     }
 
+    public List getResponseProperties() {
+    	Map properties = connection.getHeaderFields();
+    	Set keys = properties.keySet();
+    	List retList = new LinkedList();
+    	
+    	for (Iterator i = keys.iterator(); i.hasNext();) {
+    		String key = (String) i.next();
+    		List values = (List) properties.get(key);
+    		
+    		for (int j = 0; j < values.size(); j++) {
+    			retList.add(new HeaderProperty(key, (String) values.get(j)));
+    		}
+    	}
+    	
+    	return retList;
+    }
+
     public void setRequestProperty(String key, String value) {
         connection.setRequestProperty(key, value);
     }
@@ -73,4 +98,16 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
     public InputStream getErrorStream() {
         return connection.getErrorStream();
     }
+
+	public String getHost() {
+		return connection.getURL().getHost();
+	}
+
+	public int getPort() {
+		return connection.getURL().getPort();
+	}
+
+	public String getPath() {
+		return connection.getURL().getPath();
+	}
 }

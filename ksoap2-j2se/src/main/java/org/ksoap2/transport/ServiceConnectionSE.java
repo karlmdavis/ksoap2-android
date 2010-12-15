@@ -23,6 +23,13 @@ package org.ksoap2.transport;
 
 import java.io.*;
 import java.net.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.ksoap2.HeaderProperty;
 
 /**
  * Connection for J2SE environments.
@@ -36,7 +43,14 @@ public class ServiceConnectionSE implements ServiceConnection {
      * @param url the url to open the connection to.
      */
     public ServiceConnectionSE(String url) throws IOException {
-        connection = (HttpURLConnection) new URL(url).openConnection();
+    	this(null, url);
+    }
+
+    public ServiceConnectionSE(Proxy proxy, String url) throws IOException {
+    	
+    	connection = (proxy == null)
+    		? (HttpURLConnection) new URL(url).openConnection()
+    		: (HttpURLConnection) new URL(url).openConnection(proxy);
         connection.setUseCaches(false);
         connection.setDoOutput(true);
         connection.setDoInput(true);
@@ -48,6 +62,23 @@ public class ServiceConnectionSE implements ServiceConnection {
 
     public void disconnect() {
         connection.disconnect();
+    }
+
+    public List getResponseProperties() {
+    	Map properties = connection.getHeaderFields();
+    	Set keys = properties.keySet();
+    	List retList = new LinkedList();
+    	
+    	for (Iterator i = keys.iterator(); i.hasNext();) {
+    		String key = (String) i.next();
+    		List values = (List) properties.get(key);
+    		
+    		for (int j = 0; j < values.size(); j++) {
+    			retList.add(new HeaderProperty(key, (String) values.get(j)));
+    		}
+    	}
+    	
+    	return retList;
     }
 
     public void setRequestProperty(String string, String soapAction) {
@@ -70,4 +101,15 @@ public class ServiceConnectionSE implements ServiceConnection {
         return connection.getErrorStream();
     }
 
+	public String getHost() {
+		return connection.getURL().getHost();
+	}
+
+	public int getPort() {
+		return connection.getURL().getPort();
+	}
+
+	public String getPath() {
+		return connection.getURL().getPath();
+	}
 }

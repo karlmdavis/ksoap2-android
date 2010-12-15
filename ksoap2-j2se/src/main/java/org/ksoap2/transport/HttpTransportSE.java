@@ -24,7 +24,9 @@
  * */
 package org.ksoap2.transport;
 
+import java.util.List;
 import java.io.*;
+import java.net.Proxy;
 
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
@@ -43,7 +45,20 @@ public class HttpTransportSE extends Transport {
      *            the destination to POST SOAP data
      */
     public HttpTransportSE(String url) {
-        super(url);
+        super(null, url);
+    }
+    
+    /**
+     * Creates instance of HttpTransportSE with set url and defines a
+     * proxy server to use to access it
+     * 
+     * @param proxy
+     * 				Proxy information or <code>null</code> for direct access
+     * @param url
+     * 				The destination to POST SOAP data
+     */
+    public HttpTransportSE(Proxy proxy, String url) {
+    	super(proxy, url);
     }
 
     /**
@@ -53,65 +68,118 @@ public class HttpTransportSE extends Transport {
      *            the desired soapAction
      * @param envelope
      *            the envelope containing the information for the soap call.
+     * @throws MalformedCookieException 
      */
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
-        if (soapAction == null)
-            soapAction = "\"\"";
-        byte[] requestData = createRequestData(envelope);
-        requestDump = debug ? new String(requestData) : null;
-        responseDump = null;
-        connection = getServiceConnection();
-        connection.setRequestProperty("User-Agent", "kSOAP/2.0");
-        connection.setRequestProperty("SOAPAction", soapAction);
-        connection.setRequestProperty("Content-Type", "text/xml");
-        connection.setRequestProperty("Connection", "close");
-        connection.setRequestProperty("Content-Length", "" + requestData.length);
-        connection.setRequestMethod("POST");
-        connection.connect();
-        OutputStream os = connection.openOutputStream();
-        os.write(requestData, 0, requestData.length);
-        os.flush();
-        os.close();
-        requestData = null;
-        InputStream is;
-        try {
-            connection.connect();
-            is = connection.openInputStream();
-        } catch (IOException e) {
-            is = connection.getErrorStream();
-            if (is == null) {
-                connection.disconnect();
-                throw (e);
-            }
-        }
-        if (debug) {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            byte[] buf = new byte[256];
-            while (true) {
-                int rd = is.read(buf, 0, 256);
-                if (rd == -1)
-                    break;
-                bos.write(buf, 0, rd);
-            }
-            bos.flush();
-            buf = bos.toByteArray();
-            responseDump = new String(buf);
-            is.close();
-            is = new ByteArrayInputStream(buf);
-        }
-        parseResponse(envelope, is);
+    	
+    	call(soapAction, envelope, null);
     }
 
-    /**
-	 * Returns the HttpsServiceConnectionSE that was created in getServiceConnection or null
-	 * if getServiceConnection was not called or failed.
-	 * @return ServiceConnection
+	/**
+	 * 
+     * set the desired soapAction header field
+     * 
+     * @param soapAction
+     *            	the desired soapAction
+     * @param envelope
+     *            	the envelope containing the information for the soap call.
+     * @param cookieJar
+     * 				           
+     * @return <code>CookieJar</code> with any cookies sent by the server
+	 * @throws MalformedCookieException Cookie is invalid
 	 */
+    public List call(String soapAction, SoapEnvelope envelope, List headers) 
+		throws IOException, XmlPullParserException {
+
+		if (soapAction == null)
+			soapAction = "\"\"";
+
+		byte[] requestData = createRequestData(envelope);
+	    
+		requestDump = debug ? new String(requestData) : null;
+	    responseDump = null;
+	    
+	    connection = getServiceConnection();
+	    
+	    connection.setRequestProperty("User-Agent", "kSOAP/2.0");
+	    connection.setRequestProperty("SOAPAction", soapAction);
+	    connection.setRequestProperty("Content-Type", "text/xml");
+	    connection.setRequestProperty("Connection", "close");
+	    connection.setRequestProperty("Content-Length", "" + requestData.length);
+	    
+	    // Pass the headers provided by the user along with the call
+	    if (headers != null) {
+		    for (int i = 0; i < headers.size(); i++) {
+		    	HeaderProperty hp = (HeaderProperty) headers.get(i);
+		    	connection.setRequestProperty(hp.getKey(), hp.getValue());
+		    }
+	    }
+	    
+	    connection.setRequestMethod("POST");
+	    connection.connect();
+    
+
+	    OutputStream os = connection.openOutputStream();
+   
+	    os.write(requestData, 0, requestData.length);
+	    os.flush();
+	    os.close();
+	    requestData = null;
+	    InputStream is;
+	    List retHeaders = null;
+	    
+	    try {
+	    	connection.connect();
+	    	is = connection.openInputStream();
+		    retHeaders = connection.getResponseProperties();
+	    } catch (IOException e) {
+	    	is = connection.getErrorStream();
+
+	    	if (is == null) {
+	    		connection.disconnect();
+	    		throw (e);
+	    	}
+	    }
+    
+		if (debug) {
+	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	        byte[] buf = new byte[256];
+	        
+	        while (true) {
+	            int rd = is.read(buf, 0, 256);
+	            if (rd == -1)
+	                break;
+	            bos.write(buf, 0, rd);
+	        }
+	        
+	        bos.flush();
+	        buf = bos.toByteArray();
+	        responseDump = new String(buf);
+	        is.close();
+	        is = new ByteArrayInputStream(buf);
+	    }
+   
+	    parseResponse(envelope, is);
+	    return retHeaders;
+	}
+
 	public ServiceConnection getConnection() {
 		return (ServiceConnectionSE) connection;
 	}
 
     protected ServiceConnection getServiceConnection() throws IOException {
-        return new ServiceConnectionSE(url);
+        return new ServiceConnectionSE(proxy, url);
+    }
+
+	public String getHost() {
+		return connection.getHost();
+    }
+    
+	public int getPort() {
+		return connection.getPort();
+    }
+    
+	public String getPath() {
+		return connection.getPath();
     }
 }
