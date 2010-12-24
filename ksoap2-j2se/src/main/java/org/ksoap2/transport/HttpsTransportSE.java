@@ -1,6 +1,8 @@
 package org.ksoap2.transport;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * HttpsTransportSE is a simple transport for https protocal based connections. It creates a #HttpsServiceConnectionSE
@@ -47,14 +49,41 @@ public class HttpsTransportSE extends HttpTransportSE{
 	}
 
 	public String getHost() {
-		return conn.getHost();
+		
+		String retVal = null;
+		
+		try {
+			retVal = new URL(url).getHost();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		return retVal;
     }
     
 	public int getPort() {
-		return conn.getPort();
+		
+		int retVal = -1;
+		
+		try {
+			retVal = new URL(url).getPort();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		return retVal;
     }
     
 	public String getPath() {
-		return conn.getPath();
+		
+		String retVal = null;
+		
+		try {
+			retVal = new URL(url).getPath();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		return retVal;
     }
 }

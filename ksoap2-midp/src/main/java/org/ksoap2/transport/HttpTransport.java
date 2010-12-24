@@ -32,7 +32,9 @@ import javax.microedition.io.*;
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
+import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.URL;
 
 /**
  * Methods to facilitate SOAP calls over HTTP using the J2ME generic connection
@@ -223,14 +225,41 @@ public class HttpTransport extends Transport {
     }
 	
 	public String getHost() {
-		return connection.getHost();
-	}
-
+		
+		String retVal = null;
+		
+		try {
+			retVal = new URL(url).getHost();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		return retVal;
+    }
+    
 	public int getPort() {
-		return connection.getPort();
-	}
-
+		
+		int retVal = -1;
+		
+		try {
+			retVal = new URL(url).getPort();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		return retVal;
+    }
+    
 	public String getPath() {
-		return connection.getPath();
-	}
+		
+		String retVal = null;
+		
+		try {
+			retVal = new URL(url).getPath();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+		return retVal;
+    }
 }
