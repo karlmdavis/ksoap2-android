@@ -62,6 +62,18 @@ public class HttpTransportSE extends Transport {
     public HttpTransportSE(Proxy proxy, String url) {
     	super(proxy, url);
     }
+    
+    /**
+     * Creates instance of HttpTransportSE with set url
+     * 
+     * @param url
+     *            the destination to POST SOAP data
+     * @param timeout
+     * 			  timeout for connection and Read Timeouts (milliseconds)
+     */
+    public HttpTransportSE(String url, int timeout) {
+        super(url, timeout);
+    }
 
     /**
      * set the desired soapAction header field

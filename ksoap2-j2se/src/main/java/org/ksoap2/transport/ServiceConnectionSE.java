@@ -55,6 +55,19 @@ public class ServiceConnectionSE implements ServiceConnection {
         connection.setDoOutput(true);
         connection.setDoInput(true);
     }
+    
+    /**
+     * Constructor taking the url to the endpoint for this soap communication
+     * @param url the url to open the connection to.
+     */
+    public ServiceConnectionSE(String url, int timeout) throws IOException {
+    	connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setUseCaches(false);
+        connection.setDoOutput(true);
+        connection.setDoInput(true);
+        connection.setConnectTimeout(timeout); // 20 seconds like in iphone app
+        connection.setReadTimeout(timeout); // even if we connect fine we want to time out if we cant read anything..
+    }
 
     public void connect() throws IOException {
         connection.connect();

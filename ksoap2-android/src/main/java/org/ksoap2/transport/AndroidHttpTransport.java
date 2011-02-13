@@ -7,6 +7,8 @@ import java.io.IOException;
  * as that class and is provided purely for backwards-compatibility purposes. It will likely be deprecated at
  * some point in the near future.
  *
+ * Contributor(s): Andreas Mattissons
+ * 
  * @deprecated use HttpTransportSE, this class will be removed in an upcoming release
  */
 public class AndroidHttpTransport extends HttpTransportSE
@@ -18,12 +20,20 @@ public class AndroidHttpTransport extends HttpTransportSE
 	{
 		super(url);
 	}
+	
+	/**
+	 * @see HttpTransportSE#HttpTransportSE(String, int)
+	 */
+	public AndroidHttpTransport(String url, int timeout)
+	{
+		super(url, timeout);
+	}
 
 	/**
 	 * @see org.ksoap2.transport.HttpTransportSE#getServiceConnection()
 	 */
 	protected ServiceConnection getServiceConnection() throws IOException
 	{
-		return new AndroidServiceConnection(super.url);
+		return new AndroidServiceConnection(super.url, super.timeout);
 	}
 }
