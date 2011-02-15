@@ -7,8 +7,6 @@ import java.io.IOException;
  * as that class and is provided purely for backwards-compatibility purposes. It will likely be deprecated at
  * some point in the near future.
  *
- * Contributor(s): Andreas Mattissons
- * 
  * @deprecated use HttpTransportSE, this class will be removed in an upcoming release
  */
 public class AndroidHttpTransport extends HttpTransportSE

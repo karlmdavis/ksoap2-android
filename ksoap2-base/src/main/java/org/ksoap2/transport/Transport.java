@@ -46,7 +46,7 @@ abstract public class Transport {
 	 */
 	protected Proxy proxy;
     protected String url;
-    protected int timeout = 20000; // 20 seconds like in iphone app
+    protected int timeout = 20000; // 20 seconds
     /** Set to true if debugging */
     public boolean debug;
     /** String dump of request for debugging. */

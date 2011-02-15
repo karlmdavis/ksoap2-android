@@ -41,13 +41,13 @@ public class ServiceConnectionSE implements ServiceConnection {
     /**
      * Constructor taking the url to the endpoint for this soap communication
      * @param url the url to open the connection to.
+     * @throws IOException
      */
     public ServiceConnectionSE(String url) throws IOException {
     	this(null, url);
     }
 
     public ServiceConnectionSE(Proxy proxy, String url) throws IOException {
-    	
     	connection = (proxy == null)
     		? (HttpURLConnection) new URL(url).openConnection()
     		: (HttpURLConnection) new URL(url).openConnection(proxy);
@@ -59,13 +59,15 @@ public class ServiceConnectionSE implements ServiceConnection {
     /**
      * Constructor taking the url to the endpoint for this soap communication
      * @param url the url to open the connection to.
+     * @param timeout the connection and read timeout for the http connection in milliseconds
+     * @throws IOException
      */
     public ServiceConnectionSE(String url, int timeout) throws IOException {
     	connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setUseCaches(false);
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        connection.setConnectTimeout(timeout); // 20 seconds like in iphone app
+        connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout); // even if we connect fine we want to time out if we cant read anything..
     }
 

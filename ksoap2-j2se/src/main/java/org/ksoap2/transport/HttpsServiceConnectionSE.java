@@ -39,7 +39,7 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
     }
 
     private void updateConnectionParameters(int timeout) {
-        connection.setConnectTimeout(timeout); // 20 seconds like in iphone app
+        connection.setConnectTimeout(timeout); // 20 seconds
         connection.setReadTimeout(timeout); // even if we connect fine we want to time out if we cant read anything..
         connection.setUseCaches(false);
         connection.setDoOutput(true);

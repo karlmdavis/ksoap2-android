@@ -7,9 +7,6 @@ import java.io.IOException;
  * as that class and is provided purely for backwards-compatibility purposes. It will likely be deprecated at
  * some point in the near future.
  *	
- *
- * Contributor(s): Andreas Mattisson
- * 
  * @deprecated use ServiceConnectionSE, this class will be remove in next release
  */
 public class AndroidServiceConnection extends ServiceConnectionSE

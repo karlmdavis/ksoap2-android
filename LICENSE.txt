@@ -31,3 +31,4 @@ Edgar Hernández García <edgar_hz@yahoo.com>
 Jim Redman <ergouser@sourceforge.net>
 Nebojsa Licina <nebe.daredevil@gmail.com>
 Rainer Klier <rainer.klier@gmail.com>
+Andreas Mattisson <andreas.mattisson@gmail.com>
