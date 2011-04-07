@@ -27,13 +27,27 @@ import java.util.Set;
  * @see "http://code.google.com/p/android/issues/detail?id=2690"
  * @see "http://code.google.com/p/android/issues/detail?id=2764"
  *
+ * @see "https://gist.github.com/908048" There can be problems with the
+ * certificate of theof the server on older android versions. You can disable
+ * SSL for the versions only e.g. with an approach like this.
+ *
  * @author Manfred Moser <manfred@simpligility.com>
  */
 public class HttpsServiceConnectionSE implements ServiceConnection {
 
     private HttpsURLConnection connection;
 
-    public HttpsServiceConnectionSE(String host, int port, String file, int timeout) throws IOException {
+    /**
+     * Create the transport with the supplied parameters.
+     * @param host the name of the host e.g. webservices.somewhere.com
+     * @param port the http port to connect on
+     * @param file the path to the file on the webserver that represents the
+     * webservice e.g. /api/services/myservice.jsp
+     * @param timeout the timeout for the connection in milliseconds
+     * @throws IOException
+     */
+    public HttpsServiceConnectionSE(String host, int port, String file,
+                                     int timeout) throws IOException {
         connection = (HttpsURLConnection) new URL(HttpsTransportSE.PROTOCOL, host, port, file).openConnection();
         updateConnectionParameters(timeout);
     }
@@ -44,15 +58,7 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
         connection.setUseCaches(false);
         connection.setDoOutput(true);
         connection.setDoInput(true);
-
-        // Allowing any hostname  through with https:// so basically disabling host checking when https is used.
-        //Attention! This is not secure against man in the middle attacks.
-        // supposed to be a workaround for https problems.
-        // @see "http://android.amberfog.com/?p=45"
-//        connection.setHostnameVerifier(new AllowAllHostnameVerifier());
-
-        // when the url is created with protocol, host, port and file this workaround is not necessary
-    }
+   }
 
     public void connect() throws IOException {
         connection.connect();
