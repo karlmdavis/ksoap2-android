@@ -19,7 +19,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE. 
 
-Further patches have been contributed by:
+
+
+Further patches have been contributed under the same license
+with
+
+Copyright (c) 2009-2011
+
+by:
 
 Jorge Jimenez <jota@tuxpan.com> http://groups.google.com/groups/profile?enc_user=Ey3jEg8AAACg1wBgVrjM04pX08V0u_rp
 Karl Michael Davis <karl.michael.davis@gmail.com>
