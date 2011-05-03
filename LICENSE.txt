@@ -1,3 +1,4 @@
+Copyright (c) 2009-2011 the ksoap2-android project (http://code.google.com/p/ksoap2-android)
 Copyright (c) 2006, James Seigel, Calgary, AB., Canada
 Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
  
@@ -19,14 +20,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE. 
 
-
-
-Further patches have been contributed under the same license
-with
-
-Copyright (c) 2009-2011
-
-by:
+Further patches have been contributed under the same license by:
 
 Jorge Jimenez <jota@tuxpan.com> http://groups.google.com/groups/profile?enc_user=Ey3jEg8AAACg1wBgVrjM04pX08V0u_rp
 Karl Michael Davis <karl.michael.davis@gmail.com>
