@@ -14,5 +14,6 @@ For discussions with others users, questions and more:
 
  [http://groups.google.com/group/ksoap2-android](http://groups.google.com/group/ksoap2-android)
 
+## License
 
-
+This project uses the MIT license. See LICENSE.txt for more information.
