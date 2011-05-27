@@ -606,12 +606,20 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	public void writeObjectBody(XmlSerializer writer, SoapObject obj) throws IOException
 	{
 		SoapObject soapObject = (SoapObject) obj;
-		for (int counter = 0; counter < soapObject.getAttributeCount(); counter++)
+		int cnt = soapObject.getAttributeCount();
+		for (int counter = 0; counter < cnt; counter++)
 		{
 			AttributeInfo attributeInfo = new AttributeInfo();
 			soapObject.getAttributeInfo(counter, attributeInfo);
 			writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(), attributeInfo.getValue()
 					.toString());
+		}
+		cnt = soapObject.getNestedSoapCount();
+		for(int counter = 0; counter < cnt; counter++){
+				SoapObject nestedSoap = (SoapObject)soapObject.getNestedSoap(counter);
+				writer.startTag(nestedSoap.getNamespace(), nestedSoap.getName());
+				writeObjectBody(writer, nestedSoap);
+				writer.endTag(nestedSoap.getNamespace(), nestedSoap.getName());
 		}
 		writeObjectBody(writer, (KvmSerializable) obj);
 	}

@@ -45,6 +45,10 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * The Vector of properties.
      */
     protected Vector properties = new Vector();
+		/**
+		 * The Vector of SoapObjects within this SoapObject
+		 */
+		protected Vector nestedSoapObjects = new Vector();
 
     // TODO: accessing properties and attributes would work much better if we kept a list of known properties instead of iterating through the list each time
 
@@ -75,6 +79,10 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         if (numProperties != otherSoapObject.properties.size())
             return false;
 
+				int numNested = nestedSoapObjects.size();
+				if (numNested != otherSoapObject.nestedSoapObjects.size())
+						return false;
+
 
         // TODO:  The code below doesn't correctly compare the following <name> element to itself.
         // calling otherSoapObject.getProperty(thisProp.getName()) will return the first child with the given name
@@ -97,6 +105,13 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
             }
         }
 
+				// This will return false if the nestedSoapObjects are not in the same order
+				for (int nestIndex = 0; nestIndex < numNested; nestIndex++) {
+						if(!getNestedSoap(nestIndex).equals(otherSoapObject.getNestedSoap(nestIndex))){
+								return false;
+						}
+				}
+
         return attributesAreEqual(otherSoapObject);
 
     }
@@ -108,6 +123,13 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     public String getNamespace() {
         return namespace;
     }
+
+		/**
+		 * 
+		 */
+		public Object getNestedSoap(int index){
+				return (SoapObject) nestedSoapObjects.elementAt(index);
+		}
 
     /**
      * @inheritDoc
@@ -175,6 +197,15 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return properties.size();
     }
 
+		/**
+		 * Returns the number of nestedSoapObjects
+		 *
+		 * @return the number of nestedSoapObjects
+		 */
+		public int getNestedSoapCount(){
+				return nestedSoapObjects.size();
+		}
+
     /**
      * Places PropertyInfo of desired property into a designated PropertyInfo object
      *
@@ -193,12 +224,14 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * @param propertyInfo designated retainer of desired property
      */
     public void getPropertyInfo(int index, PropertyInfo propertyInfo) {
-        PropertyInfo p = (PropertyInfo) properties.elementAt(index);
-        propertyInfo.name = p.name;
-        propertyInfo.namespace = p.namespace;
-        propertyInfo.flags = p.flags;
-        propertyInfo.type = p.type;
-        propertyInfo.elementType = p.elementType;
+				if(properties.elementAt(index) instanceof PropertyInfo){
+						PropertyInfo p = (PropertyInfo) properties.elementAt(index);
+						propertyInfo.name = p.name;
+						propertyInfo.namespace = p.namespace;
+						propertyInfo.flags = p.flags;
+						propertyInfo.type = p.type;
+						propertyInfo.elementType = p.elementType;
+				}
     }
 
     /**
@@ -269,12 +302,26 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return this;
     }
 
+		/**
+		 * Adds a SoapObject the nestedSoapObjects array.
+		 * This is a sub element to allow nested SoapObjects
+		 *
+		 * @param soapObject to be added as a property of the current object
+		 */
+		public SoapObject addSoapObject(SoapObject soapObject) {
+				nestedSoapObjects.addElement(soapObject);
+				return this;
+		}
+
     /**
      * Generate a {@code String} describing this object.
      * @return
      */
     public String toString() {
         StringBuffer buf = new StringBuffer("" + name + "{");
+				for(int j = 0; j < getNestedSoapCount(); j++){
+						buf.append("\n" + ((SoapObject) nestedSoapObjects.elementAt(j)).toString());
+				}
         for (int i = 0; i < getPropertyCount(); i++) {
             buf.append("" + ((PropertyInfo) properties.elementAt(i)).getName() + "=" + getProperty(i) + "; ");
         }
