@@ -73,18 +73,18 @@ public class SoapPrimitiveTest extends TestCase {
         assertFalse(soapPrimitive.hasAttribute("First"));
     }
 
-    public void testSafeGetAttribute_GivesAttributeWhenItExists() {
+    public void testGetAttributeSafely_GivesAttributeWhenItExists() {
         soapPrimitive.addAttribute("First", "one");
         soapPrimitive.addAttribute("Second", "two");
 
-        assertEquals("two", soapPrimitive.safeGetAttribute("Second"));
-        assertEquals("one", soapPrimitive.safeGetAttribute("First"));
+        assertEquals("two", soapPrimitive.getAttributeSafely("Second"));
+        assertEquals("one", soapPrimitive.getAttributeSafely("First"));
     }
 
     public void testSafeGetAttribute_GivesNullWhenTheAttributeDoesNotExist() {
         soapPrimitive.addAttribute("Second", "two");
 
-        assertEquals("two", soapPrimitive.safeGetAttribute("Second"));
-        assertNull(soapPrimitive.safeGetAttribute("First"));
+        assertEquals("two", soapPrimitive.getAttributeSafely("Second"));
+        assertNull(soapPrimitive.getAttributeSafely("First"));
     }
 }

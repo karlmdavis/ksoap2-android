@@ -124,19 +124,19 @@ public class SoapObjectTest extends TestCase {
         assertFalse(soapObject.hasAttribute("First"));
     }
 
-    public void testSafeGetAttribute_GivesAttributeWhenItExists() {
+    public void testGetAttributeSafely_GivesAttributeWhenItExists() {
         soapObject.addAttribute("First", "one");
         soapObject.addAttribute("Second", "two");
 
-        assertEquals("two", soapObject.safeGetAttribute("Second"));
-        assertEquals("one", soapObject.safeGetAttribute("First"));
+        assertEquals("two", soapObject.getAttributeSafely("Second"));
+        assertEquals("one", soapObject.getAttributeSafely("First"));
     }
 
-    public void testSafeGetAttribute_GivesNullWhenTheAttributeDoesNotExist() {
+    public void testGetAttributeSafely_GivesNullWhenTheAttributeDoesNotExist() {
         soapObject.addAttribute("Second", "two");
 
-        assertEquals("two", soapObject.safeGetAttribute("Second"));
-        assertNull(soapObject.safeGetAttribute("First"));
+        assertEquals("two", soapObject.getAttributeSafely("Second"));
+        assertNull(soapObject.getAttributeSafely("First"));
     }
 
     public void testGetProperty_GivesPropertyWhenItExists() {
@@ -163,24 +163,26 @@ public class SoapObjectTest extends TestCase {
         }
     }
 
-    public void testSafeGetProperty_GivesPropertyWhenItExists() {
+    public void testGetPropertySafely_GivesPropertyWhenItExists() {
         soapObject.addProperty("Prop1", "One");
         soapObject.addProperty("Prop8", "Eight");
 
-        assertEquals("One", soapObject.safeGetProperty("Prop1"));
-        assertEquals("Eight", soapObject.safeGetProperty("Prop8"));
+        assertEquals("One", soapObject.getPropertySafely("Prop1"));
+        assertEquals("Eight", soapObject.getPropertySafely("Prop8"));
     }
 
-    public void testSafeGetProperty_GivesANullObjectWhenThePropertyDoesNotExist() {
-        Object nullObject = soapObject.safeGetProperty("Prop1");
+    public void testGetPropertySafely_GivesANullObjectWhenThePropertyDoesNotExist
+        () {
+        Object nullObject = soapObject.getPropertySafely("Prop1");
         assertNotNull(nullObject);
         assertNull(nullObject.toString());
     }
 
-    public void testSafeGetProperty_CanReturnTheGivenObjectWhenThePropertyDoesNotExist() {
+    public void
+    testGetPropertySafely_CanReturnTheGivenObjectWhenThePropertyDoesNotExist() {
         String thinger = "thinger";
         Integer five = new Integer(5);
-        assertSame(thinger, soapObject.safeGetProperty("Prop8", thinger));
-        assertSame(five, soapObject.safeGetProperty("Prop8", five));
+        assertSame(thinger, soapObject.getPropertySafely("Prop8", thinger));
+        assertSame(five, soapObject.getPropertySafely("Prop8", five));
     }
 }

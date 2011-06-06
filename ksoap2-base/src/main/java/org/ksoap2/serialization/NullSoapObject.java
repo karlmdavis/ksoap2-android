@@ -9,14 +9,15 @@ package org.ksoap2.serialization;
  * <pre>
  * <code>
  * private String getAge(SoapObject person) {
- *   return person.safeGetProperty("age").toString();
+ *   return person.getPropertySafely("age").toString();
  * }
  * </code>
  * </pre>
  * <ul>
  * <li> When the person object has an {@code age} property, the {@code age} will be returned. </li>
  * <li>
- *   When the person object does not have an {@code age} property, {@link SoapObject#safeGetProperty(String)}
+ *   When the person object does not have an {@code age} property,
+ *   {@link SoapObject#getPropertySafely(String)}
  *   returns a NullSoapObject, which in turn returns {@code null} for {@link NullSoapObject#toString()}.
  * </li>
  * </ul>
@@ -30,7 +31,7 @@ public class NullSoapObject {
    * See the example in this class's description as to how this can be useful.
    *
    * @return {@code null}
-   * @see SoapObject#safeGetProperty(String)
+   * @see SoapObject#getPropertySafely(String)
    */
   public String toString() {
     return null;

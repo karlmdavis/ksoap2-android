@@ -45,10 +45,10 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * The Vector of properties.
      */
     protected Vector properties = new Vector();
-		/**
-		 * The Vector of SoapObjects within this SoapObject
-		 */
-		protected Vector nestedSoapObjects = new Vector();
+    /**
+     * The Vector of SoapObjects within this SoapObject
+     */
+    protected Vector nestedSoapObjects = new Vector();
 
     // TODO: accessing properties and attributes would work much better if we kept a list of known properties instead of iterating through the list each time
 
@@ -124,12 +124,12 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return namespace;
     }
 
-		/**
-		 * 
-		 */
-		public Object getNestedSoap(int index){
-				return (SoapObject) nestedSoapObjects.elementAt(index);
-		}
+    /**
+     *
+     */
+    public Object getNestedSoap(int index){
+        return (SoapObject) nestedSoapObjects.elementAt(index);
+    }
 
     /**
      * @inheritDoc
@@ -162,10 +162,20 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      *
      * @return the property if it exists; if not, {@link NullSoapObject} is returned
      */
-    public Object safeGetProperty(final String name) {
+    public Object getPropertySafely(final String name) {
         Integer i = propertyIndex(name);
-        if (i != null) return getProperty(i.intValue());
-        else return new NullSoapObject();
+        if (i != null) {
+            return getProperty(i.intValue());
+        } else {
+            return new NullSoapObject();
+        }
+    }
+
+    /**
+     * @deprecated use #getPropertySafely
+     */
+    public Object safeGetProperty(final String name) {
+        return getPropertySafely(name);
     }
 
     /**
@@ -175,10 +185,19 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * @param defaultThing the object to return if the property is not found
      * @return the property if it exists; defaultThing if the property does not exist
      */
-    public Object safeGetProperty(final String name, final Object defaultThing) {
+    public Object getPropertySafely(final String name, final Object defaultThing) {
         Integer i = propertyIndex(name);
-        if (i != null) return getProperty(i.intValue());
-        else return defaultThing;
+        if (i != null) {
+            return getProperty(i.intValue());
+        } else {
+            return defaultThing;
+        }
+    }
+    /**
+     * @deprecated use #getPropertySafely
+     */
+    public Object safeGetProperty(final String name, final Object defaultThing) {
+        return getPropertySafely(name, defaultThing);
     }
 
     private Integer propertyIndex(String name) {
@@ -197,14 +216,14 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return properties.size();
     }
 
-		/**
-		 * Returns the number of nestedSoapObjects
-		 *
-		 * @return the number of nestedSoapObjects
-		 */
-		public int getNestedSoapCount(){
-				return nestedSoapObjects.size();
-		}
+    /**
+     * Returns the number of nestedSoapObjects
+     *
+     * @return the number of nestedSoapObjects
+     */
+    public int getNestedSoapCount(){
+            return nestedSoapObjects.size();
+    }
 
     /**
      * Places PropertyInfo of desired property into a designated PropertyInfo object
@@ -300,16 +319,16 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return this;
     }
 
-		/**
-		 * Adds a SoapObject the nestedSoapObjects array.
-		 * This is a sub element to allow nested SoapObjects
-		 *
-		 * @param soapObject to be added as a property of the current object
-		 */
-		public SoapObject addSoapObject(SoapObject soapObject) {
-				nestedSoapObjects.addElement(soapObject);
-				return this;
-		}
+    /**
+     * Adds a SoapObject the nestedSoapObjects array.
+     * This is a sub element to allow nested SoapObjects
+     *
+     * @param soapObject to be added as a property of the current object
+     */
+    public SoapObject addSoapObject(SoapObject soapObject) {
+            nestedSoapObjects.addElement(soapObject);
+            return this;
+    }
 
     /**
      * Generate a {@code String} describing this object.

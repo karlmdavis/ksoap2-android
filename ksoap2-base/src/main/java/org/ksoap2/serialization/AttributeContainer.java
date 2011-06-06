@@ -50,12 +50,23 @@ public class AttributeContainer {
     /**
      * Get an attribute without chance of throwing an exception
      *
+     * @param name the name of the attribute to retreive
      * @return the value of the attribute if it exists; {@code null} if it does not exist
      */
-    public Object safeGetAttribute(String name) {
+    public Object getAttributeSafely(String name) {
         Integer i = attributeIndex(name);
-        if (i != null) return getAttribute(i.intValue());
-        else return null;
+        if (i != null) {
+            return getAttribute(i.intValue());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @deprecated use #getAttributeSafely
+     */
+    public Object safeGetAttribute(String name) {
+        return getAttributeSafely(name);
     }
 
     private Integer attributeIndex(String name) {
