@@ -124,6 +124,17 @@ public class AttributeContainer {
     }
 
     /**
+     * Add an attribute if the value is not null.
+     * @param name
+     * @param value
+     */
+    public void addAttributeIfValue(String name, Object value) {
+        if (value != null) {
+            addAttribute(name, value);
+        }
+    }
+
+    /**
      * Add a new attribute by providing an {@link AttributeInfo} object.  {@code AttributeInfo}
      * contains all data about the attribute, including name and value.}
      *
@@ -132,5 +143,15 @@ public class AttributeContainer {
      */
     public void addAttribute(AttributeInfo attributeInfo) {
         attributes.addElement(attributeInfo);
+    }
+
+    /**
+     * Add an attributeInfo if its value is not null.
+     * @param attributeInfo
+     */
+    public void addAttributeIfValue(AttributeInfo attributeInfo) {
+        if (attributeInfo.value != null) {
+            attributes.addElement(attributeInfo);
+        }
     }
 }
