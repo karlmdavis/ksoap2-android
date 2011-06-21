@@ -185,4 +185,44 @@ public class SoapObjectTest extends TestCase {
         assertSame(thinger, soapObject.getPropertySafely("Prop8", thinger));
         assertSame(five, soapObject.getPropertySafely("Prop8", five));
     }
+
+    public void testAddPropertyIfValue() {
+        String name = "NotHere";
+        String value = null;
+        soapObject.addPropertyIfValue(name, value);
+        assertFalse(soapObject.hasProperty(name));
+
+        PropertyInfo propertyInfo = new PropertyInfo();
+        propertyInfo.name = name;
+        propertyInfo.value = value;
+
+        soapObject.addPropertyIfValue(propertyInfo);
+
+        assertFalse(soapObject.hasProperty(name));
+
+        soapObject.addPropertyIfValue(propertyInfo, null);
+        assertFalse(soapObject.hasProperty(name));
+
+        soapObject.addPropertyIfValue(propertyInfo, "GotOne");
+        assertTrue(soapObject.hasProperty(name));
+   }
+
+    public void testAddAttributeIfValue() {
+        String name = "NotHere";
+        String value = null;
+        soapObject.addAttributeIfValue(name, value);
+        assertFalse(soapObject.hasAttribute(name));
+
+        AttributeInfo attributeInfo = new AttributeInfo();
+        attributeInfo.name = name;
+        attributeInfo.value = value;
+
+        soapObject.addAttributeIfValue(attributeInfo);
+
+        assertFalse(soapObject.hasAttribute(name));
+
+        soapObject.addAttribute(name, "GotOne");
+        assertTrue(soapObject.hasAttribute(name));
+    }
+
 }
