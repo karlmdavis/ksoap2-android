@@ -65,8 +65,9 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     public boolean equals(Object obj) {
-        if (!(obj instanceof SoapObject))
+        if (!(obj instanceof SoapObject)) {
             return false;
+        }
 
         SoapObject otherSoapObject = (SoapObject) obj;
 
@@ -145,16 +146,22 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      */
     public Object getProperty(String name) {
         Integer index = propertyIndex(name);
-        if (index != null) return getProperty(index.intValue());
-        else throw new RuntimeException("illegal property: " + name);
+        if (index != null) {
+            return getProperty(index.intValue());
+        } else {
+            throw new RuntimeException("illegal property: " + name);
+        }
     }
 
     /**
      * Knows whether the given property exists
      */
     public boolean hasProperty(final String name) {
-        if (propertyIndex(name) != null) return true;
-        else return false;
+        if (propertyIndex(name) != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -243,12 +250,12 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * @param propertyInfo designated retainer of desired property
      */
     public void getPropertyInfo(int index, PropertyInfo propertyInfo) {
-				PropertyInfo p = (PropertyInfo) properties.elementAt(index);
-				propertyInfo.name = p.name;
-				propertyInfo.namespace = p.namespace;
-				propertyInfo.flags = p.flags;
-				propertyInfo.type = p.type;
-				propertyInfo.elementType = p.elementType;
+        PropertyInfo p = (PropertyInfo) properties.elementAt(index);
+        propertyInfo.name = p.name;
+        propertyInfo.namespace = p.namespace;
+        propertyInfo.flags = p.flags;
+        propertyInfo.type = p.type;
+        propertyInfo.elementType = p.elementType;
     }
 
     /**
@@ -297,6 +304,20 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     /**
+     * Add a property only if the value is not null.
+     * @param name
+     * @param value
+     * @return
+     */
+    public SoapObject addPropertyIfValue(String name, Object value) {
+        if (value != null) {
+            return addProperty(name, value);
+        } else {
+            return this;
+        }
+    }
+
+   /**
      * Adds a property (parameter) to the object. This is essentially a sub element.
      *
      * @param propertyInfo designated retainer of desired property
@@ -310,6 +331,21 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     /**
+     * Add a property only if the value is not null.
+     * @param propertyInfo
+     * @param value
+     * @return
+     */
+    public SoapObject addPropertyIfValue(PropertyInfo propertyInfo,
+                                         Object value) {
+        if (value != null) {
+            return addProperty(propertyInfo, value);
+        } else {
+           return this;
+        }
+    }
+
+    /**
      * Adds a property (parameter) to the object. This is essentially a sub element.
      *
      * @param propertyInfo designated retainer of desired property
@@ -317,6 +353,20 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     public SoapObject addProperty(PropertyInfo propertyInfo) {
         properties.addElement(propertyInfo);
         return this;
+    }
+
+    /**
+     * Ad the propertyInfo only if the value of it is not null.
+     * @param propertyInfo
+     * @return
+     */
+    public SoapObject addPropertyIfValue(PropertyInfo propertyInfo) {
+        if (propertyInfo.value != null) {
+            properties.addElement(propertyInfo);
+            return this;
+        } else {
+            return this;
+        }
     }
 
     /**
