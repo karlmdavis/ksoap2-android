@@ -235,6 +235,29 @@ public class SoapObjectTest extends TestCase {
         String name2 = "NotThere";
         assertEquals("", soapObject.getPropertySafelyAsString(name2));
         assertEquals(value, soapObject.getPropertySafelyAsString(name));
+
+        String anInteger = "AnInteger";
+        String integerValue = "12";
+
+        soapObject.addProperty(anInteger, new Integer(12));
+        assertEquals(integerValue, soapObject.getPropertyAsString(anInteger));
     }
 
+    public void testGetAttributeAsString() {
+       String name = "StringAttribute";
+        String value = "a string";
+        soapObject.addAttribute(name, value);
+
+        assertEquals(value, soapObject.getAttributeAsString(name));
+
+        String name2 = "NotThere";
+        assertEquals("", soapObject.getAttributeSafelyAsString(name2));
+        assertEquals(value, soapObject.getAttributeSafelyAsString(name));
+
+        String anInteger = "AnInteger";
+        String integerValue = "12";
+
+        soapObject.addAttribute(anInteger, new Integer(12));
+        assertEquals(integerValue, soapObject.getAttributeSafelyAsString(anInteger));
+    }
 }

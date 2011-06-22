@@ -28,6 +28,10 @@ public class AttributeContainer {
         return ((AttributeInfo) attributes.elementAt(index)).getValue();
     }
 
+    public String getAttributeAsString(int index) {
+        AttributeInfo attributeInfo = (AttributeInfo) attributes.elementAt(index);
+        return attributeInfo.getValue().toString();
+    }
     /**
      * Get the attribute with the given name
      *
@@ -37,6 +41,16 @@ public class AttributeContainer {
         Integer i = attributeIndex(name);
         if (i != null) return getAttribute(i.intValue());
         else throw new RuntimeException("illegal property: " + name);
+    }
+
+    public String getAttributeAsString(String name) {
+        Integer i = attributeIndex(name);
+        if (i != null) {
+            return getAttribute(i.intValue()).toString();
+        }
+        else {
+            throw new RuntimeException("illegal property: " + name);
+        }
     }
 
     /**
@@ -59,6 +73,15 @@ public class AttributeContainer {
             return getAttribute(i.intValue());
         } else {
             return null;
+        }
+    }
+
+    public Object getAttributeSafelyAsString(String name) {
+        Integer i = attributeIndex(name);
+        if (i != null) {
+            return getAttribute(i.intValue()).toString();
+        } else {
+            return "";
         }
     }
 
