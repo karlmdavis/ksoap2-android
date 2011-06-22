@@ -139,6 +139,11 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return ((PropertyInfo) properties.elementAt(index)).getValue();
     }
 
+    public String getPropertyAsString(int index) {
+        PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(index);
+        return propertyInfo.getValue().toString();
+    }
+
     /**
      * Get the property with the given name
      *
@@ -148,6 +153,20 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         Integer index = propertyIndex(name);
         if (index != null) {
             return getProperty(index.intValue());
+        } else {
+            throw new RuntimeException("illegal property: " + name);
+        }
+    }
+
+    /**
+     * Get the property as String as produced by its toString method.
+     * @param name
+     * @return
+     */
+    public String getPropertyAsString(String name) {
+        Integer index = propertyIndex(name);
+        if (index != null) {
+            return getProperty(index.intValue()).toString();
         } else {
             throw new RuntimeException("illegal property: " + name);
         }
@@ -178,6 +197,15 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         }
     }
 
+    public String getPropertySafelyAsString(final String name) {
+        Integer i = propertyIndex(name);
+        if (i != null) {
+            return getProperty(i.intValue()).toString();
+        } else {
+            return "";
+        }
+    }
+
     /**
      * @deprecated use #getPropertySafely
      */
@@ -198,6 +226,16 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
             return getProperty(i.intValue());
         } else {
             return defaultThing;
+        }
+    }
+
+    public String getPropertySafelyAsString(final String name,
+                                 final Object defaultThing) {
+        Integer i = propertyIndex(name);
+        if (i != null) {
+            return getProperty(i.intValue()).toString();
+        } else {
+            return "";
         }
     }
     /**

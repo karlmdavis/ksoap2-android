@@ -225,4 +225,16 @@ public class SoapObjectTest extends TestCase {
         assertTrue(soapObject.hasAttribute(name));
     }
 
+    public void testGetPropertyAsString() {
+        String name = "StringProperty";
+        String value = "a string";
+        soapObject.addProperty(name, value);
+
+        assertEquals(value, soapObject.getPropertyAsString(name));
+
+        String name2 = "NotThere";
+        assertEquals("", soapObject.getPropertySafelyAsString(name2));
+        assertEquals(value, soapObject.getPropertySafelyAsString(name));
+    }
+
 }
