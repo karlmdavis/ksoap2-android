@@ -28,10 +28,14 @@ public class AttributeContainer {
         return ((AttributeInfo) attributes.elementAt(index)).getValue();
     }
 
+     /**
+     * Get the attribute's toString value.
+     */
     public String getAttributeAsString(int index) {
         AttributeInfo attributeInfo = (AttributeInfo) attributes.elementAt(index);
         return attributeInfo.getValue().toString();
     }
+
     /**
      * Get the attribute with the given name
      *
@@ -43,6 +47,11 @@ public class AttributeContainer {
         else throw new RuntimeException("illegal property: " + name);
     }
 
+    /**
+     * Get the toString value of the attribute with the given name.
+     *
+     * @throws RuntimeException if the attribute does not exist
+     */
     public String getAttributeAsString(String name) {
         Integer i = attributeIndex(name);
         if (i != null) {
@@ -57,14 +66,18 @@ public class AttributeContainer {
      * Knows whether the given attribute exists
      */
     public boolean hasAttribute(final String name) {
-        if (attributeIndex(name) != null) return true;
-        else return false;
+        if (attributeIndex(name) != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
      * Get an attribute without chance of throwing an exception
      *
-     * @param name the name of the attribute to retreive
+     * @param name the name of the attribute to retrieve
      * @return the value of the attribute if it exists; {@code null} if it does not exist
      */
     public Object getAttributeSafely(String name) {
@@ -76,6 +89,14 @@ public class AttributeContainer {
         }
     }
 
+    /**
+     * Get an attributes' toString value without chance of throwing an
+     * exception.
+
+     * @param name
+     * @return the value of the attribute,s toString method if it exists; ""
+     * if it does not exist
+     */
     public Object getAttributeSafelyAsString(String name) {
         Integer i = attributeIndex(name);
         if (i != null) {

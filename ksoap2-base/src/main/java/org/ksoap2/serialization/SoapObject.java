@@ -129,7 +129,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      *
      */
     public Object getNestedSoap(int index){
-        return (SoapObject) nestedSoapObjects.elementAt(index);
+         return (SoapObject) nestedSoapObjects.elementAt(index);
     }
 
     /**
@@ -139,6 +139,11 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         return ((PropertyInfo) properties.elementAt(index)).getValue();
     }
 
+    /**
+     * Get the toString value of the property.
+     * @param index
+     * @return
+     */
     public String getPropertyAsString(int index) {
         PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(index);
         return propertyInfo.getValue().toString();
@@ -159,10 +164,11 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     /**
-     * Get the property as String as produced by its toString method.
+     * Get the toString value of the property.
      * @param name
      * @return
      */
+
     public String getPropertyAsString(String name) {
         Integer index = propertyIndex(name);
         if (index != null) {
@@ -197,6 +203,13 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         }
     }
 
+    /**
+     * Get the toString value of a property without chance of throwing an
+     * exception
+     *
+     * @return the string value of the property  if it exists; if not, "" is
+     * returned
+     */
     public String getPropertySafelyAsString(final String name) {
         Integer i = propertyIndex(name);
         if (i != null) {
@@ -229,13 +242,23 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         }
     }
 
+    /**
+     * Get the toString value of a property without chance of throwing an
+     * exception. An object can be provided to this method; if the property
+     * is not found, this object will be returned.
+     *
+     * @param defaultThing toString of the object to return if the property is
+     * not found
+     * @return the property toString if it exists; defaultThing toString if
+     * the property does not exist
+     */
     public String getPropertySafelyAsString(final String name,
-                                 final Object defaultThing) {
+                             final Object defaultThing) {
         Integer i = propertyIndex(name);
         if (i != null) {
             return getProperty(i.intValue()).toString();
         } else {
-            return "";
+            return defaultThing.toString();
         }
     }
     /**
