@@ -29,6 +29,8 @@ import java.io.*;
  */
 public interface ServiceConnection {
 
+    public static final int DEFAULT_TIMEOUT = 20000; // 20 seconds
+
     /**
      * Make an outgoing connection.
      * 

@@ -46,7 +46,7 @@ abstract public class Transport {
 	 */
 	protected Proxy proxy;
     protected String url;
-    protected int timeout = 20000; // 20 seconds
+    protected int timeout = ServiceConnection.DEFAULT_TIMEOUT;
     /** Set to true if debugging */
     public boolean debug;
     /** String dump of request for debugging. */
@@ -78,6 +78,12 @@ abstract public class Transport {
     public Transport(Proxy proxy, String url) {
     	this.proxy = proxy;
         this.url = url;
+    }
+
+    public Transport(Proxy proxy, String url, int timeout) {
+    	this.proxy = proxy;
+        this.url = url;
+        this.timeout = timeout;
     }
 
     /**

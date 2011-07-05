@@ -44,26 +44,27 @@ public class ServiceConnectionSE implements ServiceConnection {
      * @throws IOException
      */
     public ServiceConnectionSE(String url) throws IOException {
-    	this(null, url);
+    	this(null, url, ServiceConnection.DEFAULT_TIMEOUT);
     }
 
     public ServiceConnectionSE(Proxy proxy, String url) throws IOException {
-    	connection = (proxy == null)
-    		? (HttpURLConnection) new URL(url).openConnection()
-    		: (HttpURLConnection) new URL(url).openConnection(proxy);
-        connection.setUseCaches(false);
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
+    	this(proxy, url, ServiceConnection.DEFAULT_TIMEOUT);
     }
     
     /**
      * Constructor taking the url to the endpoint for this soap communication
      * @param url the url to open the connection to.
      * @param timeout the connection and read timeout for the http connection in milliseconds
-     * @throws IOException
+     * @throws IOException                            // 20 seconds
      */
     public ServiceConnectionSE(String url, int timeout) throws IOException {
-    	connection = (HttpURLConnection) new URL(url).openConnection();
+    	this(null, url, timeout);
+    }
+
+    public ServiceConnectionSE(Proxy proxy, String url, int timeout) throws IOException {
+        connection = (proxy == null)
+            ? (HttpURLConnection) new URL(url).openConnection()
+            : (HttpURLConnection) new URL(url).openConnection(proxy);
         connection.setUseCaches(false);
         connection.setDoOutput(true);
         connection.setDoInput(true);

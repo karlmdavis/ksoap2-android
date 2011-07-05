@@ -75,6 +75,10 @@ public class HttpTransportSE extends Transport {
         super(url, timeout);
     }
 
+    public HttpTransportSE(Proxy proxy, String url, int timeout) {
+        super(proxy, url, timeout);
+    }
+
     /**
      * set the desired soapAction header field
      * 
@@ -185,11 +189,11 @@ public class HttpTransportSE extends Transport {
 	}
 
     protected ServiceConnection getServiceConnection() throws IOException {
-        return new ServiceConnectionSE(proxy, url);
+        return new ServiceConnectionSE(proxy, url, timeout);
     }
 
 	public String getHost() {
-		
+
 		String retVal = null;
 		
 		try {
