@@ -317,6 +317,8 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         propertyInfo.flags = p.flags;
         propertyInfo.type = p.type;
         propertyInfo.elementType = p.elementType;
+        propertyInfo.value = p.value;
+        propertyInfo.multiRef = p.multiRef;
     }
 
     /**
