@@ -31,6 +31,7 @@ import java.net.Proxy;
 import java.net.URL;
 
 import org.ksoap2.*;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.xmlpull.v1.*;
 
 /**
@@ -123,7 +124,12 @@ public class HttpTransportSE extends Transport {
 	    connection = getServiceConnection();
 	    
 	    connection.setRequestProperty("User-Agent", "kSOAP/2.0");
-	    connection.setRequestProperty("SOAPAction", soapAction);
+	    // SOAPAction is not a valid header for VER12 so do not add
+	    // it
+	    // @see "http://code.google.com/p/ksoap2-android/issues/detail?id=67
+	    if (envelope.version != SoapSerializationEnvelope.VER12) {
+            connection.setRequestProperty("SOAPAction", soapAction);
+        }
 	    connection.setRequestProperty("Content-Type", "text/xml");
 	    connection.setRequestProperty("Connection", "close");
 	    connection.setRequestProperty("Content-Length", "" + requestData.length);
