@@ -30,6 +30,7 @@ import org.ksoap2.transport.mock.*;
 
 public class ServiceConnectionFixture implements ServiceConnection {
     public static final String FAULT_MESSAGE_STRING = "The ISBN value contains invalid characters";
+    public static final String FAULT_MESSAGE_STRING_12 ="Authentication failed";
     public static final Class RESPONSE_CLASS = new ComplexResponse().getClass();
     public static final String RESPONSE_CLASS_NAME = "ComplexFunctionResponse";
     private static final String UNKNOWN_CLASS_NAME = "Unknown";
@@ -98,6 +99,21 @@ public class ServiceConnectionFixture implements ServiceConnection {
             "        </soap:Fault>" +
             "     </soap:Body>" +
             "    </soap:Envelope>";
+    
+    public static String FAULT_STRING_12 = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + 
+    		"<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n" + 
+    		"<soap:Body>\n" + 
+    		"<soap:Fault>\n" + 
+    		"<soap:Code>\n" + 
+    		"<soap:Value xmlns:q0=\"http://schemas.xmlsoap.org/envelope/\">q0:Client.AuthenticationFailed</soap:Value>\n" + 
+    		"</soap:Code>\n" + 
+    		"<soap:Reason>\n" + 
+    		"<soap:Text xml:lang=\"en\">Authentication failed</soap:Text>\n" + 
+    		"</soap:Reason>\n" + 
+    		"<soap:Detail />\n" + 
+    		"</soap:Fault>\n" + 
+    		"</soap:Body>\n" + 
+    		"</soap:Envelope>";
 
     // have to see how this one works
     public static String AXIS_FAULT_STRING = "    <?xml version=\"1.0\" encoding=\"UTF-8\"?>" +

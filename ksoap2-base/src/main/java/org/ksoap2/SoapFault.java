@@ -33,6 +33,7 @@ import org.xmlpull.v1.XmlSerializer;
 public class SoapFault extends IOException
 {
 
+	private static final long serialVersionUID = 1011001L;
 	/** The SOAP fault code */
 	public String faultcode;
 	/** The SOAP fault code */
@@ -41,6 +42,20 @@ public class SoapFault extends IOException
 	public String faultactor;
 	/** A KDom Node holding the details of the fault */
 	public Node detail;
+	/** an integer that holds current soap version */
+	public int version;
+	
+	
+	public SoapFault() {
+		super();
+		this.version = SoapEnvelope.VER11;
+	}
+	
+
+	public SoapFault(int version) {
+		super();
+		this.version = version;
+	}
 
 	/** Fills the fault details from the given XML stream */
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException
