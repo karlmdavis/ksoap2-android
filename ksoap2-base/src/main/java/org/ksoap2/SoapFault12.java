@@ -21,7 +21,6 @@
 
 package org.ksoap2;
 
-
 import java.io.IOException;
 
 import org.kxml2.kdom.Node;
@@ -29,17 +28,15 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-
-
 /**
  * Exception class encapsulating SOAP 1.2 Faults
  * 
  * see http://www.w3.org/TR/soap12-part1/#soapfault for explanation of fields
+ *
+ * @author Petter Uvesten
  */
 
-public class SoapFault12 extends SoapFault
-{
-
+public class SoapFault12 extends SoapFault {
 	private static final long serialVersionUID = 1012001L;
 	
 	/** Top-level nodes */
@@ -69,75 +66,47 @@ public class SoapFault12 extends SoapFault
 		this.faultstring = Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
 		this.detail = this.Detail;
 		this.faultactor = null;
-		
-		
 	}
 	
 	
 	private void parseSelf(XmlPullParser parser) throws IOException, XmlPullParserException {
-parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV2003, "Fault");
+        parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV2003, "Fault");
 		
-		while (parser.nextTag() == XmlPullParser.START_TAG)
-		{
-			String name = parser.getName();
-			parser.nextTag();
-			if (name.equals("Code"))
-			{
-				
-				this.Code = new Node();
-				this.Code.parse(parser);
-				
-				
-			}
-			else if (name.equals("Reason"))
-			{
-				this.Reason = new Node();
-				this.Reason.parse(parser);
-				
-				
-				
-			} else if (name.equals("Node"))
-			{
-				this.Node = new Node();
-				this.Node.parse(parser);
-				
-				
-			}
-			else if (name.equals("Role"))
-			{
-				this.Role = new Node();
-				this.Role.parse(parser);
-				
-				
-			}
-			else if (name.equals("Detail"))
-			{
-				this.Detail = new Node();
-				this.Detail.parse(parser);
-				
-				
-			}
-			else
-				throw new RuntimeException("unexpected tag:" + name);
-			
-			parser.require(XmlPullParser.END_TAG, SoapEnvelope.ENV2003, name);
-			
-		}
-		parser.require(XmlPullParser.END_TAG, SoapEnvelope.ENV2003, "Fault");
-		parser.nextTag();
-		
-	}
-	
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+            String name = parser.getName();
+            parser.nextTag();
+            if (name.equals("Code")) {
+                this.Code = new Node();
+                this.Code.parse(parser);
+            } else if (name.equals("Reason")) {
+                this.Reason = new Node();
+                this.Reason.parse(parser);
+            } else if (name.equals("Node")) {
+                this.Node = new Node();
+                this.Node.parse(parser);
+            } else if (name.equals("Role")) {
+                this.Role = new Node();
+                this.Role.parse(parser);
+            } else if (name.equals("Detail")) {
+                this.Detail = new Node();
+                this.Detail.parse(parser);
+            } else {
+                throw new RuntimeException("unexpected tag:" + name);
+            }
 
+            parser.require(XmlPullParser.END_TAG, SoapEnvelope.ENV2003, name);
+        }
+        parser.require(XmlPullParser.END_TAG, SoapEnvelope.ENV2003, "Fault");
+        parser.nextTag();
+
+    }
+	
 	/** Writes the fault to the given XML stream */
 	public void write(XmlSerializer xw) throws IOException
 	{
-		
-		
 		xw.startTag(SoapEnvelope.ENV2003, "Fault");
 		//this.Code.write(xw);
-		
-		
+
 		xw.startTag(SoapEnvelope.ENV2003, "Code");
 		this.Code.write(xw);
 		xw.endTag(SoapEnvelope.ENV2003, "Code");
@@ -161,31 +130,20 @@ parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV2003, "Fault");
 			this.Detail.write(xw);
 			xw.endTag(SoapEnvelope.ENV2003, "Detail");
 		}
-		
-		
-		
-		
 		xw.endTag(SoapEnvelope.ENV2003, "Fault");
 	}
 
 	/**
 	 * @see java.lang.Throwable#getMessage()
 	 */
-	public String getMessage()
-	{
+	public String getMessage() {
 		return Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
 	}
 
 	/** Returns a string representation of the fault */
-	public String toString()
-	{
-		
-        
+	public String toString() {
         String reason = Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
-        
         String code = Code.getElement(SoapEnvelope.ENV2003, "Value").getText(0);
-        
-       
 		return "Code: " + code + ", Reason: " + reason;
 	}
 }

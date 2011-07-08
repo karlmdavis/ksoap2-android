@@ -30,8 +30,7 @@ import org.xmlpull.v1.XmlSerializer;
  * Exception class encapsulating SOAP Faults
  */
 
-public class SoapFault extends IOException
-{
+public class SoapFault extends IOException {
 
 	private static final long serialVersionUID = 1011001L;
 	/** The SOAP fault code */
@@ -44,13 +43,11 @@ public class SoapFault extends IOException
 	public Node detail;
 	/** an integer that holds current soap version */
 	public int version;
-	
-	
+
 	public SoapFault() {
 		super();
 		this.version = SoapEnvelope.VER11;
 	}
-	
 
 	public SoapFault(int version) {
 		super();
@@ -61,26 +58,24 @@ public class SoapFault extends IOException
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException
 	{
 		parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV, "Fault");
-		while (parser.nextTag() == XmlPullParser.START_TAG)
-		{
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
 			String name = parser.getName();
-			if (name.equals("detail"))
-			{
+			if (name.equals("detail")) {
 				detail = new Node();
 				detail.parse(parser);
 				// Handle case '...<detail/></soap:Fault>'
 				if ( parser.getNamespace().equals( SoapEnvelope.ENV ) && parser.getName().equals( "Fault" ) )
 					break;
 				continue;
-			}
-			else if (name.equals("faultcode"))
-				faultcode = parser.nextText();
-			else if (name.equals("faultstring"))
+			} else if (name.equals("faultcode")) {
+                faultcode = parser.nextText();
+            } else if (name.equals("faultstring")) {
 				faultstring = parser.nextText();
-			else if (name.equals("faultactor"))
+            } else if (name.equals("faultactor")) {
 				faultactor = parser.nextText();
-			else
+            } else {
 				throw new RuntimeException("unexpected tag:" + name);
+            }
 			parser.require(XmlPullParser.END_TAG, null, name);
 		}
 		parser.require(XmlPullParser.END_TAG, SoapEnvelope.ENV, "Fault");
@@ -107,15 +102,15 @@ public class SoapFault extends IOException
 	/**
 	 * @see java.lang.Throwable#getMessage()
 	 */
-	public String getMessage()
-	{
+	public String getMessage() {
 		return faultstring;
 	}
 
 	/** Returns a simple string representation of the fault */
 	public String toString()
 	{
-		return "SoapFault - faultcode: '" + faultcode + "' faultstring: '" + faultstring + "' faultactor: '"
-				+ faultactor + "' detail: " + detail;
+		return "SoapFault - faultcode: '" + faultcode + "' faultstring: '"
+            + faultstring + "' faultactor: '" + faultactor + "' detail: " +
+            detail;
 	}
 }
