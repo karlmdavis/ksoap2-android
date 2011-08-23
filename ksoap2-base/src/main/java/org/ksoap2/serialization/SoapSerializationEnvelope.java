@@ -718,7 +718,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		// This removes the arrayType attribute from the xml for arrays(required for most .Net services to work)
 		if(!implicitTypes)
 		{
-    		     writer.attribute(enc, ARRAY_TYPE_LABEL, writer.getPrefix((String) arrType[0], false) + ":"
+             writer.attribute(enc, ARRAY_TYPE_LABEL, writer.getPrefix((String) arrType[0], false) + ":"
     				+ arrType[1] + "[" + cnt + "]");
 		}
 		
