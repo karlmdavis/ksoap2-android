@@ -260,14 +260,13 @@ public class SoapSerializationEnvelopeTest extends TestCase {
 
     public void testWritingBody_NullBody() throws IOException {
         envelope.setOutputSoapObject(null);
-        try {
-            envelope.writeBody(xmlWriter);
-            fail();
-        }
-        catch (NullPointerException e) {
-            // TODO: This should probably do something intelligent instead of
-            // throwing a null pointer exception
-        }
+        envelope.writeBody(xmlWriter);
+        // null body no longer fails
+    }
+
+    public void testWritingBody_SetEmpty() throws IOException {
+        envelope.setBodyOutEmpty(true);
+        envelope.writeBody(xmlWriter);
     }
 
     public void testWritingBody_EmptyBody() throws Exception {
