@@ -112,6 +112,18 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		this.addAdornments = addAdornments;
 	}
 
+    /**
+     * Set the bodyOut to be empty so that no un-needed xml is create. The null value for bodyOut will
+     * cause #writeBody to skip writing anything redundant.
+     * @param emptyBody
+     * @see "http://code.google.com/p/ksoap2-android/issues/detail?id=77"
+     */
+    public void setBodyOutEmpty(boolean emptyBody) {
+        if (emptyBody) {
+            bodyOut = null;
+        }
+    }
+
 	public void parseBody(XmlPullParser parser) throws IOException, XmlPullParserException
 	{
 		bodyIn = null;
@@ -587,22 +599,25 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 */
 	public void writeBody(XmlSerializer writer) throws IOException
 	{
-		multiRef = new Vector();
-		multiRef.addElement(bodyOut);
-		Object[] qName = getInfo(null, bodyOut);
-		writer.startTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
-		if (dotNet)
-		{
-			writer.attribute(null, "xmlns", (String) qName[QNAME_NAMESPACE]);
-		}
-		if (addAdornments)
-		{
-			writer.attribute(null, ID_LABEL, qName[2] == null ? ("o" + 0) : (String) qName[2]);
-			writer.attribute(enc, ROOT_LABEL, "1");
-		}
-		writeElement(writer, bodyOut, null, qName[QNAME_MARSHAL]);
-		writer.endTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
-
+		// allow an empty body without any tags in it
+		// see http://code.google.com/p/ksoap2-android/issues/detail?id=77
+		if (bodyOut != null) {
+            multiRef = new Vector();
+            multiRef.addElement(bodyOut);
+            Object[] qName = getInfo(null, bodyOut);
+            writer.startTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
+            if (dotNet)
+            {
+                writer.attribute(null, "xmlns", (String) qName[QNAME_NAMESPACE]);
+            }
+            if (addAdornments)
+            {
+                writer.attribute(null, ID_LABEL, qName[2] == null ? ("o" + 0) : (String) qName[2]);
+                writer.attribute(enc, ROOT_LABEL, "1");
+            }
+            writeElement(writer, bodyOut, null, qName[QNAME_MARSHAL]);
+            writer.endTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
+        }
 	}
 
 	/**
