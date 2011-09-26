@@ -30,6 +30,7 @@ import java.io.*;
 import javax.microedition.io.*;
 
 import org.ksoap2.*;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.xmlpull.v1.*;
 
 import java.net.MalformedURLException;
@@ -146,6 +147,11 @@ public class HttpTransport extends Transport {
             connected = true;
             connection = getServiceConnection();
             connection.setRequestProperty("SOAPAction", soapAction);
+            if (envelope.version == SoapSerializationEnvelope.VER12) {
+                connection.setRequestProperty("Content-Type", "application/soap+xml");
+            } else {
+                connection.setRequestProperty("Content-Type", "text/xml");
+            }
             connection.setRequestProperty("Content-Type", "text/xml");
             connection.setRequestProperty("Content-Length", "" + requestData.length);
             connection.setRequestProperty("User-Agent", "kSOAP/2.0");
