@@ -123,7 +123,7 @@ public class HttpTransportSE extends Transport {
 	    
 	    connection = getServiceConnection();
 	    
-	    connection.setRequestProperty("User-Agent", "kSOAP/2.0");
+	    connection.setRequestProperty("User-Agent", USER_AGENT);
 	    // SOAPAction is not a valid header for VER12 so do not add
 	    // it
 	    // @see "http://code.google.com/p/ksoap2-android/issues/detail?id=67
@@ -132,9 +132,9 @@ public class HttpTransportSE extends Transport {
         }
 
         if (envelope.version == SoapSerializationEnvelope.VER12) {
-            connection.setRequestProperty("Content-Type", "application/soap+xml");
+            connection.setRequestProperty("Content-Type", CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8);
         } else {
-            connection.setRequestProperty("Content-Type", "text/xml");
+            connection.setRequestProperty("Content-Type", CONTENT_TYPE_XML_CHARSET_UTF_8);
         }
 
 	    connection.setRequestProperty("Connection", "close");

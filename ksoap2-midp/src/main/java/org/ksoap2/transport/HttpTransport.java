@@ -148,13 +148,12 @@ public class HttpTransport extends Transport {
             connection = getServiceConnection();
             connection.setRequestProperty("SOAPAction", soapAction);
             if (envelope.version == SoapSerializationEnvelope.VER12) {
-                connection.setRequestProperty("Content-Type", "application/soap+xml");
+                connection.setRequestProperty("Content-Type", CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8);
             } else {
-                connection.setRequestProperty("Content-Type", "text/xml");
+                connection.setRequestProperty("Content-Type", CONTENT_TYPE_XML_CHARSET_UTF_8);
             }
-            connection.setRequestProperty("Content-Type", "text/xml");
             connection.setRequestProperty("Content-Length", "" + requestData.length);
-            connection.setRequestProperty("User-Agent", "kSOAP/2.0");
+            connection.setRequestProperty("User-Agent", USER_AGENT);
             
             if (headers != null) {
             	for (int i = 0; i < headers.size(); i++) {

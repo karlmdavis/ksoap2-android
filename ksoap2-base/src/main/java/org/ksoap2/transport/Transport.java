@@ -39,7 +39,7 @@ import org.xmlpull.v1.*;
  */
 abstract public class Transport {
 
-	/** 
+	/**
 	 * Added to enable web service interactions on the emulator 
 	 * to be debugged with Fiddler2 (Windows) but provides utility 
 	 * for other proxy requirements.
@@ -54,7 +54,11 @@ abstract public class Transport {
     /** String dump of response for debugging */
     public String responseDump;
     private String xmlVersionTag = "";
-    
+
+    protected static final String CONTENT_TYPE_XML_CHARSET_UTF_8 = "text/xml;charset=utf-8";
+    protected static final String CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8 = "application/soap+xml;charset=utf-8";
+    protected static final String USER_AGENT = "ksoap2-android/2.6.0+";
+
     public Transport() {
     }
 
