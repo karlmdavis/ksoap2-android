@@ -134,7 +134,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
 	}
 
 	/**
-     * @depreciated use #getProperty
+     * @deprecated use #getProperty
      */
 	public Object getNestedSoap(int index) {
 		return getProperty(index);

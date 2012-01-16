@@ -578,7 +578,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			}
 			return ret;
 		}
-		//return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
 	}
 
 	/**
