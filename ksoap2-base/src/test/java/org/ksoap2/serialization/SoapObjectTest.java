@@ -71,9 +71,8 @@ public class SoapObjectTest extends TestCase {
 		SoapObject multipleAddresses = new SoapObject("namespace", "name");
 		multipleAddresses.addProperty("address", "941 Wealthy");
 		multipleAddresses.addProperty("address", "942 Wealthy");
-		// TODO: This test shows that SoapObject.equals is broken. See comment
-		// in source.
-		// assertTrue(multipleAddresses.equals(multipleAddresses));
+
+		assertTrue(multipleAddresses.equals(multipleAddresses));
 
 		// Different number of attributes should result in equals returning
 		// false
