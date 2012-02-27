@@ -191,7 +191,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 				{
 					if (countdown-- == 0)
 					{
-						throw new RuntimeException("Unknown Property: " + name);
+						// If we don't know such a property - simply skip it
+						break;
 					}
 					if (++testIndex >= propertyCount)
 					{
@@ -205,7 +206,14 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 						break;
 					}
 				}
-				obj.setProperty(testIndex, read(parser, obj, testIndex, null, null, info));
+				
+				// Set object's property if it is known for us
+				if (countdown >= 0) {
+					obj.setProperty(testIndex, read(parser, obj, testIndex, null, null, info));
+				} else {
+					// Dummy loop to read until corresponding END tag
+					while (parser.next() != XmlPullParser.END_TAG || !name.equals(parser.getName())){};
+				}
 			}
 			else
 			{
