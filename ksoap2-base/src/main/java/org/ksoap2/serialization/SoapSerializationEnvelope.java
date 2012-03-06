@@ -68,28 +68,22 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 * .Net-Services. This feature is an extremely ugly hack. A much better option is to change the
 	 * configuration of the .Net-Server to standard Soap Serialization!
 	 */
-
 	public boolean dotNet;
 
 	/**
 	 * Set this variable to true if you prefer to silently skip unknown
-	 * properties.
-	 * <p>
-	 * {@link RuntimeException} will be thrown otherwise.
+	 * properties. Otherwise a  {@link RuntimeException} will be thrown.
 	 */
-
-	public boolean avoidExceptionForUnknownProperty;
+	public boolean avoidExceptionForUnknownProperty = false;
 
 	/**
 	 * Map from XML qualified names to Java classes
 	 */
-
 	protected Hashtable qNameToClass = new Hashtable();
 
 	/**
 	 * Map from Java class names to XML name and namespace pairs
 	 */
-
 	protected Hashtable classToQName = new Hashtable();
 
 	/**
