@@ -29,6 +29,7 @@
 	</issueManagement>
 
 	<modules>
+        <module>build-tools</module>
 		<module>ksoap2-base</module>
 		<module>ksoap2-android</module>
 		<module>ksoap2-android-assembly</module>
