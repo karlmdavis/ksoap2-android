@@ -166,18 +166,18 @@ public class SoapEnvelope {
         // insert fault generation code here
         if (parser.getEventType() == XmlPullParser.START_TAG && parser.getNamespace().equals(env) && parser.getName().equals("Fault")) {
 
-        	SoapFault fault;
-        	if (this.version < SoapEnvelope.VER12) {
-        		fault = new SoapFault(this.version);
-        	} else {
-        		fault = new SoapFault12(this.version);
-        	}
-        	fault.parse(parser);
-        	bodyIn = fault;
+            SoapFault fault;
+            if (this.version < SoapEnvelope.VER12) {
+                fault = new SoapFault(this.version);
+            } else {
+                fault = new SoapFault12(this.version);
+            }
+            fault.parse(parser);
+            bodyIn = fault;
         } else {
-        	Node node = (bodyIn instanceof Node) ? (Node) bodyIn : new Node();
-        	node.parse(parser);
-        	bodyIn = node;
+            Node node = (bodyIn instanceof Node) ? (Node) bodyIn : new Node();
+            node.parse(parser);
+            bodyIn = node;
         }
     }
 

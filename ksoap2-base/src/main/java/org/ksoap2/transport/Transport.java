@@ -39,12 +39,12 @@ import org.xmlpull.v1.*;
  */
 abstract public class Transport {
 
-	/**
-	 * Added to enable web service interactions on the emulator 
-	 * to be debugged with Fiddler2 (Windows) but provides utility 
-	 * for other proxy requirements.
-	 */
-	protected Proxy proxy;
+    /**
+     * Added to enable web service interactions on the emulator
+     * to be debugged with Fiddler2 (Windows) but provides utility
+     * for other proxy requirements.
+     */
+    protected Proxy proxy;
     protected String url;
     protected int timeout = ServiceConnection.DEFAULT_TIMEOUT;
     /** Set to true if debugging */
@@ -63,14 +63,14 @@ abstract public class Transport {
     }
 
     public Transport(String url) {
-		this(null, url);
+        this(null, url);
     }
-    
+
     public Transport(String url, int timeout) {
         this.url = url;
         this.timeout = timeout;
     }
-    
+
     /**
      * Construct the transport object
      * 
@@ -80,12 +80,12 @@ abstract public class Transport {
      * 
      */
     public Transport(Proxy proxy, String url) {
-    	this.proxy = proxy;
+        this.proxy = proxy;
         this.url = url;
     }
 
     public Transport(Proxy proxy, String url, int timeout) {
-    	this.proxy = proxy;
+        this.proxy = proxy;
         this.url = url;
         this.timeout = timeout;
     }
@@ -142,7 +142,7 @@ abstract public class Transport {
      */
     public void reset() {
     }
-    
+
     /**
      * Perform a soap call with a given namespace and the given envelope providing
      * any extra headers that the user requires such as cookies. Headers that are
@@ -154,7 +154,7 @@ abstract public class Transport {
      * @param envelope
      *            the envelope the contains the information for the call.
      * @param headers
-     * 			  <code>List</code> of <code>HeaderProperty</code> headers to send with the SOAP request.
+     *   <code>List</code> of <code>HeaderProperty</code> headers to send with the SOAP request.
      * 
      * @return Headers returned by the web service as a <code>List</code> of
      * <code>HeaderProperty</code> instances.
@@ -170,27 +170,27 @@ abstract public class Transport {
      *            the envelope the contains the information for the call.
      */
     public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException {
-		call(targetNamespace, envelope, null);
+        call(targetNamespace, envelope, null);
      }
 
-	/**
-	 * Return the name of the host that is specified as the web service target
-	 * 
-	 * @return Host name
-	 */
-	abstract public String getHost();
+    /**
+     * Return the name of the host that is specified as the web service target
+     *
+     * @return Host name
+     */
+    abstract public String getHost();
 
-	/**
-	 * Return the port number of the host that is specified as the web service target
-	 * 
-	 * @return Port number
-	 */
-	abstract public int getPort();
+    /**
+     * Return the port number of the host that is specified as the web service target
+     *
+     * @return Port number
+     */
+    abstract public int getPort();
 
-	/**
-	 * Return the path to the web service target
-	 * 
-	 * @return The URL's path
-	 */
-	abstract public String getPath();
+    /**
+     * Return the path to the web service target
+     *
+     * @return The URL's path
+     */
+    abstract public String getPath();
 }

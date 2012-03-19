@@ -37,42 +37,42 @@ import org.xmlpull.v1.XmlSerializer;
  */
 
 public class SoapFault12 extends SoapFault {
-	private static final long serialVersionUID = 1012001L;
-	
-	/** Top-level nodes */
-	public Node Code;
-	public Node Reason;
-	public Node Node;
-	public Node Role;
-	public Node Detail;
-	
-	public SoapFault12() {
-		super();
-		this.version = SoapEnvelope.VER12;
-	}
-	
-	public SoapFault12(int version) {
-		super();
-		this.version = version;
-	}
-	
+    private static final long serialVersionUID = 1012001L;
+                    
+    /** Top-level nodes */
+    public Node Code;
+    public Node Reason;
+    public Node Node;
+    public Node Role;
+    public Node Detail;
+                    
+    public SoapFault12() {
+        super();
+        this.version = SoapEnvelope.VER12;
+    }
+                    
+    public SoapFault12(int version) {
+        super();
+        this.version = version;
+    }
+                    
 
-	/** Fills the fault details from the given XML stream */
-	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException
-	{
-		parseSelf(parser);
-		// done parsing, populate some of the legacy public members
-		this.faultcode = Code.getElement(SoapEnvelope.ENV2003, "Value").getText(0);
-		this.faultstring = Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
-		this.detail = this.Detail;
-		this.faultactor = null;
-	}
-	
-	
-	private void parseSelf(XmlPullParser parser) throws IOException, XmlPullParserException {
+    /** Fills the fault details from the given XML stream */
+    public void parse(XmlPullParser parser) throws IOException, XmlPullParserException
+    {
+        parseSelf(parser);
+        // done parsing, populate some of the legacy public members
+        this.faultcode = Code.getElement(SoapEnvelope.ENV2003, "Value").getText(0);
+        this.faultstring = Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
+        this.detail = this.Detail;
+        this.faultactor = null;
+    }
+                    
+                    
+    private void parseSelf(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV2003, "Fault");
-		
-		while (parser.nextTag() == XmlPullParser.START_TAG) {
+                                        
+        while (parser.nextTag() == XmlPullParser.START_TAG) {
             String name = parser.getName();
             parser.nextTag();
             if (name.equals("Code")) {
@@ -100,50 +100,50 @@ public class SoapFault12 extends SoapFault {
         parser.nextTag();
 
     }
-	
-	/** Writes the fault to the given XML stream */
-	public void write(XmlSerializer xw) throws IOException
-	{
-		xw.startTag(SoapEnvelope.ENV2003, "Fault");
-		//this.Code.write(xw);
+                    
+    /** Writes the fault to the given XML stream */
+    public void write(XmlSerializer xw) throws IOException
+    {
+        xw.startTag(SoapEnvelope.ENV2003, "Fault");
+        //this.Code.write(xw);
 
-		xw.startTag(SoapEnvelope.ENV2003, "Code");
-		this.Code.write(xw);
-		xw.endTag(SoapEnvelope.ENV2003, "Code");
-		xw.startTag(SoapEnvelope.ENV2003, "Reason");
-		this.Reason.write(xw);
-		xw.endTag(SoapEnvelope.ENV2003, "Reason");
-		
-		if (this.Node != null) {
-			xw.startTag(SoapEnvelope.ENV2003, "Node");
-			this.Node.write(xw);
-			xw.endTag(SoapEnvelope.ENV2003, "Node");
-		}
-		if (this.Role != null) {
-			xw.startTag(SoapEnvelope.ENV2003, "Role");
-			this.Role.write(xw);
-			xw.endTag(SoapEnvelope.ENV2003, "Role");
-		}
-		
-		if (this.Detail != null) {
-			xw.startTag(SoapEnvelope.ENV2003, "Detail");
-			this.Detail.write(xw);
-			xw.endTag(SoapEnvelope.ENV2003, "Detail");
-		}
-		xw.endTag(SoapEnvelope.ENV2003, "Fault");
-	}
+        xw.startTag(SoapEnvelope.ENV2003, "Code");
+        this.Code.write(xw);
+        xw.endTag(SoapEnvelope.ENV2003, "Code");
+        xw.startTag(SoapEnvelope.ENV2003, "Reason");
+        this.Reason.write(xw);
+        xw.endTag(SoapEnvelope.ENV2003, "Reason");
+                                        
+        if (this.Node != null) {
+            xw.startTag(SoapEnvelope.ENV2003, "Node");
+            this.Node.write(xw);
+            xw.endTag(SoapEnvelope.ENV2003, "Node");
+        }
+        if (this.Role != null) {
+            xw.startTag(SoapEnvelope.ENV2003, "Role");
+            this.Role.write(xw);
+            xw.endTag(SoapEnvelope.ENV2003, "Role");
+        }
+                                        
+        if (this.Detail != null) {
+            xw.startTag(SoapEnvelope.ENV2003, "Detail");
+            this.Detail.write(xw);
+            xw.endTag(SoapEnvelope.ENV2003, "Detail");
+        }
+        xw.endTag(SoapEnvelope.ENV2003, "Fault");
+    }
 
-	/**
-	 * @see java.lang.Throwable#getMessage()
-	 */
-	public String getMessage() {
-		return Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
-	}
+    /**
+     * @see java.lang.Throwable#getMessage()
+     */
+    public String getMessage() {
+        return Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
+    }
 
-	/** Returns a string representation of the fault */
-	public String toString() {
+    /** Returns a string representation of the fault */
+    public String toString() {
         String reason = Reason.getElement(SoapEnvelope.ENV2003, "Text").getText(0);
         String code = Code.getElement(SoapEnvelope.ENV2003, "Value").getText(0);
-		return "Code: " + code + ", Reason: " + reason;
-	}
+        return "Code: " + code + ", Reason: " + reason;
+    }
 }
