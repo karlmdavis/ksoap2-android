@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 public class KeepAliveHttpsTransportSE extends HttpsTransportSE
 {
-	private HttpsServiceConnectionSE conn = null;
+    private HttpsServiceConnectionSE conn = null;
     private final String host;
     private final int port;
     private final String file;
@@ -37,15 +37,15 @@ public class KeepAliveHttpsTransportSE extends HttpsTransportSE
         this.timeout = timeout;
     }
 
-	/**
-	 * Get a service connection. Returns an implementation of {@link org.ksoap2.transport.ServiceConnectionSE} that
+    /**
+     * Get a service connection. Returns an implementation of {@link org.ksoap2.transport.ServiceConnectionSE} that
      * ignores "Connection: close" request property setting and has "Connection: keep-alive" always set and is uses
      * a https connection.
      * @see org.ksoap2.transport.HttpTransportSE#getServiceConnection()
-	 */
-	//@Override
-	protected ServiceConnection getServiceConnection() throws IOException
-	{
+     */
+    //@Override
+    protected ServiceConnection getServiceConnection() throws IOException
+    {
         conn = new HttpsServiceConnectionSE(host, port, file, timeout)
         {
             //@Override
@@ -61,5 +61,5 @@ public class KeepAliveHttpsTransportSE extends HttpsTransportSE
         };
         conn.setRequestProperty("Connection", "keep-alive");
         return conn;
-	}
+    }
 }

@@ -50,27 +50,27 @@ public class HttpTransportSE extends Transport {
     public HttpTransportSE(String url) {
         super(null, url);
     }
-    
+        
     /**
      * Creates instance of HttpTransportSE with set url and defines a
      * proxy server to use to access it
      * 
      * @param proxy
-     * 				Proxy information or <code>null</code> for direct access
+     * Proxy information or <code>null</code> for direct access
      * @param url
-     * 				The destination to POST SOAP data
+     * The destination to POST SOAP data
      */
     public HttpTransportSE(Proxy proxy, String url) {
-    	super(proxy, url);
+        super(proxy, url);
     }
-    
+        
     /**
      * Creates instance of HttpTransportSE with set url
      * 
      * @param url
      *            the destination to POST SOAP data
      * @param timeout
-     * 			  timeout for connection and Read Timeouts (milliseconds)
+     *   timeout for connection and Read Timeouts (milliseconds)
      */
     public HttpTransportSE(String url, int timeout) {
         super(url, timeout);
@@ -91,43 +91,43 @@ public class HttpTransportSE extends Transport {
      * @throws XmlPullParserException
      */
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
-    	
-    	call(soapAction, envelope, null);
+            
+        call(soapAction, envelope, null);
     }
 
-	/**
-	 * 
+    /**
+     * 
      * set the desired soapAction header field
      * 
      * @param soapAction
-     *            	the desired soapAction
+     *            the desired soapAction
      * @param envelope
-     *            	the envelope containing the information for the soap call.
+     *            the envelope containing the information for the soap call.
      * @param headers
      *              a list of HeaderProperties to be http header properties when establishing the connection
-     * 				           
+     *            
      * @return <code>CookieJar</code> with any cookies sent by the server
      * @throws IOException
      * @throws XmlPullParserException
-	 */
+     */
     public List call(String soapAction, SoapEnvelope envelope, List headers) 
-		throws IOException, XmlPullParserException {
+        throws IOException, XmlPullParserException {
 
-		if (soapAction == null)
-			soapAction = "\"\"";
+        if (soapAction == null)
+            soapAction = "\"\"";
 
-		byte[] requestData = createRequestData(envelope);
-	    
-		requestDump = debug ? new String(requestData) : null;
-	    responseDump = null;
-	    
-	    connection = getServiceConnection();
-	    
-	    connection.setRequestProperty("User-Agent", USER_AGENT);
-	    // SOAPAction is not a valid header for VER12 so do not add
-	    // it
-	    // @see "http://code.google.com/p/ksoap2-android/issues/detail?id=67
-	    if (envelope.version != SoapSerializationEnvelope.VER12) {
+        byte[] requestData = createRequestData(envelope);
+            
+        requestDump = debug ? new String(requestData) : null;
+        responseDump = null;
+            
+        connection = getServiceConnection();
+            
+        connection.setRequestProperty("User-Agent", USER_AGENT);
+        // SOAPAction is not a valid header for VER12 so do not add
+        // it
+        // @see "http://code.google.com/p/ksoap2-android/issues/detail?id=67
+        if (envelope.version != SoapSerializationEnvelope.VER12) {
             connection.setRequestProperty("SOAPAction", soapAction);
         }
 
@@ -137,109 +137,109 @@ public class HttpTransportSE extends Transport {
             connection.setRequestProperty("Content-Type", CONTENT_TYPE_XML_CHARSET_UTF_8);
         }
 
-	    connection.setRequestProperty("Connection", "close");
-	    connection.setRequestProperty("Content-Length", "" + requestData.length);
-	    
-	    // Pass the headers provided by the user along with the call
-	    if (headers != null) {
-		    for (int i = 0; i < headers.size(); i++) {
-		    	HeaderProperty hp = (HeaderProperty) headers.get(i);
-		    	connection.setRequestProperty(hp.getKey(), hp.getValue());
-		    }
-	    }
-	    
-	    connection.setRequestMethod("POST");
-	    connection.connect();
-    
+        connection.setRequestProperty("Connection", "close");
+        connection.setRequestProperty("Content-Length", "" + requestData.length);
+            
+        // Pass the headers provided by the user along with the call
+        if (headers != null) {
+            for (int i = 0; i < headers.size(); i++) {
+                HeaderProperty hp = (HeaderProperty) headers.get(i);
+                connection.setRequestProperty(hp.getKey(), hp.getValue());
+            }
+        }
+            
+        connection.setRequestMethod("POST");
+        connection.connect();
+        
 
-	    OutputStream os = connection.openOutputStream();
-   
-	    os.write(requestData, 0, requestData.length);
-	    os.flush();
-	    os.close();
-	    requestData = null;
-	    InputStream is;
-	    List retHeaders = null;
-	    
-	    try {
-	    	connection.connect();
-	    	is = connection.openInputStream();
-		    retHeaders = connection.getResponseProperties();
-	    } catch (IOException e) {
-	    	is = connection.getErrorStream();
+        OutputStream os = connection.openOutputStream();
+      
+        os.write(requestData, 0, requestData.length);
+        os.flush();
+        os.close();
+        requestData = null;
+        InputStream is;
+        List retHeaders = null;
+            
+        try {
+            connection.connect();
+            is = connection.openInputStream();
+            retHeaders = connection.getResponseProperties();
+        } catch (IOException e) {
+            is = connection.getErrorStream();
 
-	    	if (is == null) {
-	    		connection.disconnect();
-	    		throw (e);
-	    	}
-	    }
-    
-		if (debug) {
-	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	        byte[] buf = new byte[256];
-	        
-	        while (true) {
-	            int rd = is.read(buf, 0, 256);
-	            if (rd == -1)
-	                break;
-	            bos.write(buf, 0, rd);
-	        }
-	        
-	        bos.flush();
-	        buf = bos.toByteArray();
-	        responseDump = new String(buf);
-	        is.close();
-	        is = new ByteArrayInputStream(buf);
-	    }
-   
-	    parseResponse(envelope, is);
-	    return retHeaders;
-	}
+            if (is == null) {
+                connection.disconnect();
+                throw (e);
+            }
+        }
+        
+        if (debug) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[256];
+                    
+            while (true) {
+                int rd = is.read(buf, 0, 256);
+                if (rd == -1)
+                    break;
+                bos.write(buf, 0, rd);
+            }
+                    
+            bos.flush();
+            buf = bos.toByteArray();
+            responseDump = new String(buf);
+            is.close();
+            is = new ByteArrayInputStream(buf);
+        }
+      
+        parseResponse(envelope, is);
+        return retHeaders;
+    }
 
-	public ServiceConnection getConnection() {
-		return (ServiceConnectionSE) connection;
-	}
+    public ServiceConnection getConnection() {
+        return (ServiceConnectionSE) connection;
+    }
 
     protected ServiceConnection getServiceConnection() throws IOException {
         return new ServiceConnectionSE(proxy, url, timeout);
     }
 
-	public String getHost() {
+    public String getHost() {
 
-		String retVal = null;
-		
-		try {
-			retVal = new URL(url).getHost();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+        String retVal = null;
+        
+        try {
+            retVal = new URL(url).getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        
+        return retVal;
     }
-    
-	public int getPort() {
-		
-		int retVal = -1;
-		
-		try {
-			retVal = new URL(url).getPort();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+        
+    public int getPort() {
+        
+        int retVal = -1;
+        
+        try {
+            retVal = new URL(url).getPort();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        
+        return retVal;
     }
-    
-	public String getPath() {
-		
-		String retVal = null;
-		
-		try {
-			retVal = new URL(url).getPath();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+        
+    public String getPath() {
+        
+        String retVal = null;
+        
+        try {
+            retVal = new URL(url).getPath();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        
+        return retVal;
     }
 }

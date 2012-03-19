@@ -11,38 +11,38 @@ import org.ksoap2.transport.*;
 
 
 public class SoapDemo extends MIDlet implements CommandListener{
-    
+
     private Display display;
-    
+
     Form mainForm = new Form ("Hello World WebService");
     TextField nameField = new TextField ("Your name","",456,TextField.ANY);
     Command getCommand = new Command ("send", Command.SCREEN, 1);
 
     public SoapDemo () {
-    	mainForm.append (nameField);
-    	mainForm.addCommand (getCommand);
-    	mainForm.setCommandListener (this);
+        mainForm.append (nameField);
+        mainForm.addCommand (getCommand);
+        mainForm.setCommandListener (this);
     }
-    
+
     public void startApp() {
         display = Display.getDisplay (this);
         display.setCurrent (mainForm);
   }
-    
+
     public void pauseApp() {
     }
-    
+
     public void destroyApp(boolean unconditional) {
     }
-    
+
 
     public void commandAction(Command c, Displayable s) {
         if (c == getCommand) {
-         	final TextBox t = new TextBox("", "", 256, 0);            
-        	Thread thr = new Thread(){
-        	    public void run() {    
-        	try {
-             
+            final TextBox t = new TextBox("", "", 256, 0);
+            Thread thr = new Thread(){
+                public void run() {
+            try {
+
                 SoapObject client = new
                 SoapObject("","getObject");
                 client.addProperty("name",nameField.getString());
@@ -64,8 +64,8 @@ public class SoapDemo extends MIDlet implements CommandListener{
                 e.printStackTrace();
                 t.setString(e.getMessage());
             }
-           	}};
-           	thr.start();
+            }};
+            thr.start();
             display.setCurrent(t);
         }
         else{

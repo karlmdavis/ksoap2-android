@@ -29,7 +29,7 @@ import javax.microedition.io.*;
 import org.ksoap2.HeaderProperty;
 
 public class ServiceConnectionMidp implements ServiceConnection {
-	
+    
     private HttpConnection connection;
 
     public ServiceConnectionMidp(String url) throws IOException {
@@ -42,20 +42,20 @@ public class ServiceConnectionMidp implements ServiceConnection {
 
     public List getResponseProperties() {
 
-    	List retList = new LinkedList();
-    	int i = 0;
-    	String key;
-    	
-    	try {
-	    	while (null != (key = connection.getHeaderFieldKey(i++))) {
-	    		retList.add(new HeaderProperty(key, connection.getHeaderField(i)));
-	    	}
-	    	
-    	} catch (IOException exp) {
-    		// Absorb errors - if this fails then cookies are the the least of our worries
-    	}
-    	
-    	return retList;
+        List retList = new LinkedList();
+        int i = 0;
+        String key;
+            
+        try {
+            while (null != (key = connection.getHeaderFieldKey(i++))) {
+                retList.add(new HeaderProperty(key, connection.getHeaderField(i)));
+            }
+                
+        } catch (IOException exp) {
+            // Absorb errors - if this fails then cookies are the the least of our worries
+        }
+            
+        return retList;
     }
 
     public void setRequestProperty(String string, String soapAction) throws IOException {
@@ -82,15 +82,15 @@ public class ServiceConnectionMidp implements ServiceConnection {
         throw new RuntimeException("ServiceConnectionMidp.getErrorStream is not available.");
     }
 
-	public String getHost() {
-		return connection.getHost();
-	}
+    public String getHost() {
+        return connection.getHost();
+    }
 
-	public int getPort() {
-		return connection.getPort();
-	}
+    public int getPort() {
+        return connection.getPort();
+    }
 
-	public String getPath() {
-		return connection.getFile();
-	}
+    public String getPath() {
+        return connection.getFile();
+    }
 }

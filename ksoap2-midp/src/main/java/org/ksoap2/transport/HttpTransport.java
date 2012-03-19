@@ -124,9 +124,9 @@ public class HttpTransport extends Transport {
     public HttpTransport(String url) {
         super(url);
     }
-    
+
     public HttpTransport(Proxy proxy, String url) {
-    	super(proxy, url);
+        super(proxy, url);
     }
 
     /**
@@ -154,13 +154,13 @@ public class HttpTransport extends Transport {
             }
             connection.setRequestProperty("Content-Length", "" + requestData.length);
             connection.setRequestProperty("User-Agent", USER_AGENT);
-            
+
             if (headers != null) {
-            	for (int i = 0; i < headers.size(); i++) {
-            		HeaderProperty hp = (HeaderProperty) headers.get(i);
-            		
-            		connection.setRequestProperty(hp.getKey(), hp.getValue());
-            	}
+                for (int i = 0; i < headers.size(); i++) {
+                    HeaderProperty hp = (HeaderProperty) headers.get(i);
+
+                    connection.setRequestProperty(hp.getKey(), hp.getValue());
+                }
             }
             connection.setRequestMethod(HttpConnection.POST);
             os = connection.openOutputStream();
@@ -183,7 +183,7 @@ public class HttpTransport extends Transport {
                 is.close();
                 is = new ByteArrayInputStream(buf);
             }
-            
+
             retHeaders = connection.getResponseProperties();
             parseResponse(envelope, is);
         } finally {
@@ -193,7 +193,7 @@ public class HttpTransport extends Transport {
         }
         if (envelope.bodyIn instanceof SoapFault)
             throw ((SoapFault) envelope.bodyIn);
-        
+
         return retHeaders;
     }
 
@@ -228,43 +228,43 @@ public class HttpTransport extends Transport {
     protected ServiceConnection getServiceConnection() throws IOException {
         return new ServiceConnectionMidp(url);
     }
-	
-	public String getHost() {
-		
-		String retVal = null;
-		
-		try {
-			retVal = new URL(url).getHost();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+
+    public String getHost() {
+
+        String retVal = null;
+
+        try {
+            retVal = new URL(url).getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
     }
-    
-	public int getPort() {
-		
-		int retVal = -1;
-		
-		try {
-			retVal = new URL(url).getPort();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+
+    public int getPort() {
+
+        int retVal = -1;
+
+        try {
+            retVal = new URL(url).getPort();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
     }
-    
-	public String getPath() {
-		
-		String retVal = null;
-		
-		try {
-			retVal = new URL(url).getPath();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+
+    public String getPath() {
+
+        String retVal = null;
+
+        try {
+            retVal = new URL(url).getPath();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
     }
 }

@@ -14,7 +14,7 @@ public class HttpsTransportSE extends HttpTransportSE{
 
     static final String PROTOCOL = "https";
 
-	private HttpsServiceConnectionSE conn = null;
+    private HttpsServiceConnectionSE conn = null;
     private final String host;
     private final int port;
     private final String file;
@@ -28,62 +28,62 @@ public class HttpsTransportSE extends HttpTransportSE{
         this.timeout = timeout;
     }
 
-	/**
-	 * Returns the HttpsServiceConnectionSE that was created in getServiceConnection or null
-	 * if getServiceConnection was not called or failed.
-	 * @return ServiceConnection
-	 */
-	public ServiceConnection getConnection() {
-		return (HttpsServiceConnectionSE) conn;
-	}
+    /**
+     * Returns the HttpsServiceConnectionSE that was created in getServiceConnection or null
+     * if getServiceConnection was not called or failed.
+     * @return ServiceConnection
+     */
+    public ServiceConnection getConnection() {
+        return (HttpsServiceConnectionSE) conn;
+    }
 
-	/**
-	 * Get a https service connection.
+    /**
+     * Get a https service connection.
      * @see org.ksoap2.transport.HttpsTransportSE#getServiceConnection()
-	 */
-	//@Override
-	protected ServiceConnection getServiceConnection() throws IOException
-	{
+     */
+    //@Override
+    protected ServiceConnection getServiceConnection() throws IOException
+    {
         conn = new HttpsServiceConnectionSE(host, port, file, timeout);
         return conn;
-	}
+    }
 
-	public String getHost() {
-		
-		String retVal = null;
-		
-		try {
-			retVal = new URL(url).getHost();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+    public String getHost() {
+
+        String retVal = null;
+
+        try {
+            retVal = new URL(url).getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
     }
-    
-	public int getPort() {
-		
-		int retVal = -1;
-		
-		try {
-			retVal = new URL(url).getPort();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+
+    public int getPort() {
+
+        int retVal = -1;
+
+        try {
+            retVal = new URL(url).getPort();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
     }
-    
-	public String getPath() {
-		
-		String retVal = null;
-		
-		try {
-			retVal = new URL(url).getPath();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
-		return retVal;
+
+    public String getPath() {
+
+        String retVal = null;
+
+        try {
+            retVal = new URL(url).getPath();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
     }
 }

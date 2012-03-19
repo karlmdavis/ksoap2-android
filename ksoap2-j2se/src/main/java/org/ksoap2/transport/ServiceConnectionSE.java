@@ -44,13 +44,13 @@ public class ServiceConnectionSE implements ServiceConnection {
      * @throws IOException
      */
     public ServiceConnectionSE(String url) throws IOException {
-    	this(null, url, ServiceConnection.DEFAULT_TIMEOUT);
+        this(null, url, ServiceConnection.DEFAULT_TIMEOUT);
     }
 
     public ServiceConnectionSE(Proxy proxy, String url) throws IOException {
-    	this(proxy, url, ServiceConnection.DEFAULT_TIMEOUT);
+        this(proxy, url, ServiceConnection.DEFAULT_TIMEOUT);
     }
-    
+
     /**
      * Constructor taking the url to the endpoint for this soap communication
      * @param url the url to open the connection to.
@@ -58,7 +58,7 @@ public class ServiceConnectionSE implements ServiceConnection {
      * @throws IOException                            // 20 seconds
      */
     public ServiceConnectionSE(String url, int timeout) throws IOException {
-    	this(null, url, timeout);
+        this(null, url, timeout);
     }
 
     public ServiceConnectionSE(Proxy proxy, String url, int timeout) throws IOException {
@@ -81,20 +81,20 @@ public class ServiceConnectionSE implements ServiceConnection {
     }
 
     public List getResponseProperties() {
-    	Map properties = connection.getHeaderFields();
-    	Set keys = properties.keySet();
-    	List retList = new LinkedList();
-    	
-    	for (Iterator i = keys.iterator(); i.hasNext();) {
-    		String key = (String) i.next();
-    		List values = (List) properties.get(key);
-    		
-    		for (int j = 0; j < values.size(); j++) {
-    			retList.add(new HeaderProperty(key, (String) values.get(j)));
-    		}
-    	}
-    	
-    	return retList;
+        Map properties = connection.getHeaderFields();
+        Set keys = properties.keySet();
+        List retList = new LinkedList();
+
+        for (Iterator i = keys.iterator(); i.hasNext();) {
+            String key = (String) i.next();
+            List values = (List) properties.get(key);
+
+            for (int j = 0; j < values.size(); j++) {
+                retList.add(new HeaderProperty(key, (String) values.get(j)));
+            }
+        }
+
+        return retList;
     }
 
     public void setRequestProperty(String string, String soapAction) {
@@ -117,15 +117,15 @@ public class ServiceConnectionSE implements ServiceConnection {
         return connection.getErrorStream();
     }
 
-	public String getHost() {
-		return connection.getURL().getHost();
-	}
+    public String getHost() {
+        return connection.getURL().getHost();
+    }
 
-	public int getPort() {
-		return connection.getURL().getPort();
-	}
+    public int getPort() {
+        return connection.getURL().getPort();
+    }
 
-	public String getPath() {
-		return connection.getURL().getPath();
-	}
+    public String getPath() {
+        return connection.getURL().getPath();
+    }
 }

@@ -69,20 +69,20 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
     }
 
     public List getResponseProperties() {
-    	Map properties = connection.getHeaderFields();
-    	Set keys = properties.keySet();
-    	List retList = new LinkedList();
-    	
-    	for (Iterator i = keys.iterator(); i.hasNext();) {
-    		String key = (String) i.next();
-    		List values = (List) properties.get(key);
-    		
-    		for (int j = 0; j < values.size(); j++) {
-    			retList.add(new HeaderProperty(key, (String) values.get(j)));
-    		}
-    	}
-    	
-    	return retList;
+        Map properties = connection.getHeaderFields();
+        Set keys = properties.keySet();
+        List retList = new LinkedList();
+
+        for (Iterator i = keys.iterator(); i.hasNext();) {
+            String key = (String) i.next();
+            List values = (List) properties.get(key);
+
+            for (int j = 0; j < values.size(); j++) {
+                retList.add(new HeaderProperty(key, (String) values.get(j)));
+            }
+        }
+
+        return retList;
     }
 
     public void setRequestProperty(String key, String value) {
@@ -105,15 +105,15 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
         return connection.getErrorStream();
     }
 
-	public String getHost() {
-		return connection.getURL().getHost();
-	}
+    public String getHost() {
+        return connection.getURL().getHost();
+    }
 
-	public int getPort() {
-		return connection.getURL().getPort();
-	}
+    public int getPort() {
+        return connection.getURL().getPort();
+    }
 
-	public String getPath() {
-		return connection.getURL().getPath();
-	}
+    public String getPath() {
+        return connection.getURL().getPath();
+    }
 }
