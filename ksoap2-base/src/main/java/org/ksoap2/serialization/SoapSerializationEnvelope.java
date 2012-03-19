@@ -646,7 +646,13 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		PropertyInfo info = new PropertyInfo();
 		for (int i = 0; i < cnt; i++)
 		{
-			Object prop = obj.getProperty(i);
+            // in this call we loose the property name info, maybe not call it but rather work
+            // with property info and soapobject in one thing here..
+
+            // get property returns a SoapObject and that looses the property info, maybe we can always use the property i
+            // info for the tag writting and and just write the property/value differently or so..
+            Object prop = obj.getProperty(i);
+
 			if(!(prop instanceof SoapObject)) {
 				// prop is a PropertyInfo
 				obj.getPropertyInfo(i, properties, info);
@@ -657,14 +663,43 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 					writer.endTag(info.namespace, info.name);
 				}
 			} else {
-				// prop is a SoapObject
-				SoapObject nestedSoap = (SoapObject)prop;
-				Object[] qName = getInfo(null, nestedSoap);
-				writer.startTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
-				String prefix = writer.getPrefix((String) qName[QNAME_NAMESPACE], true);
-				writer.attribute(xsi, TYPE_LABEL, prefix + ":" + qName[QNAME_TYPE]);
-				writeObjectBody(writer, nestedSoap);
-	            writer.endTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);				
+				// prop is a SoapObject .. and therefore the property info is missing.. maybe we can cheat it back in here
+
+				// lets try and get the property info in case there is one..
+                obj.getPropertyInfo(i, properties, info);
+
+                // lets get the info from the soap object itself
+                SoapObject nestedSoap = (SoapObject)prop;
+                Object[] qName = getInfo(null, nestedSoap);
+
+                String namespace;
+                if (info.namespace != null && info.namespace.length() > 0) {
+                    namespace = info.namespace;
+                } else {
+                    namespace = (String) qName[QNAME_NAMESPACE];
+                }
+
+                String name;
+                if (info.name != null && info.name.length() > 0) {
+                    name = info.name;
+                } else {
+                    name = (String) qName[QNAME_TYPE];
+                }
+
+                String type = (String) qName[QNAME_TYPE];
+
+                writer.startTag((dotNet) ? "" : namespace, name);
+                String prefix = writer.getPrefix(namespace, true);
+                writer.attribute(xsi, TYPE_LABEL, prefix + ":" + type);
+                writeObjectBody(writer, nestedSoap);
+                writer.endTag((dotNet) ? "" : namespace, name);
+
+
+//                writer.startTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
+//				String prefix = writer.getPrefix((String) qName[QNAME_NAMESPACE], true);
+//				writer.attribute(xsi, TYPE_LABEL, prefix + ":" + qName[QNAME_TYPE]);
+//				writeObjectBody(writer, nestedSoap);
+//	            writer.endTag((dotNet) ? "" : (String) qName[QNAME_NAMESPACE], (String) qName[QNAME_TYPE]);
 			}
 		}
 	}
