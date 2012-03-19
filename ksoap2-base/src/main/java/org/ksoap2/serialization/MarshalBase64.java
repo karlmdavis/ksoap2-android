@@ -31,7 +31,8 @@ import org.xmlpull.v1.*;
 public class MarshalBase64 implements Marshal {
     public static Class BYTE_ARRAY_CLASS = new byte[0].getClass();
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected)
+            throws IOException, XmlPullParserException {
         return Base64.decode(parser.nextText());
     }
 

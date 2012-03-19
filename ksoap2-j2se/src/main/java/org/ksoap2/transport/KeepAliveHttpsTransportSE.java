@@ -12,8 +12,9 @@ import java.io.IOException;
 
 /**
  * KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble with certificates and
- * certificate authorities somehow messing up connecting/needing reconnects. Added as generic class for SE since it might
- * be useful in SE environments as well and can be used as an example to create your own transport implementations.
+ * certificate authorities somehow messing up connecting/needing reconnects. Added as generic class for SE since it
+ * might be useful in SE environments as well and can be used as an example to create your own transport
+ * implementations.
  *
  * @author Manfred Moser <manfred@simpligility.com>
  *

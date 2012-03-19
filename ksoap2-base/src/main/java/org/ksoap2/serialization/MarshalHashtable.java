@@ -46,7 +46,8 @@ public class MarshalHashtable implements Marshal {
     public static final Class HASHTABLE_CLASS = new Hashtable().getClass();
     SoapSerializationEnvelope envelope;
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected)
+            throws IOException, XmlPullParserException {
         Hashtable instance = new Hashtable();
         String elementName = parser.getName();
         while (parser.nextTag() != XmlPullParser.END_TAG) {

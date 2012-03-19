@@ -30,7 +30,8 @@ import org.ksoap2.*;
  */
 class DM implements Marshal {
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected)
+            throws IOException, XmlPullParserException {
         String text = parser.nextText();
         switch (name.charAt(0)) {
         case 's':

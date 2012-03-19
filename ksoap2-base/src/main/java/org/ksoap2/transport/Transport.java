@@ -159,7 +159,8 @@ abstract public class Transport {
      * @return Headers returned by the web service as a <code>List</code> of
      * <code>HeaderProperty</code> instances.
      */
-    abstract public List call(String targetNamespace, SoapEnvelope envelope, List headers) throws IOException, XmlPullParserException;
+    abstract public List call(String targetNamespace, SoapEnvelope envelope, List headers)
+            throws IOException, XmlPullParserException;
 
     /**
      * Perform a soap call with a given namespace and the given envelope.

@@ -127,7 +127,9 @@ public class SoapEnvelope {
         parser.require(XmlPullParser.START_TAG, env, "Envelope");
         encodingStyle = parser.getAttributeValue(env, "encodingStyle");
         parser.nextTag();
-        if (parser.getEventType() == XmlPullParser.START_TAG && parser.getNamespace().equals(env) && parser.getName().equals("Header")) {
+        if (parser.getEventType() == XmlPullParser.START_TAG
+                && parser.getNamespace().equals(env)
+                && parser.getName().equals("Header")) {
             parseHeader(parser);
             parser.require(XmlPullParser.END_TAG, env, "Header");
             parser.nextTag();
@@ -164,7 +166,9 @@ public class SoapEnvelope {
     public void parseBody(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.nextTag();
         // insert fault generation code here
-        if (parser.getEventType() == XmlPullParser.START_TAG && parser.getNamespace().equals(env) && parser.getName().equals("Fault")) {
+        if (parser.getEventType() == XmlPullParser.START_TAG
+                && parser.getNamespace().equals(env)
+                && parser.getName().equals("Fault")) {
 
             SoapFault fault;
             if (this.version < SoapEnvelope.VER12) {

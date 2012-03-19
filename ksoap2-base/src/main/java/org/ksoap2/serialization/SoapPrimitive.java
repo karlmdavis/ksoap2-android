@@ -49,7 +49,9 @@ public class SoapPrimitive extends AttributeContainer {
             return false;
         }
         SoapPrimitive p = (SoapPrimitive) o;
-        boolean varsEqual = name.equals(p.name) && (namespace == null ? p.namespace == null:namespace.equals(p.namespace)) && (value == null ? (p.value == null) : value.equals(p.value));
+        boolean varsEqual = name.equals(p.name)
+                && (namespace == null ? p.namespace == null:namespace.equals(p.namespace))
+                && (value == null ? (p.value == null) : value.equals(p.value));
         return varsEqual && attributesAreEqual(p);
     }
 

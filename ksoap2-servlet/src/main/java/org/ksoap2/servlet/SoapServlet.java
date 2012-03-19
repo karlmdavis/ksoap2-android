@@ -199,7 +199,8 @@ public class SoapServlet extends HttpServlet {
       res.flushBuffer();
     }
 
-    protected SoapObject invoke(Object service, SoapObject soapReq) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    protected SoapObject invoke(Object service, SoapObject soapReq)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String name = soapReq.getName();
         Class types[] = new Class[soapReq.getPropertyCount()];
         Object[] args = new Object[soapReq.getPropertyCount()];

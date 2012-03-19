@@ -135,7 +135,8 @@ public class HttpTransport extends Transport {
      * @param soapAction
      *            the desired soapAction
      */
-    public List call(String soapAction, SoapEnvelope envelope, List headers) throws IOException, XmlPullParserException {
+    public List call(String soapAction, SoapEnvelope envelope, List headers)
+            throws IOException, XmlPullParserException {
         if (soapAction == null)
             soapAction = "\"\"";
         byte[] requestData = createRequestData(envelope);

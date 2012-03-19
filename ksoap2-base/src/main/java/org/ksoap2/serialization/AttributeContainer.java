@@ -56,8 +56,7 @@ public class AttributeContainer {
         Integer i = attributeIndex(name);
         if (i != null) {
             return getAttribute(i.intValue()).toString();
-        }
-        else {
+        } else {
             throw new RuntimeException("illegal property: " + name);
         }
     }
@@ -68,8 +67,7 @@ public class AttributeContainer {
     public boolean hasAttribute(final String name) {
         if (attributeIndex(name) != null) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
