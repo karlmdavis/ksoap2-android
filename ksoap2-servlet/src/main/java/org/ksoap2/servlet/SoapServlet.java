@@ -221,5 +221,4 @@ public class SoapServlet extends HttpServlet {
             response.addProperty("return", result);
         return response;
     }
-
 }
