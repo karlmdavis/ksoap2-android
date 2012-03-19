@@ -573,7 +573,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     /**
      * This test ensures that name set on the SoapObject creation as well as when adding it as a property to another
      * SoapObject are kept around and used. This used to be the default behaviour up to including 2.6.0 and a regression
-     * broke this with 2.6.1 and 2.6.2. The 2.6.3 release fixes this again.
+     * broke this with 2.6.1. The 2.6.2 release fixes this again.
      *
      * @throws Exception
      */
