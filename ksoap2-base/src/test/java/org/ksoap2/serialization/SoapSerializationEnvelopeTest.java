@@ -36,6 +36,11 @@ import org.kxml2.io.KXmlSerializer;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+/**
+ *
+ * @author James Seigel (original author)
+ * @author Manfred Moser <manfred@simpligility.com> (minor test additions)
+ */
 public class SoapSerializationEnvelopeTest extends TestCase {
     private static final String PARAMETER_NAME = "aParameter";
     private static String FUNCTION_NAME = "FunctionName";
@@ -513,9 +518,6 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         }
     }
 
-    ;
-
-
     public void testAttributesOnPrimitives() throws Exception {
         String testXML = "<body><response><result name=\"fred\" anotherAttr=\"anotherValue\">Barney</result></response></body>";
         InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
@@ -568,4 +570,54 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     }
 
 
+    /**
+     * This test ensures that name set on the SoapObject creation as well as when adding it as a property to another
+     * SoapObject are kept around and used. This used to be the default behaviour up to including 2.6.0 and a regression
+     * broke this with 2.6.1 and 2.6.2. The 2.6.3 release fixes this again.
+     *
+     * @throws Exception
+     */
+    public void testEnsureNameAndTypeNotLost() throws Exception {
+        String namespace = "namespace";
+        String typeDetails = "ArrayOfDetails";
+        String nameDetails = "Details";
+
+        String typeDetail = "DetailBase";
+        String nameDetail = "Detail";
+
+        String expectedResponse
+                = "<n0:PlaceOrder id=\"o0\" n1:root=\"1\" xmlns:n0=\"namespace\" xmlns:n1=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+                "<n0:Details n2:type=\"n0:ArrayOfDetails\" xmlns:n2=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+                "<n0:Detail n2:type=\"n0:DetailBase\">" +
+                "<PartNumber n2:type=\"n3:string\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema\">abc0</PartNumber>" +
+                "<Quantity n2:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">0</Quantity>" +
+                "</n0:Detail>" +
+                "<n0:Detail n2:type=\"n0:DetailBase\">" +
+                "<PartNumber n2:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">abc1</PartNumber>" +
+                "<Quantity n2:type=\"n6:string\" xmlns:n6=\"http://www.w3.org/2001/XMLSchema\">1</Quantity>" +
+                "</n0:Detail>" +
+                "<n0:Detail n2:type=\"n0:DetailBase\">" +
+                "<PartNumber n2:type=\"n7:string\" xmlns:n7=\"http://www.w3.org/2001/XMLSchema\">abc2</PartNumber>" +
+                "<Quantity n2:type=\"n8:string\" xmlns:n8=\"http://www.w3.org/2001/XMLSchema\">2</Quantity>" +
+                "</n0:Detail>" +
+                "</n0:Details>" +
+                "</n0:PlaceOrder>";
+
+        SoapObject requestSoap = new SoapObject(namespace, "PlaceOrder");
+
+        SoapObject details = new SoapObject(namespace, typeDetails);
+        int detailTotal = 3;
+        for (int detailCount = 0; detailCount < detailTotal; detailCount++) {
+            SoapObject detailSoap = new SoapObject(namespace, typeDetail);
+            detailSoap.addProperty("PartNumber", "abc" + detailCount);
+            detailSoap.addProperty("Quantity", Integer.toString(detailCount));
+
+            details.addProperty(nameDetail, detailSoap);
+        }
+        requestSoap.addProperty(nameDetails, details);
+
+        writeBodyWithSoapObject(requestSoap);
+        String request = new String(outputStream.toByteArray());
+        assertEquals(expectedResponse, request);
+    }
 }
