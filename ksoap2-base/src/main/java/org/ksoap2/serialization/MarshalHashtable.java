@@ -103,10 +103,11 @@ public class MarshalHashtable implements Marshal {
             } else {
                 // already have a key or value
                 Object resolved = resolvedIndex == 0 ? getProperty(0) : getProperty(1);
-                if (index == 0)
+                if (index == 0) {
                     h.put(value, resolved);
-                else
+                } else  {
                     h.put(resolved, value);
+                }
             }
         }
     }

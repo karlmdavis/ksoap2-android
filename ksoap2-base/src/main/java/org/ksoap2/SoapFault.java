@@ -55,8 +55,7 @@ public class SoapFault extends IOException {
     }
 
     /** Fills the fault details from the given XML stream */
-    public void parse(XmlPullParser parser) throws IOException, XmlPullParserException
-    {
+    public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, SoapEnvelope.ENV, "Fault");
         while (parser.nextTag() == XmlPullParser.START_TAG) {
             String name = parser.getName();
@@ -64,8 +63,9 @@ public class SoapFault extends IOException {
                 detail = new Node();
                 detail.parse(parser);
                 // Handle case '...<detail/></soap:Fault>'
-                if ( parser.getNamespace().equals( SoapEnvelope.ENV ) && parser.getName().equals( "Fault" ) )
+                if ( parser.getNamespace().equals( SoapEnvelope.ENV ) && parser.getName().equals( "Fault" ) ) {
                     break;
+                }
                 continue;
             } else if (name.equals("faultcode")) {
                 faultcode = parser.nextText();
@@ -83,8 +83,7 @@ public class SoapFault extends IOException {
     }
 
     /** Writes the fault to the given XML stream */
-    public void write(XmlSerializer xw) throws IOException
-    {
+    public void write(XmlSerializer xw) throws IOException {
         xw.startTag(SoapEnvelope.ENV, "Fault");
         xw.startTag(null, "faultcode");
         xw.text("" + faultcode);
@@ -93,8 +92,9 @@ public class SoapFault extends IOException {
         xw.text("" + faultstring);
         xw.endTag(null, "faultstring");
         xw.startTag(null, "detail");
-        if (detail != null)
+        if (detail != null) {
             detail.write(xw);
+        }
         xw.endTag(null, "detail");
         xw.endTag(SoapEnvelope.ENV, "Fault");
     }
@@ -107,8 +107,7 @@ public class SoapFault extends IOException {
     }
 
     /** Returns a simple string representation of the fault */
-    public String toString()
-    {
+    public String toString() {
         return "SoapFault - faultcode: '" + faultcode + "' faultstring: '"
             + faultstring + "' faultactor: '" + faultactor + "' detail: " +
             detail;

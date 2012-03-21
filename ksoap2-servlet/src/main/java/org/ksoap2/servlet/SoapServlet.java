@@ -64,8 +64,9 @@ public class SoapServlet extends HttpServlet {
      * servlet itself is returned.
      */
     protected Object getInstance(HttpServletRequest request) {
-        if (request.getPathInfo() == null)
+        if (request.getPathInfo() == null) {
             return this;
+        }
         Object result = instanceMap.get(request.getPathInfo());
         return (result != null) ? result : this;
     }
@@ -104,8 +105,9 @@ public class SoapServlet extends HttpServlet {
 
     public void publishMethod(Class service, String namespace, String name, PropertyInfo[] parameters) {
         SoapObject template = new SoapObject(namespace, name);
-        for (int i = 0; i < parameters.length; i++)
+        for (int i = 0; i < parameters.length; i++) {
             template.addProperty(parameters[i], null);
+        }
         envelope.addTemplate(template);
     }
 
@@ -218,8 +220,9 @@ public class SoapServlet extends HttpServlet {
         Object result = method.invoke(service, args);
         System.out.println("result:" + result);
         SoapObject response = new SoapObject(soapReq.getNamespace(), name + "Response");
-        if (result != null)
+        if (result != null) {
             response.addProperty("return", result);
+        }
         return response;
     }
 }

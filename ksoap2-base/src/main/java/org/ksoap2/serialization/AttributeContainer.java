@@ -43,8 +43,11 @@ public class AttributeContainer {
      */
     public Object getAttribute(String name) {
         Integer i = attributeIndex(name);
-        if (i != null) return getAttribute(i.intValue());
-        else throw new RuntimeException("illegal property: " + name);
+        if (i != null) {
+            return getAttribute(i.intValue());
+        } else {
+            throw new RuntimeException("illegal property: " + name);
+        }
     }
 
     /**
@@ -113,7 +116,9 @@ public class AttributeContainer {
 
     private Integer attributeIndex(String name) {
         for (int i = 0; i < attributes.size(); i++) {
-            if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName())) return new Integer(i);
+            if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName())) {
+                return new Integer(i);
+            }
         }
         return null;
     }
@@ -135,13 +140,16 @@ public class AttributeContainer {
      */
     protected boolean attributesAreEqual(AttributeContainer other) {
         int numAttributes = getAttributeCount();
-        if (numAttributes != other.getAttributeCount())
+        if (numAttributes != other.getAttributeCount()) {
             return false;
+        }
 
         for (int attribIndex = 0; attribIndex < numAttributes; attribIndex++) {
             AttributeInfo thisAttrib = (AttributeInfo) this.attributes.elementAt(attribIndex);
             Object thisAttribValue = thisAttrib.getValue();
-            if (!other.hasAttribute(thisAttrib.getName())) return false;
+            if (!other.hasAttribute(thisAttrib.getName())) {
+                return false;
+            }
             Object otherAttribValue = other.safeGetAttribute(thisAttrib.getName());
             if (!thisAttribValue.equals(otherAttribValue)) {
                 return false;

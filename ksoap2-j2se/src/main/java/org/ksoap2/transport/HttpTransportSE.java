@@ -113,8 +113,9 @@ public class HttpTransportSE extends Transport {
     public List call(String soapAction, SoapEnvelope envelope, List headers) 
         throws IOException, XmlPullParserException {
 
-        if (soapAction == null)
+        if (soapAction == null) {
             soapAction = "\"\"";
+        }
 
         byte[] requestData = createRequestData(envelope);
             
@@ -180,8 +181,9 @@ public class HttpTransportSE extends Transport {
                     
             while (true) {
                 int rd = is.read(buf, 0, 256);
-                if (rd == -1)
+                if (rd == -1) {
                     break;
+                }
                 bos.write(buf, 0, rd);
             }
                     

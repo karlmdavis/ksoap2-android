@@ -84,7 +84,9 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         }
 
         int numProperties = properties.size();
-        if (numProperties != otherSoapObject.properties.size()) return false;
+        if (numProperties != otherSoapObject.properties.size()) {
+            return false;
+        }
 
         // SoapObjects are only considered the same if properties equals and in the same order
         for (int propIndex = 0; propIndex < numProperties; propIndex++) {
@@ -116,8 +118,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
             PropertyInfo thisPropInfo = (PropertyInfo)thisProp;
             return otherPropInfo.getName().equals(thisPropInfo.getName()) &&
                     otherPropInfo.getValue().equals(thisPropInfo.getValue());
-        } else if(otherProp instanceof SoapObject &&
-                thisProp instanceof SoapObject) {
+        } else if (otherProp instanceof SoapObject && thisProp instanceof SoapObject) {
             SoapObject otherPropSoap = (SoapObject)otherProp;
             SoapObject thisPropSoap = (SoapObject)thisProp;
             return otherPropSoap.equals(thisPropSoap);
@@ -231,8 +232,11 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         Integer i = propertyIndex(name);
         if (i != null) {
             Object foo = getProperty(i.intValue());
-            if (foo == null) return "null";
-            else return foo.toString();
+            if (foo == null) {
+                return "null";
+            } else {
+                return foo.toString();
+            }
         } else {
             return "";
         }
@@ -388,8 +392,9 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
 
     private Integer propertyIndex(String name) {
         for (int i = 0; i < properties.size(); i++) {
-            if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) return new Integer(
-                    i);
+            if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) {
+                return new Integer(i);
+            }
         }
         return null;
     }
@@ -430,8 +435,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      *            designated retainer of desired property
      * @deprecated
      */
-    public void getPropertyInfo(int index, Hashtable properties,
-            PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int index, Hashtable properties, PropertyInfo propertyInfo) {
         getPropertyInfo(index, propertyInfo);
     }
 
@@ -467,8 +471,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         for (int propIndex = 0; propIndex < properties.size(); propIndex++) {
             Object prop = properties.elementAt(propIndex);
             if(prop instanceof PropertyInfo) {
-                PropertyInfo propertyInfo = (PropertyInfo) properties
-                        .elementAt(propIndex);
+                PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(propIndex);
                 o.addProperty(propertyInfo);
             } else if(prop instanceof SoapObject) {
                 o.addSoapObject(((SoapObject)prop).newInstance());

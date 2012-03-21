@@ -59,8 +59,9 @@ public class SoapEnvelope {
      * case and whitespace, false otherwise.
      */
     public static boolean stringToBoolean(String booleanAsString) {
-        if (booleanAsString == null)
+        if (booleanAsString == null) {
             return false;
+        }
         booleanAsString = booleanAsString.trim().toLowerCase();
         return (booleanAsString.equals("1") || booleanAsString.equals("true"));
     }
@@ -151,15 +152,17 @@ public class SoapEnvelope {
         int count = 0;
         for (int i = 0; i < headers.getChildCount(); i++) {
             Element child = headers.getElement(i);
-            if (child != null)
+            if (child != null) {
                 count++;
+            }
         }
         headerIn = new Element[count];
         count = 0;
         for (int i = 0; i < headers.getChildCount(); i++) {
             Element child = headers.getElement(i);
-            if (child != null)
+            if (child != null) {
                 headerIn[count++] = child;
+            }
         }
     }
 
@@ -220,8 +223,9 @@ public class SoapEnvelope {
      * method for customized writing of the soap message body.
      */
     public void writeBody(XmlSerializer writer) throws IOException {
-        if (encodingStyle != null)
+        if (encodingStyle != null) {
             writer.attribute(env, "encodingStyle", encodingStyle);
+        }
         ((Node) bodyOut).write(writer);
     }
 

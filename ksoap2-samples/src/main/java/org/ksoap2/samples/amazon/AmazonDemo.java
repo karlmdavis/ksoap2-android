@@ -167,8 +167,9 @@ public class AmazonDemo extends MIDlet implements CommandListener, Runnable {
             PropertyInfo pi = new PropertyInfo();
             for(int i = 0; i < details.getPropertyCount(); i++) {
                 details.getPropertyInfo(i, null, pi);
-                if(pi.name.toLowerCase().indexOf("url")==-1)
+                if(pi.name.toLowerCase().indexOf("url")==-1) {
                     detailForm.append(new StringItem(pi.name, ""+details.getProperty(i)));
+                }
             }
             display.setCurrent(detailForm);
         }

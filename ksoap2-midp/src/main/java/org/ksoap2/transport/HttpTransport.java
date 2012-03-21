@@ -137,8 +137,9 @@ public class HttpTransport extends Transport {
      */
     public List call(String soapAction, SoapEnvelope envelope, List headers)
             throws IOException, XmlPullParserException {
-        if (soapAction == null)
+        if (soapAction == null) {
             soapAction = "\"\"";
+        }
         byte[] requestData = createRequestData(envelope);
         List retHeaders = null; 
 
@@ -159,7 +160,6 @@ public class HttpTransport extends Transport {
             if (headers != null) {
                 for (int i = 0; i < headers.size(); i++) {
                     HeaderProperty hp = (HeaderProperty) headers.get(i);
-
                     connection.setRequestProperty(hp.getKey(), hp.getValue());
                 }
             }
@@ -174,8 +174,9 @@ public class HttpTransport extends Transport {
                 byte[] buf = new byte[256];
                 while (true) {
                     int rd = is.read(buf, 0, 256);
-                    if (rd == -1)
+                    if (rd == -1) {
                         break;
+                    }
                     bos.write(buf, 0, rd);
                 }
                 bos.flush();
@@ -188,13 +189,14 @@ public class HttpTransport extends Transport {
             retHeaders = connection.getResponseProperties();
             parseResponse(envelope, is);
         } finally {
-            if (!connected)
+            if (!connected) {
                 throw new InterruptedIOException();
+            }
             reset();
         }
-        if (envelope.bodyIn instanceof SoapFault)
+        if (envelope.bodyIn instanceof SoapFault) {
             throw ((SoapFault) envelope.bodyIn);
-
+        }
         return retHeaders;
     }
 
