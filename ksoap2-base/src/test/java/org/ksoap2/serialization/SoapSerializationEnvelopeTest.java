@@ -586,22 +586,14 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         String nameDetail = "Detail";
 
         String expectedResponse
-                = "<n0:PlaceOrder id=\"o0\" n1:root=\"1\" xmlns:n0=\"namespace\" xmlns:n1=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
-                "<n0:Details n2:type=\"n0:ArrayOfDetails\" xmlns:n2=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-                "<n0:Detail n2:type=\"n0:DetailBase\">" +
-                "<PartNumber n2:type=\"n3:string\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema\">abc0</PartNumber>" +
-                "<Quantity n2:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">0</Quantity>" +
-                "</n0:Detail>" +
-                "<n0:Detail n2:type=\"n0:DetailBase\">" +
-                "<PartNumber n2:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">abc1</PartNumber>" +
-                "<Quantity n2:type=\"n6:string\" xmlns:n6=\"http://www.w3.org/2001/XMLSchema\">1</Quantity>" +
-                "</n0:Detail>" +
-                "<n0:Detail n2:type=\"n0:DetailBase\">" +
-                "<PartNumber n2:type=\"n7:string\" xmlns:n7=\"http://www.w3.org/2001/XMLSchema\">abc2</PartNumber>" +
-                "<Quantity n2:type=\"n8:string\" xmlns:n8=\"http://www.w3.org/2001/XMLSchema\">2</Quantity>" +
-                "</n0:Detail>" +
+                = "<n0:PlaceOrder xmlns:n0=\"namespace\">" +
+                "<n0:Details n1:type=\"n0:ArrayOfDetails\" xmlns:n1=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+                "<n0:Detail n1:type=\"n0:DetailBase\"><PartNumber>abc0</PartNumber><Quantity>0</Quantity></n0:Detail>" +
+                "<n0:Detail n1:type=\"n0:DetailBase\"><PartNumber>abc1</PartNumber><Quantity>1</Quantity></n0:Detail>" +
+                "<n0:Detail n1:type=\"n0:DetailBase\"><PartNumber>abc2</PartNumber><Quantity>2</Quantity></n0:Detail>" +
                 "</n0:Details>" +
                 "</n0:PlaceOrder>";
+
 
         SoapObject requestSoap = new SoapObject(namespace, "PlaceOrder");
 
@@ -616,6 +608,35 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         }
         requestSoap.addProperty(nameDetails, details);
 
+        envelope.implicitTypes = true;
+        envelope.addAdornments = false;
+        writeBodyWithSoapObject(requestSoap);
+        String request = new String(outputStream.toByteArray());
+        assertEquals(expectedResponse, request);
+    }
+
+    /**
+     * Test created for issue 112 that uncovered a problem with writing a SoapPrimitive with Attributes. They used to
+     * get lost. Not anymore about fixes to DM#writeInstance .
+     * @throws Exception
+     * @see DM#writeInstance(org.xmlpull.v1.XmlSerializer, Object)
+     * @see "http://code.google.com/p/ksoap2-android/issues/detail?id=112"
+     */
+    public void testIssue112() throws Exception {
+        String expectedResponse
+                = "<n0:CostOfRepairs xmlns:n0=\"MyNameSpace\">" +
+                "<Power Unit=\"kW\">1500</Power>" +
+                "</n0:CostOfRepairs>";
+
+        String namespace = "MyNameSpace";
+
+        SoapObject requestSoap = new SoapObject(namespace, "CostOfRepairs");
+        SoapPrimitive power = new SoapPrimitive(namespace, "Power", Integer.toString(1500));
+        power.addAttribute("Unit", "kW");
+        requestSoap.addProperty("Power", power);
+
+        envelope.implicitTypes = true;
+        envelope.addAdornments = false;
         writeBodyWithSoapObject(requestSoap);
         String request = new String(outputStream.toByteArray());
         assertEquals(expectedResponse, request);

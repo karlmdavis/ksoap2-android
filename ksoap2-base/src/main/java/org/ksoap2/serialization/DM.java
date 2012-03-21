@@ -47,7 +47,24 @@ class DM implements Marshal {
         }
     }
 
+    /**
+     * Write the instance out. In case it is an AttributeContainer write those our first though.
+     * @param writer
+     *            the xml serializer.
+     * @param instance
+     * @throws IOException
+     */
     public void writeInstance(XmlSerializer writer, Object instance) throws IOException {
+        if (instance instanceof AttributeContainer) {
+            AttributeContainer attributeContainer = (AttributeContainer) instance;
+            int cnt = attributeContainer.getAttributeCount();
+            for (int counter = 0; counter < cnt; counter++) {
+                AttributeInfo attributeInfo = new AttributeInfo();
+                attributeContainer.getAttributeInfo(counter, attributeInfo);
+                writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(),
+                        attributeInfo.getValue().toString());
+            }
+        }
         writer.text(instance.toString());
     }
 
