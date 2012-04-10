@@ -233,7 +233,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         if (i != null) {
             Object foo = getProperty(i.intValue());
             if (foo == null) {
-                return "null";
+                return "";
             } else {
                 return foo.toString();
             }
