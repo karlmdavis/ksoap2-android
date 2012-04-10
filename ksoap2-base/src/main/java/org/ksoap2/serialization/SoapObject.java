@@ -391,9 +391,11 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
 
 
     private Integer propertyIndex(String name) {
-        for (int i = 0; i < properties.size(); i++) {
-            if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) {
-                return new Integer(i);
+        if (name != null) {
+            for (int i = 0; i < properties.size(); i++) {
+                if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) {
+                    return new Integer(i);
+                }
             }
         }
         return null;

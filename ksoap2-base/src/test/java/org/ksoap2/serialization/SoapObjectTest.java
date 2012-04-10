@@ -251,6 +251,7 @@ public class SoapObjectTest extends TestCase {
 		assertEquals("null",
 				mojSoapObejObject.getPropertySafelyAsString("jaaa"));
 
+        assertTrue("".equals(soapObject.getPropertySafelyAsString(null)));
 	}
 
 	public void testGetAttributeAsString() {
