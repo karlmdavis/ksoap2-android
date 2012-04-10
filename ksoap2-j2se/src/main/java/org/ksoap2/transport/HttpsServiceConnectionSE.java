@@ -1,6 +1,7 @@
 package org.ksoap2.transport;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.ksoap2.HeaderProperty;
 
@@ -118,6 +119,6 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
     }
 
     public void setSSLSocketFactory(SSLSocketFactory sf) {
-        connection.setSSLSocketFactory(SSLSocketFactory sf);
+        connection.setSSLSocketFactory(sf);
     }
 }
