@@ -36,16 +36,17 @@ public class ComplexResponse implements KvmSerializable {
     public int parameterCount = 4;
 
     public Object getProperty(int index) {
-        if (index == 0)
+        if (index == 0) {
             return stringResponse;
-        else if (index == 1)
+        } else if (index == 1) {
             return new Long(longResponse);
-        else if (index == 2) {
+        } else if (index == 2) {
             return new Integer(integerResponse);
         } else if (index == 3) {
             return new Boolean(booleanResponse);
-        } else
+        } else {
             throw new RuntimeException("invalid parameter");
+        }
     }
 
     public int getPropertyCount() {
@@ -53,16 +54,18 @@ public class ComplexResponse implements KvmSerializable {
     }
 
     public void setProperty(int index, Object value) {
-        if (index == 0 && value instanceof String)
+        if (index == 0 && value instanceof String) {
             stringResponse = (String) value;
-        else if (index == 1 && value instanceof Long)
+        } else if (index == 1 && value instanceof Long) {
             longResponse = ((Long) value).longValue();
-        else if (index == 2 ) {
+        } else if (index == 2 ) {
             integerResponse = ((Integer) value).intValue();
         } else if (index == 3) {
             booleanResponse = ((Boolean) value).booleanValue();
-        } else
-            throw new RuntimeException("invalid parameter in set: "+index+":"+value.toString()+":"+value.getClass().getName());
+        } else {
+            throw new RuntimeException("invalid parameter in set: " + index + ":" + value.toString() + ":" +
+                    value.getClass().getName());
+        }
     }
 
     public void getPropertyInfo(int index, Hashtable properties, PropertyInfo info) {

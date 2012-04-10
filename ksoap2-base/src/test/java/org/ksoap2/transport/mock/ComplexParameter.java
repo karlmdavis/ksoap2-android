@@ -30,12 +30,13 @@ public class ComplexParameter implements KvmSerializable {
     public int count;
 
     public Object getProperty(int index) {
-        if (index == 0)
+        if (index == 0) {
             return name;
-        else if (index == 1)
+        } else if (index == 1) {
             return new Integer(count);
-        else
+        } else {
             throw new RuntimeException("invalid parameter");
+        }
     }
 
     public int getPropertyCount() {
@@ -43,13 +44,13 @@ public class ComplexParameter implements KvmSerializable {
     }
 
     public void setProperty(int index, Object value) {
-        if (index == 0 && value instanceof String)
+        if (index == 0 && value instanceof String) {
             name = (String) value;
-        else if (index == 1 && value instanceof Integer)
+        } else if (index == 1 && value instanceof Integer) {
             count = ((Integer) value).intValue();
-        else
+        } else {
             throw new RuntimeException("invalid parameter");
-
+        }
     }
 
     public void getPropertyInfo(int index, Hashtable properties, PropertyInfo info) {

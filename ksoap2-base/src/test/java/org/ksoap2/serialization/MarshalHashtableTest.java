@@ -25,7 +25,8 @@ public class MarshalHashtableTest extends TestCase {
 
         // the mock just appends the bits together
         assertEquals(KEY1_NAME + ";" + VALUE1, writer.getOutputText());
-        assertEquals(MockXmlSerializer.PREFIX + ":string;" + MockXmlSerializer.PREFIX + ":string", writer.getPropertyType());
+        assertEquals(MockXmlSerializer.PREFIX + ":string;" + MockXmlSerializer.PREFIX + ":string",
+                writer.getPropertyType());
         assertEquals("item;key;value", writer.getStartTag());
         assertEquals("key;value;item", writer.getEndtag());
         
@@ -35,7 +36,8 @@ public class MarshalHashtableTest extends TestCase {
         marshalHashtable.writeInstance(writer, hashTable);
 
         assertEquals("key2;12;"+KEY1_NAME + ";" + VALUE1, writer.getOutputText());
-        assertEquals(MockXmlSerializer.PREFIX + ":string;" + MockXmlSerializer.PREFIX + ":int;"+MockXmlSerializer.PREFIX + ":string;" + MockXmlSerializer.PREFIX + ":string", writer.getPropertyType());
+        assertEquals(MockXmlSerializer.PREFIX + ":string;" + MockXmlSerializer.PREFIX + ":int;" +
+                MockXmlSerializer.PREFIX + ":string;" + MockXmlSerializer.PREFIX + ":string", writer.getPropertyType());
         assertEquals("item;key;value;item;key;value", writer.getStartTag());
         assertEquals("key;value;item;key;value;item", writer.getEndtag());
     }

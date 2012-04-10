@@ -25,7 +25,8 @@ public abstract class TransportTestCase extends TestCase {
         complexParameter.name = "Serenity";
         complexParameter.count = 56;
         envelope.addMapping(containerNameSpaceURI, "ComplexParameter", complexParameter.getClass());
-        envelope.addMapping(containerNameSpaceURI, ServiceConnectionFixture.RESPONSE_CLASS_NAME, ServiceConnectionFixture.RESPONSE_CLASS);
+        envelope.addMapping(containerNameSpaceURI, ServiceConnectionFixture.RESPONSE_CLASS_NAME,
+                ServiceConnectionFixture.RESPONSE_CLASS);
         soapObject.addProperty("complexFunction", complexParameter);
         envelope.setOutputSoapObject(soapObject);
     }

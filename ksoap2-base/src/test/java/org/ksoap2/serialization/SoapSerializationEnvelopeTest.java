@@ -90,8 +90,10 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         assertEquals("valueBar", longResp.safeGetAttribute("attrFoo"));
 
         assertEquals(ServiceConnectionFixture.theStringResponse, cfr.getProperty("stringResponse").toString());
-        assertEquals(ServiceConnectionFixture.theIntegerResponse + "", cfr.getProperty(ComplexResponse.INTEGER_REPONSE_NAME).toString());
-        assertEquals(ServiceConnectionFixture.theBooleanResponse + "", cfr.getProperty(ComplexResponse.BOOLEAN_RESPONSE_NAME).toString());
+        assertEquals(ServiceConnectionFixture.theIntegerResponse + "",
+                cfr.getProperty(ComplexResponse.INTEGER_REPONSE_NAME).toString());
+        assertEquals(ServiceConnectionFixture.theBooleanResponse + "",
+                cfr.getProperty(ComplexResponse.BOOLEAN_RESPONSE_NAME).toString());
 
 
     }
@@ -214,7 +216,12 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         assertEquals(
                 BODY_XML_STRING
                         + ">"
-                        + "<hashthingy n3:type=\"n2:Map\" xmlns:n2=\"http://xml.apache.org/xml-soap\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema-instance\"><item><key n3:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key><value n3:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value></item></hashthingy></n0:FunctionName>",
+                        + "<hashthingy n3:type=\"n2:Map\" xmlns:n2=\"http://xml.apache.org/xml-soap\" " +
+                        "xmlns:n3=\"http://www.w3.org/2001/XMLSchema-instance\"><item><key n3:type=\"n4:string\" " +
+                        "xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">key1</key><value n3:type=\"n5:string\" " +
+                        "xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">value1</value></item>" +
+                        "</hashthingy></n0:FunctionName>",
+
                 new String(outputStream.toByteArray()));
     }
 
@@ -365,8 +372,11 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     /**
      * The string that represents the "getStatus". This is copied from an Axis call.
      */
-    protected static final String getStatusRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-            + "<soapenv:Body><getStatus ClientRequestHandle=\"ClientHandle\" LocaleID=\"de-AT\" xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\"/></soapenv:Body>"
+    protected static final String getStatusRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+            "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+            + "<soapenv:Body><getStatus ClientRequestHandle=\"ClientHandle\" " +
+            "LocaleID=\"de-AT\" xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\"/></soapenv:Body>"
             + "</soapenv:Envelope>";
 
     /**
@@ -444,7 +454,8 @@ public class SoapSerializationEnvelopeTest extends TestCase {
      * envelope above.
      */
     protected static final String getStatusResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-            + "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+            + "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+            "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
             + "  <soapenv:Body>"
             + "  <GetStatusResponse xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\">"
             + "    <GetStatusResult" + "       RcvTime=\"2003-05-26T20:17:42.4781250-07:00\""
@@ -490,20 +501,22 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         SoapObject getStatusResult = (SoapObject) response.getProperty("GetStatusResult");
         assertNotNull(" GetStatusResult ", getStatusResult);
         assertEquals(" No Parameters (GetStatusResult)", 0, getStatusResult.getPropertyCount());
-        if(nestedSoap)
-        	assertEquals(" Five Attributes (GetStatusResult)", 5, getStatusResult.getAttributeCount());
-        else
-        	assertEquals(" Four Attributes (GetStatusResult)", 4, getStatusResult.getAttributeCount());
+        if(nestedSoap) {
+            assertEquals(" Five Attributes (GetStatusResult)", 5, getStatusResult.getAttributeCount());
+        } else {
+            assertEquals(" Four Attributes (GetStatusResult)", 4, getStatusResult.getAttributeCount());
+        }
         assertEquals("2003-05-26T20:17:42.4781250-07:00", getStatusResult.getAttribute("RcvTime"));
         assertEquals("2003-05-26T20:17:42.5781250-07:00", getStatusResult.getAttribute("ReplyTime"));
         assertEquals("running", getStatusResult.getAttribute("ServerState"));
         // first property is "Status"
         SoapObject status = (SoapObject) response.getProperty("Status");
         assertEquals(" Five Parameters (Status)", 5, status.getPropertyCount());
-        if(nestedSoap)
-        	assertEquals(" Three Attributes (Status)", 3, status.getAttributeCount());
-        else
-        	assertEquals(" Two Attributes (Status)", 2, status.getAttributeCount());
+        if(nestedSoap) {
+            assertEquals(" Three Attributes (Status)", 3, status.getAttributeCount());
+        } else {
+        assertEquals(" Two Attributes (Status)", 2, status.getAttributeCount());
+        }
         assertEquals("2003-05-26T20:16:45.0937500-07:00", status.getAttribute("StartTime"));
         assertEquals("1.00.1.00", status.getAttribute("ProductVersion"));
     }
@@ -519,7 +532,8 @@ public class SoapSerializationEnvelopeTest extends TestCase {
     }
 
     public void testAttributesOnPrimitives() throws Exception {
-        String testXML = "<body><response><result name=\"fred\" anotherAttr=\"anotherValue\">Barney</result></response></body>";
+        String testXML = "<body><response><result name=\"fred\" anotherAttr=\"anotherValue\">Barney</result>" +
+                "</response></body>";
         InputStream inputStream = new ByteArrayInputStream(testXML.getBytes());
         SoapSerializationEnvelope sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
