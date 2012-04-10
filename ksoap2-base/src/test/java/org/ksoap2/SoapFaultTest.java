@@ -63,7 +63,16 @@ public class SoapFaultTest extends TestCase {
         SoapFault fault = generateFaultFromFaultString(ServiceConnectionFixture.FAULT_STRING);
         fault.write(xmlWriter);
 
-        String possibleOutputString = "<n0:Fault xmlns:n0=\"http://schemas.xmlsoap.org/soap/envelope/\"><faultcode>soap:Client</faultcode>"+FAULT_STRING+"<detail><detail>                <n1:InvalidIsbnFaultDetail xmlns:n1=\"http://www.Monson-Haefel.com/jwsbook/BookQuote\">                <offending-value>19318224-D</offending-value>                <conformance-rules>                    The first nine characters must be digits. The last                    character may be a digit or the letter 'X'. Case is                    not important.                </conformance-rules>                </n1:InvalidIsbnFaultDetail>            </detail>        ";
+        String possibleOutputString = "<n0:Fault xmlns:n0=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+                "<faultcode>soap:Client</faultcode>"+FAULT_STRING+"<detail>" +
+                "<detail>                <n1:InvalidIsbnFaultDetail " +
+                "xmlns:n1=\"http://www.Monson-Haefel.com/jwsbook/BookQuote\">" +
+                "                <offending-value>19318224-D</offending-value>" +
+                "                <conformance-rules>" +
+                "                    The first nine characters must be digits. The last" +
+                "                    character may be a digit or the letter 'X'. Case is" +
+                "                    not important.                </conformance-rules>" +
+                "                </n1:InvalidIsbnFaultDetail>            </detail>        ";
         String faultString = new String(outputStream.toByteArray());
         assertEquals(possibleOutputString, faultString);
     }
@@ -79,9 +88,10 @@ public class SoapFaultTest extends TestCase {
         SoapFault12 fault = generateFaultFromFaultString12(ServiceConnectionFixture.FAULT_STRING_12);
         fault.write(xmlWriter);
 
-        String possibleOutputString = "<n0:Fault xmlns:n0=\"http://www.w3.org/2003/05/soap-envelope\"><n0:Code><n0:Value xmlns:q0=\"http://schemas.xmlsoap.org/envelope/\">q0:Client.AuthenticationFailed</n0:Value>\n" + 
-        		"</n0:Code><n0:Reason><n0:Text xml:lang=\"en\">Authentication failed</n0:Text>\n" + 
-        		"</n0:Reason><n0:Detail></n0:Detail></n0:Fault>";
+        String possibleOutputString = "<n0:Fault xmlns:n0=\"http://www.w3.org/2003/05/soap-envelope\">
+     <n0:Code><n0:Value xmlns:q0=\"http://schemas.xmlsoap.org/envelope/\">q0:Client.AuthenticationFailed</n0:Value>\n" +
+        "</n0:Code><n0:Reason><n0:Text xml:lang=\"en\">Authentication failed</n0:Text>\n" +
+        "</n0:Reason><n0:Detail></n0:Detail></n0:Fault>";
         
         
         String faultString = new String(outputStream.toByteArray());
