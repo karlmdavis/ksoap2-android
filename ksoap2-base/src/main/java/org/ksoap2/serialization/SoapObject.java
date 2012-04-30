@@ -40,6 +40,7 @@ import java.util.*;
 
 public class SoapObject extends AttributeContainer implements KvmSerializable {
 
+    private static final String EMPTY_STRING = "";
     /**
      * The namespace of this soap object.
      */
@@ -225,7 +226,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * Get the toString value of a property without chance of throwing an
      * exception
      *
-     * @return the string value of the property if it exists; if not, "" is
+     * @return the string value of the property if it exists; if not, #EMPTY_STRING is
      *         returned
      */
     public String getPropertySafelyAsString(final String name) {
@@ -233,12 +234,12 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         if (i != null) {
             Object foo = getProperty(i.intValue());
             if (foo == null) {
-                return "";
+                return EMPTY_STRING;
             } else {
                 return foo.toString();
             }
         } else {
-            return "";
+            return EMPTY_STRING;
         }
     }
 
@@ -271,20 +272,30 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     /**
      * Get the toString value of a property without chance of throwing an
      * exception. An object can be provided to this method; if the property is
-     * not found, this object will be returned.
+     * not found, this object's string representation will be returned.
      *
      * @param defaultThing
      *            toString of the object to return if the property is not found
      * @return the property toString if it exists; defaultThing toString if the
-     *         property does not exist
+     *         property does not exist, if the defaultThing is null #EMPTY_STRING
+     *         is returned
      */
     public String getPropertySafelyAsString(final String name,
             final Object defaultThing) {
         Integer i = propertyIndex(name);
         if (i != null) {
-            return getProperty(i.intValue()).toString();
+            Object property = getProperty(i.intValue());
+            if (property != null) {
+                return property.toString();
+            } else {
+                return EMPTY_STRING;
+            }
         } else {
-            return defaultThing.toString();
+            if (defaultThing != null) {
+                return defaultThing.toString();
+            } else {
+                return EMPTY_STRING;
+            }
         }
     }
 
@@ -310,7 +321,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
             } else {
                 propertyInfo = new PropertyInfo();
                 propertyInfo.setType(String.class);
-                propertyInfo.setValue("");
+                propertyInfo.setValue(EMPTY_STRING);
                 propertyInfo.setName(name);
                 return (Object) propertyInfo.getValue();
             }
@@ -333,7 +344,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
             if (propertyInfo.getType()!=SoapObject.class){
                 return propertyInfo.getValue().toString();
             } else {
-                return "";
+                return EMPTY_STRING;
             }
         } else {
             throw new RuntimeException("illegal property: " + name);
@@ -345,7 +356,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * exception
      *
      * @param name
-     * @return the string value of the property if it exists and is primitive; if not, "" is
+     * @return the string value of the property if it exists and is primitive; if not, #EMPTY_STRING is
      *         returned
      */
     public Object getPrimitivePropertySafely(final String name) {
@@ -357,7 +368,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
             } else {
                 propertyInfo = new PropertyInfo();
                 propertyInfo.setType(String.class);
-                propertyInfo.setValue("");
+                propertyInfo.setValue(EMPTY_STRING);
                 propertyInfo.setName(name);
                 return (Object) propertyInfo.getValue();
             }
@@ -371,7 +382,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * exception
      *
      * @param name
-     * @return the string value of the property if it exists and is primitive; if not, "" is
+     * @return the string value of the property if it exists and is primitive; if not, #EMPTY_STRING is
      *         returned
      */
     public String getPrimitivePropertySafelyAsString(final String name) {
@@ -381,10 +392,10 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
             if (propertyInfo.getType()!=SoapObject.class){
                 return propertyInfo.getValue().toString();
             } else {
-                return "";
+                return EMPTY_STRING;
             }
         } else {
-            return "";
+            return EMPTY_STRING;
         }
     }
 
@@ -626,11 +637,11 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * @return
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer("" + name + "{");
+        StringBuffer buf = new StringBuffer(EMPTY_STRING + name + "{");
         for (int i = 0; i < getPropertyCount(); i++) {
             Object prop = properties.elementAt(i);
             if(prop instanceof PropertyInfo) {
-                buf.append("" + ((PropertyInfo) prop).getName()
+                buf.append(EMPTY_STRING + ((PropertyInfo) prop).getName()
                         + "=" + getProperty(i) + "; ");
             } else {
                 buf.append(((SoapObject) prop).toString());

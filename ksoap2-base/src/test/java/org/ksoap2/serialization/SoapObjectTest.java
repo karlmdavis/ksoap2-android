@@ -252,6 +252,11 @@ public class SoapObjectTest extends TestCase {
                 mojSoapObejObject.getPropertySafelyAsString("jaaa"));
 
         assertTrue("".equals(soapObject.getPropertySafelyAsString(null)));
+
+        // tests for later comments on http://code.google.com/p/ksoap2-android/issues/detail?id=94
+        assertTrue("".equals(soapObject.getPropertySafelyAsString(null, null)));
+
+        assertTrue("test".equals(soapObject.getPropertySafelyAsString(null, "test")));
     }
 
     public void testGetAttributeAsString() {
