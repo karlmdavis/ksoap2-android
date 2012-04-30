@@ -426,7 +426,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * Returns the number of SoapObjects in properties
      *
      * @return the number of nestedSoapObjects
-     * @depreciated
+     * @deprecated
      */
     public int getNestedSoapCount() {
         int count = 0;
@@ -440,13 +440,14 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
 
     /**
      * Places PropertyInfo of desired property into a designated PropertyInfo
-     * object
+     * object. Just calls #getPropertyInfo and discards any provided properties.
      *
      * @param index
      *            index of desired property
+     * @param properties
+     *            this parameter is ignored
      * @param propertyInfo
      *            designated retainer of desired property
-     * @deprecated
      */
     public void getPropertyInfo(int index, Hashtable properties, PropertyInfo propertyInfo) {
         getPropertyInfo(index, propertyInfo);
