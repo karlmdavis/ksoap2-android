@@ -140,6 +140,7 @@ public class HttpTransportSE extends Transport {
         }
 
         connection.setRequestProperty("Connection", "close");
+        connection.setRequestProperty("Accept-Encoding", "gzip");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
             
         // Pass the headers provided by the user along with the call
