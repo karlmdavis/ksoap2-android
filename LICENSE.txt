@@ -39,3 +39,8 @@ Petter Uvesten <petter@everichon.com> http://www.everichon.com
 John Lindemann <jwlindemann@gmail.com>
 Finn Larsen <fl@digroli.com>
 Dawid Drozd <dordoz@debianPC.unauth.amu.edu.pl> https://github.com/gelldur
+Konrad Barth <Konrad.Barth@gmail.com>
+Nikolay Ivanets <>
+Sergej Koščejev <>
+Anatoliy Shuba <ashuba@ya.ru>
+Jose Castellanos Molina <Jose_castellanos@hotmail.com>
