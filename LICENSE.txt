@@ -43,4 +43,4 @@ Konrad Barth <Konrad.Barth@gmail.com>
 Nikolay Ivanets <>
 Sergej Koščejev <>
 Anatoliy Shuba <ashuba@ya.ru>
-Jose Castellanos Molina <Jose_castellanos@hotmail.com>
+Jose Castellanos Molina <Jose_castellanos@hotmail.com> https://github.com/matlock08
