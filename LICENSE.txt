@@ -23,7 +23,7 @@ IN THE SOFTWARE.
 Further patches have been contributed under the same license by:
 
 Jorge Jimenez <jota@tuxpan.com> http://groups.google.com/groups/profile?enc_user=Ey3jEg8AAACg1wBgVrjM04pX08V0u_rp
-Karl Michael Davis <karl.michael.davis@gmail.com>
+Karl Michael Davis <karl.michael.davis@gmail.com> https://github.com/karlmdavis
 Manfred Moser <manfred@simpligility.com> http://www.simpligility.com
 Matt Fletcher <fletcher@atomicobject.com>  http://www.atomicobject.com/pages/Matt+Fletcher
 Zachary Kurmasz <zachary.kurmas@atomicobject.com> http://www.cis.gvsu.edu/~kurmasz/
@@ -34,13 +34,13 @@ Nebojsa Licina <nebe.daredevil@gmail.com>
 Rainer Klier <rainer.klier@gmail.com>
 Andreas Mattisson <andreas.mattisson@gmail.com>
 Mark Radbourne <markradb@gmail.com>
-Andrew Oppenlander <andrew.oppenlander@gmail.com>
+Andrew Oppenlander <andrew.oppenlander@gmail.com> https://github.com/Usagimaru57
 Petter Uvesten <petter@everichon.com> http://www.everichon.com
 John Lindemann <jwlindemann@gmail.com>
 Finn Larsen <fl@digroli.com>
 Dawid Drozd <dordoz@debianPC.unauth.amu.edu.pl> https://github.com/gelldur
 Konrad Barth <Konrad.Barth@gmail.com>
-Nikolay Ivanets <>
-Sergej Koščejev <>
-Anatoliy Shuba <ashuba@ya.ru>
+Nikolay Ivanets <> https://github.com/StenaviN
+Sergej Koščejev <> https://github.com/sergej-koscejev
+Anatoliy Shuba <ashuba@ya.ru> https://github.com/AShuba
 Jose Castellanos Molina <Jose_castellanos@hotmail.com> https://github.com/matlock08
