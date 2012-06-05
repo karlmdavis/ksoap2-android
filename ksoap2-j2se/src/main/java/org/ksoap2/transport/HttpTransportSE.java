@@ -172,8 +172,10 @@ public class HttpTransportSE extends Transport {
                 if (null == hp.getKey()) {
                     continue;
                 }
-                if (hp.getKey().equals("Content-Encoding")
-                     && hp.getValue().equals("gzip")) {
+                // ignoring case since users found that all smaller case is used on some server
+                // and even if it is wrong according to spec, we rather have it work..
+                if (hp.getKey().equalsIgnoreCase("Content-Encoding")
+                     && hp.getValue().equalsIgnoreCase("gzip")) {
                     gZippedContent = true;
                     break;
                 }
