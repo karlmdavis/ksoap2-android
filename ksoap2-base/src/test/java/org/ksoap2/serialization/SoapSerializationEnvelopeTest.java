@@ -462,7 +462,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         byte[] request = null;
         request = myTransport.createRequestData(envelope);
         String xmlString = new String(request);
-        assertGetStatusResponse(xmlString, true);
+        assertGetStatusResponse(xmlString);
     }
 
     /**
@@ -493,7 +493,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
      * @throws Throwable
      */
     public void testGetStatusResponse() throws Throwable {
-        assertGetStatusResponse(getStatusResponse, false);
+        assertGetStatusResponse(getStatusResponse);
     }
 
     /**
@@ -501,7 +501,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
      *
      * @throws Throwable
      */
-    public void assertGetStatusResponse(String xmlString, boolean nestedSoap) throws Throwable {
+    public void assertGetStatusResponse(String xmlString) throws Throwable {
         ByteArrayInputStream is = new ByteArrayInputStream(xmlString.toString().getBytes());
         envelope.addMapping("http://opcfoundation.org/webservices/XMLDA/1.0/", "GetStatusResponse",
                 SoapObject.class);
@@ -517,22 +517,22 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         SoapObject getStatusResult = (SoapObject) response.getProperty("GetStatusResult");
         assertNotNull(" GetStatusResult ", getStatusResult);
         assertEquals(" No Parameters (GetStatusResult)", 0, getStatusResult.getPropertyCount());
-        if(nestedSoap) {
-            assertEquals(" Five Attributes (GetStatusResult)", 5, getStatusResult.getAttributeCount());
-        } else {
+//        if(nestedSoap) {
+//            assertEquals(" Five Attributes (GetStatusResult)", 5, getStatusResult.getAttributeCount());
+//        } else {
             assertEquals(" Four Attributes (GetStatusResult)", 4, getStatusResult.getAttributeCount());
-        }
+//        }
         assertEquals("2003-05-26T20:17:42.4781250-07:00", getStatusResult.getAttribute("RcvTime"));
         assertEquals("2003-05-26T20:17:42.5781250-07:00", getStatusResult.getAttribute("ReplyTime"));
         assertEquals("running", getStatusResult.getAttribute("ServerState"));
         // first property is "Status"
         SoapObject status = (SoapObject) response.getProperty("Status");
         assertEquals(" Five Parameters (Status)", 5, status.getPropertyCount());
-        if(nestedSoap) {
-            assertEquals(" Three Attributes (Status)", 3, status.getAttributeCount());
-        } else {
+//        if(nestedSoap) {
+//            assertEquals(" Three Attributes (Status)", 3, status.getAttributeCount());
+//        } else {
         assertEquals(" Two Attributes (Status)", 2, status.getAttributeCount());
-        }
+//        }
         assertEquals("2003-05-26T20:16:45.0937500-07:00", status.getAttribute("StartTime"));
         assertEquals("1.00.1.00", status.getAttribute("ProductVersion"));
     }
@@ -616,14 +616,22 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         String nameDetail = "Detail";
 
         String expectedResponse
-                = "<n0:PlaceOrder xmlns:n0=\"namespace\">" +
-                "<n0:Details n1:type=\"n0:ArrayOfDetails\" xmlns:n1=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-                "<n0:Detail n1:type=\"n0:DetailBase\"><PartNumber>abc0</PartNumber><Quantity>0</Quantity></n0:Detail>" +
-                "<n0:Detail n1:type=\"n0:DetailBase\"><PartNumber>abc1</PartNumber><Quantity>1</Quantity></n0:Detail>" +
-                "<n0:Detail n1:type=\"n0:DetailBase\"><PartNumber>abc2</PartNumber><Quantity>2</Quantity></n0:Detail>" +
-                "</n0:Details>" +
-                "</n0:PlaceOrder>";
-
+            = "<n0:PlaceOrder xmlns:n0=\"namespace\">" +
+            "<n0:Details n1:type=\"n0:ArrayOfDetails\" xmlns:n1=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+            "<n0:Detail n1:type=\"n0:DetailBase\">" +
+                "<PartNumber n1:type=\"n2:string\" xmlns:n2=\"http://www.w3.org/2001/XMLSchema\">abc0</PartNumber>" +
+                "<Quantity n1:type=\"n3:string\" xmlns:n3=\"http://www.w3.org/2001/XMLSchema\">0</Quantity>" +
+            "</n0:Detail>" +
+            "<n0:Detail n1:type=\"n0:DetailBase\">" +
+                "<PartNumber n1:type=\"n4:string\" xmlns:n4=\"http://www.w3.org/2001/XMLSchema\">abc1</PartNumber>" +
+                "<Quantity n1:type=\"n5:string\" xmlns:n5=\"http://www.w3.org/2001/XMLSchema\">1</Quantity>" +
+            "</n0:Detail>" +
+            "<n0:Detail n1:type=\"n0:DetailBase\">" +
+                "<PartNumber n1:type=\"n6:string\" xmlns:n6=\"http://www.w3.org/2001/XMLSchema\">abc2</PartNumber>" +
+                "<Quantity n1:type=\"n7:string\" xmlns:n7=\"http://www.w3.org/2001/XMLSchema\">2</Quantity>" +
+            "</n0:Detail>" +
+            "</n0:Details>" +
+            "</n0:PlaceOrder>";
 
         SoapObject requestSoap = new SoapObject(namespace, "PlaceOrder");
 
@@ -638,7 +646,6 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         }
         requestSoap.addProperty(nameDetails, details);
 
-        envelope.implicitTypes = true;
         envelope.addAdornments = false;
         writeBodyWithSoapObject(requestSoap);
         String request = new String(outputStream.toByteArray());
