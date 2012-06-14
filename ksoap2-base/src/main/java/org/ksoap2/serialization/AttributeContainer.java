@@ -107,13 +107,6 @@ public class AttributeContainer {
         }
     }
 
-    /**
-     * @deprecated use #getAttributeSafely
-     */
-    public Object safeGetAttribute(String name) {
-        return getAttributeSafely(name);
-    }
-
     private Integer attributeIndex(String name) {
         for (int i = 0; i < attributes.size(); i++) {
             if (name.equals(((AttributeInfo) attributes.elementAt(i)).getName())) {
@@ -150,7 +143,7 @@ public class AttributeContainer {
             if (!other.hasAttribute(thisAttrib.getName())) {
                 return false;
             }
-            Object otherAttribValue = other.safeGetAttribute(thisAttrib.getName());
+            Object otherAttribValue = other.getAttributeSafely(thisAttrib.getName());
             if (!thisAttribValue.equals(otherAttribValue)) {
                 return false;
             }
