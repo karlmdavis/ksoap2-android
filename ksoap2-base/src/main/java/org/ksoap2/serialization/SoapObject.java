@@ -136,13 +136,6 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     /**
-     * @deprecated use #getProperty
-     */
-    public Object getNestedSoap(int index) {
-        return getProperty(index);
-    }
-
-    /**
      * @inheritDoc
      */
     public Object getProperty(int index) {
@@ -244,13 +237,6 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     /**
-     * @deprecated use #getPropertySafely
-     */
-    public Object safeGetProperty(final String name) {
-        return getPropertySafely(name);
-    }
-
-    /**
      * Get a property without chance of throwing an exception. An object can be
      * provided to this method; if the property is not found, this object will
      * be returned.
@@ -297,13 +283,6 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
                 return EMPTY_STRING;
             }
         }
-    }
-
-    /**
-     * @deprecated use #getPropertySafely
-     */
-    public Object safeGetProperty(final String name, final Object defaultThing) {
-        return getPropertySafely(name, defaultThing);
     }
 
     /**

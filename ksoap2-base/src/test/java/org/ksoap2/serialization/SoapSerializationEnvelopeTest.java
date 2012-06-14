@@ -87,7 +87,7 @@ public class SoapSerializationEnvelopeTest extends TestCase {
 
         SoapPrimitive longResp = (SoapPrimitive) cfr.getProperty("longResponse");
         assertEquals(ServiceConnectionFixture.theLongResponse + "", longResp.toString());
-        assertEquals("valueBar", longResp.safeGetAttribute("attrFoo"));
+        assertEquals("valueBar", longResp.getAttributeSafely("attrFoo"));
 
         assertEquals(ServiceConnectionFixture.theStringResponse, cfr.getProperty("stringResponse").toString());
         assertEquals(ServiceConnectionFixture.theIntegerResponse + "",
@@ -127,10 +127,8 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         SoapObject result = (SoapObject) envelope.getResponse();
 
         SoapPrimitive item = (SoapPrimitive) result.getProperty(0);
-        assertEquals("Alpine Urgent Care", item.safeGetAttribute("GetCensusByUrgentCarePROD2ResultKey"));
+        assertEquals("Alpine Urgent Care", item.getAttributeSafely("GetCensusByUrgentCarePROD2ResultKey"));
         assertEquals("1", item.toString());
-
-
     }
 
 
@@ -562,8 +560,8 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         sse.parseBody(parser);
 
         SoapPrimitive result = (SoapPrimitive) sse.getResponse();
-        assertEquals("fred", result.safeGetAttribute("name"));
-        assertEquals("anotherValue", result.safeGetAttribute("anotherAttr"));
+        assertEquals("fred", result.getAttributeSafely("name"));
+        assertEquals("anotherValue", result.getAttributeSafely("anotherAttr"));
         assertEquals("Barney", result.toString());
     }
 
@@ -587,15 +585,15 @@ public class SoapSerializationEnvelopeTest extends TestCase {
         SoapObject result = (SoapObject) sse.getResponse();
         SoapPrimitive fred = (SoapPrimitive) result.getProperty(0);
 
-        assertEquals("F", fred.safeGetAttribute("grade"));
+        assertEquals("F", fred.getAttributeSafely("grade"));
         assertEquals("Fred", fred.toString());
 
         SoapPrimitive chris = (SoapPrimitive) result.getProperty(1);
-        assertEquals("C", chris.safeGetAttribute("grade"));
+        assertEquals("C", chris.getAttributeSafely("grade"));
         assertEquals("Chris", chris.toString());
 
         SoapPrimitive allison = (SoapPrimitive) result.getProperty(2);
-        assertEquals("A", allison.safeGetAttribute("grade"));
+        assertEquals("A", allison.getAttributeSafely("grade"));
         assertEquals("Allison", allison.toString());
     }
 
