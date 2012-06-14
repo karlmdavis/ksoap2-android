@@ -532,15 +532,6 @@ public class SoapSerializationEnvelope extends SoapEnvelope
     }
 
     /**
-     * @deprecated Please use the getResponse going forward
-     * @see #getResponse()
-     */
-    public Object getResult() {
-        KvmSerializable ks = (KvmSerializable) bodyIn;
-        return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
-    }
-
-    /**
      * Serializes the request object to the given XmlSerliazer object
      *
      * @param writer
