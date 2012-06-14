@@ -32,7 +32,6 @@ public class HttpsTransportSE extends HttpTransportSE{
      * Returns the HttpsServiceConnectionSE and creates it if necessary
      * @see org.ksoap2.transport.HttpsTransportSE#getServiceConnection()
      */
-    @Override
     public ServiceConnection getServiceConnection() throws IOException
     {
         if (serviceConnection == null) {
