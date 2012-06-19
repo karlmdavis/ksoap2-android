@@ -10,6 +10,7 @@ import java.util.List;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.transport.ServiceConnection;
 import org.ksoap2.transport.Transport;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -96,4 +97,9 @@ public class MockTransport extends Transport
     public String getPath() {
         throw new RuntimeException("call not currently implemented");
     }
+
+    public ServiceConnection getServiceConnection() {
+        throw new RuntimeException("call not currently implemented");
+    }
+
 }

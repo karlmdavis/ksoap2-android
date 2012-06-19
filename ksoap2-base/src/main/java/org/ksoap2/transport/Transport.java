@@ -194,4 +194,6 @@ abstract public class Transport {
      * @return The URL's path
      */
     abstract public String getPath();
+
+    abstract public ServiceConnection getServiceConnection() throws IOException;
 }

@@ -228,7 +228,7 @@ public class HttpTransport extends Transport {
         }
     }
 
-    protected ServiceConnection getServiceConnection() throws IOException {
+    public ServiceConnection getServiceConnection() throws IOException {
         return new ServiceConnectionMidp(url);
     }
 
