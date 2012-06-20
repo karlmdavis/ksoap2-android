@@ -54,10 +54,13 @@ abstract public class Transport {
     /** String dump of response for debugging */
     public String responseDump;
     private String xmlVersionTag = "";
+    
 
     protected static final String CONTENT_TYPE_XML_CHARSET_UTF_8 = "text/xml;charset=utf-8";
     protected static final String CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8 = "application/soap+xml;charset=utf-8";
     protected static final String USER_AGENT = "ksoap2-android/2.6.0+";
+
+    private int bufferLength = ServiceConnection.DEFAULT_BUFFER_SIZE;
 
     public Transport() {
     }
@@ -69,6 +72,12 @@ abstract public class Transport {
     public Transport(String url, int timeout) {
         this.url = url;
         this.timeout = timeout;
+    }
+
+    public Transport(String url, int timeout, int bufferLength) {
+        this.url = url;
+        this.timeout = timeout;
+        this.bufferLength = bufferLength;
     }
 
     /**
@@ -88,6 +97,13 @@ abstract public class Transport {
         this.proxy = proxy;
         this.url = url;
         this.timeout = timeout;
+    }
+
+    public Transport(Proxy proxy, String url, int timeout, int bufferLength) {
+        this.proxy = proxy;
+        this.url = url;
+        this.timeout = timeout;
+        this.bufferLength = bufferLength;
     }
 
     /**

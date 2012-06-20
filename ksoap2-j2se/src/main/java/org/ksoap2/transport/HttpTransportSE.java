@@ -142,6 +142,9 @@ public class HttpTransportSE extends Transport {
         connection.setRequestProperty("Connection", "close");
         connection.setRequestProperty("Accept-Encoding", "gzip");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
+        // For best performance, call setFixedLengthStreamingMode(int) when the body length is known in advance
+        // @see "http://developer.android.com/reference/java/net/HttpURLConnection.html" Posting Content
+        connection.setFixedLengthStreamingMode(requestData.length);
             
         // Pass the headers provided by the user along with the call
         if (headers != null) {
