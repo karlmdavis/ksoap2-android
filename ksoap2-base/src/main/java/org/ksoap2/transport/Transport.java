@@ -120,7 +120,8 @@ abstract public class Transport {
      * Serializes the request.
      */
     protected byte[] createRequestData(SoapEnvelope envelope) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(bufferLength);
+        byte result[] = null;
         bos.write(xmlVersionTag.getBytes());
         XmlSerializer xw = new KXmlSerializer();
         xw.setOutput(bos, null);
@@ -129,7 +130,10 @@ abstract public class Transport {
         bos.write('\r');
         bos.write('\n');
         bos.flush();
-        return bos.toByteArray();
+        result = bos.toByteArray();
+        xw = null;
+        bos = null;
+        return result;
     }
 
     /**
