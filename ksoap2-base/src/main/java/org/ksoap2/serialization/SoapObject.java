@@ -402,22 +402,6 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     /**
-     * Returns the number of SoapObjects in properties
-     *
-     * @return the number of nestedSoapObjects
-     * @deprecated
-     */
-    public int getNestedSoapCount() {
-        int count = 0;
-        for(int i = 0; i < properties.size(); i++) {
-            if(properties.elementAt(i) instanceof SoapObject) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
      * Places PropertyInfo of desired property into a designated PropertyInfo
      * object. Just calls #getPropertyInfo and discards any provided properties.
      *
@@ -543,22 +527,6 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
     }
 
     /**
-     * Adds a property (parameter) to the object. This is essentially a sub
-     * element.
-     *
-     * @param propertyInfo
-     *            designated retainer of desired property
-     * @param value
-     *            the value of the property
-     * @deprecated property info now contains the value
-     */
-    public SoapObject addProperty(PropertyInfo propertyInfo, Object value) {
-        propertyInfo.setValue(value);
-        addProperty(propertyInfo);
-        return this;
-    }
-
-    /**
      * Add a property only if the value is not null.
      *
      * @param propertyInfo
@@ -567,7 +535,8 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      */
     public SoapObject addPropertyIfValue(PropertyInfo propertyInfo, Object value) {
         if (value != null) {
-            return addProperty(propertyInfo, value);
+            propertyInfo.setValue(value);
+            return addProperty(propertyInfo);
         } else {
             return this;
         }

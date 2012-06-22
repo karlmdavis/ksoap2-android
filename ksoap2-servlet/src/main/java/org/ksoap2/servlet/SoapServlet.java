@@ -106,7 +106,7 @@ public class SoapServlet extends HttpServlet {
     public void publishMethod(Class service, String namespace, String name, PropertyInfo[] parameters) {
         SoapObject template = new SoapObject(namespace, name);
         for (int i = 0; i < parameters.length; i++) {
-            template.addProperty(parameters[i], null);
+            template.addProperty(parameters[i]);
         }
         envelope.addTemplate(template);
     }
