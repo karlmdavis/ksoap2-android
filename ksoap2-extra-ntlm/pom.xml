@@ -9,10 +9,10 @@
     <version>2.7.0-RC.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>ksoap2-extra-ntml</artifactId>
-  <name>ksoap2-extra-ntml</name>
+  <artifactId>ksoap2-extra-ntlm</artifactId>
+  <name>ksoap2-extra-ntlm</name>
   <packaging>jar</packaging>
-  <description>NTML support</description>
+  <description>NTLM support</description>
 
 
   <dependencies>
