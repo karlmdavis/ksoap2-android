@@ -45,4 +45,4 @@ Sergej Koščejev <> https://github.com/sergej-koscejev
 Anatoliy Shuba <ashuba@ya.ru> https://github.com/AShuba
 Jose Castellanos Molina <Jose_castellanos@hotmail.com> https://github.com/matlock08
 Dominik Maier domenukk@googlemail.com https://github.com/domenukk
-Vadim Kotov https://github.com/vkotovv
+Vadim Kotov vkotovv@gmail.com https://github.com/vkotovv
