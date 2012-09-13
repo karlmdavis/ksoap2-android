@@ -3,7 +3,7 @@
 
     <groupId>com.google.code.ksoap2-android</groupId>
     <artifactId>ksoap2-parent</artifactId>
-    <version>3.0.0-RC-2</version>
+    <version>3.0.0-RC.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>ksoap2-parent</name>
