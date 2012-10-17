@@ -131,16 +131,22 @@ public class KeepAliveHttpTransportSE extends Transport {
      */
     public List call(String soapAction, SoapEnvelope envelope, List headers) 
         throws IOException, XmlPullParserException {
-
+        
+        requestDump = null;
+        responseDump = null;
+        OutputStream os = null;
+        InputStream is = null;
+        List retHeaders = null;
+        boolean gZippedContent = false;
+        byte[] buf = null;
+        int contentLenght = 0;
+        
         if (soapAction == null) {
             soapAction = "\"\"";
         }
-
+        
         byte[] requestData = createRequestData(envelope, "UTF-8");
-            
-        requestDump = null;
-        responseDump = null;
-            
+
         ServiceConnection connection = getServiceConnection();
             
         connection.setRequestProperty("User-Agent", USER_AGENT);
@@ -156,7 +162,6 @@ public class KeepAliveHttpTransportSE extends Transport {
         } else {
             connection.setRequestProperty("Content-Type", CONTENT_TYPE_XML_CHARSET_UTF_8);
         }
-
         connection.setRequestProperty("Connection", "keep-alive");
         connection.setRequestProperty("Accept-Encoding", "gzip");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
@@ -170,10 +175,9 @@ public class KeepAliveHttpTransportSE extends Transport {
             }
         }
             
-        connection.setRequestMethod("POST");
-        
+        connection.setRequestMethod("POST");        
 
-        OutputStream os = connection.openOutputStream();
+        os = connection.openOutputStream();
       
         os.write(requestData, 0, requestData.length);
         os.flush();
@@ -181,13 +185,10 @@ public class KeepAliveHttpTransportSE extends Transport {
         
         if (debug) {
             requestDump = new String(requestData);
-        }
+        } 
+        
         requestData = null;
         
-        
-        InputStream is;
-        List retHeaders = null;
-        boolean gZippedContent = false;
             
         try {
             retHeaders = connection.getResponseProperties();
@@ -198,6 +199,18 @@ public class KeepAliveHttpTransportSE extends Transport {
                 if (null == hp.getKey()) {
                     continue;
                 }
+                
+                // If we know the size of the response, we should use the size to initiate vars
+                if (hp.getKey().equalsIgnoreCase("content-length") ) {
+                    if ( hp.getValue() != null ) {
+                        try {
+                            contentLenght = Integer.parseInt( hp.getValue() );
+                        } catch ( NumberFormatException nfe ) {
+                            contentLenght = -1;
+                        }
+                    }
+                }                
+                
                 // ignoring case since users found that all smaller case is used on some server
                 // and even if it is wrong according to spec, we rather have it work..
                 if (hp.getKey().equalsIgnoreCase("Content-Encoding")
@@ -226,24 +239,37 @@ public class KeepAliveHttpTransportSE extends Transport {
             }
         }
         
-        if ( is.markSupported() ) {
-            System.out.println("Mark supported");
-            is.mark( 1024 * 1024* 1 ); //bytes
-        } else {
-            System.out.println("Mark NOT supported");
+        if (debug) {
+            // If known use the size if not use default value 
+            ByteArrayOutputStream bos = new ByteArrayOutputStream( (contentLenght > 0 ) ? contentLenght : bufferLength);
+            buf = new byte[256];
+                    
+            while (true) {
+                int rd = is.read(buf, 0, 256);
+                if (rd == -1) {
+                    break;
+                }
+                bos.write(buf, 0, rd);
+            }
+                    
+            bos.flush();
+            buf = null;
+            buf = bos.toByteArray();
+            bos = null;            
+            responseDump = new String(buf);
+            
+            is.close();
+            is = new ByteArrayInputStream(buf);
+            
         }
-        
+                
         // Parse response  before any debugging process
         parseResponse(envelope, is);
         
-        if (debug) {
-            System.out.println("Mark reset");
-            is.reset();
-            responseDump = new String(is.toString() );// Try to fill it with out copying            
-        }
-      
-        // release all resources        
+        // release all resources   
+        is.close();
         os = null;
+        buf = null;
                 
         return retHeaders;
     }
@@ -267,14 +293,10 @@ public class KeepAliveHttpTransportSE extends Transport {
     }
 
     public String getHost() {
-
+        
         String retVal = null;
         
-        try {
-            retVal = new URL(url).getHost();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        retVal = serviceConnection.getHost();
         
         return retVal;
     }
@@ -282,12 +304,8 @@ public class KeepAliveHttpTransportSE extends Transport {
     public int getPort() {
         
         int retVal = -1;
-        
-        try {
-            retVal = new URL(url).getPort();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+                
+        retVal = serviceConnection.getPort();
         
         return retVal;
     }
@@ -295,13 +313,9 @@ public class KeepAliveHttpTransportSE extends Transport {
     public String getPath() {
         
         String retVal = null;
-        
-        try {
-            retVal = new URL(url).getPath();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        
+                
+        retVal = serviceConnection.getPath();
+                
         return retVal;
     }
 }
