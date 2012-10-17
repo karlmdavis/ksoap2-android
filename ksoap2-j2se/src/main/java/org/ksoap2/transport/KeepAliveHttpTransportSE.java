@@ -226,13 +226,18 @@ public class KeepAliveHttpTransportSE extends Transport {
             }
         }
         
-        if ( debug && is.markSupported() ) {
-             mark( 1024 * 1024* 1 ); //bytes
+        if ( is.markSupported() ) {
+            System.out.println("Mark supported");
+            is.mark( 1024 * 1024* 1 ); //bytes
+        } else {
+            System.out.println("Mark NOT supported");
         }
+        
         // Parse response  before any debugging process
         parseResponse(envelope, is);
         
         if (debug) {
+            System.out.println("Mark reset");
             is.reset();
             responseDump = new String(is.toString() );// Try to fill it with out copying            
         }
