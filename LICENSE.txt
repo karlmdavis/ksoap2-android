@@ -46,3 +46,5 @@ Anatoliy Shuba <ashuba@ya.ru> https://github.com/AShuba
 Jose Castellanos Molina <Jose_castellanos@hotmail.com> https://github.com/matlock08
 Dominik Maier domenukk@googlemail.com https://github.com/domenukk
 Vadim Kotov vkotovv@gmail.com https://github.com/vkotovv
+Ahmad Maziz Esa maziz.esa@gmail.com https://github.com/MazizEsa
+
