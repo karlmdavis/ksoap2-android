@@ -38,81 +38,11 @@ import org.xmlpull.v1.*;
 /**
  * A J2SE based HttpTransport layer.
  */
-public class KeepAliveHttpTransportSE extends Transport {
+public class KeepAliveHttpTransportSE extends HttpTransportSE {
 
     private ServiceConnection serviceConnection;
 
-    /**
-     * Creates instance of HttpTransportSE with set url
-     * 
-     * @param url
-     *            the destination to POST SOAP data
-     */
-    public KeepAliveHttpTransportSE(String url) {
-        super(null, url);
-    }
-        
-    /**
-     * Creates instance of HttpTransportSE with set url and defines a
-     * proxy server to use to access it
-     * 
-     * @param proxy
-     * Proxy information or <code>null</code> for direct access
-     * @param url
-     * The destination to POST SOAP data
-     */
-    public KeepAliveHttpTransportSE(Proxy proxy, String url) {
-        super(proxy, url);
-    }
-        
-    /**
-     * Creates instance of HttpTransportSE with set url
-     * 
-     * @param url
-     *            the destination to POST SOAP data
-     * @param timeout
-     *   timeout for connection and Read Timeouts (milliseconds)
-     */
-    public KeepAliveHttpTransportSE(String url, int timeout) {
-        super(url, timeout);
-    }
-
-    public KeepAliveHttpTransportSE(Proxy proxy, String url, int timeout) {
-        super(proxy, url, timeout);
-    }
-
-    /**
-     * Creates instance of HttpTransportSE with set url
-     * 
-     * @param url
-     *            the destination to POST SOAP data
-     * @param timeout
-     *   timeout for connection and Read Timeouts (milliseconds)
-     * @param contentLength
-     *   Content Lenght in bytes if known in advance
-     */
-    public KeepAliveHttpTransportSE(String url, int timeout, int contentLength) {
-        super(url, timeout);
-    }
-
-    public KeepAliveHttpTransportSE(Proxy proxy, String url, int timeout, int contentLength) {
-        super(proxy, url, timeout);
-    }
-
-    /**
-     * set the desired soapAction header field
-     * 
-     * @param soapAction
-     *            the desired soapAction
-     * @param envelope
-     *            the envelope containing the information for the soap call.
-     * @throws IOException
-     * @throws XmlPullParserException
-     */
-    public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
-            
-        call(soapAction, envelope, null);
-    }
+   
 
     /**
      * 
@@ -132,157 +62,38 @@ public class KeepAliveHttpTransportSE extends Transport {
     public List call(String soapAction, SoapEnvelope envelope, List headers) 
         throws IOException, XmlPullParserException {
         
-        requestDump = null;
-        responseDump = null;
-        OutputStream os = null;
-        InputStream is = null;
-        List retHeaders = null;
-        boolean gZippedContent = false;
-        byte[] buf = null;
-        int contentLenght = 0;
-        
-        if (soapAction == null) {
-            soapAction = "\"\"";
+        if ( headers == null ) {
+            headers = new ArrayList();
         }
         
-        byte[] requestData = createRequestData(envelope, "UTF-8");
-
-        ServiceConnection connection = getServiceConnection();
-            
-        connection.setRequestProperty("User-Agent", USER_AGENT);
-        // SOAPAction is not a valid header for VER12 so do not add
-        // it
-        // @see "http://code.google.com/p/ksoap2-android/issues/detail?id=67
-        if (envelope.version != SoapSerializationEnvelope.VER12) {
-            connection.setRequestProperty("SOAPAction", soapAction);
-        }
-
-        if (envelope.version == SoapSerializationEnvelope.VER12) {
-            connection.setRequestProperty("Content-Type", CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8);
-        } else {
-            connection.setRequestProperty("Content-Type", CONTENT_TYPE_XML_CHARSET_UTF_8);
-        }
-        connection.setRequestProperty("Connection", "keep-alive");
-        connection.setRequestProperty("Accept-Encoding", "gzip");
-        connection.setRequestProperty("Content-Length", "" + requestData.length);
-        connection.setFixedLengthStreamingMode(requestData.length);
-            
-        // Pass the headers provided by the user along with the call
-        if (headers != null) {
-            for (int i = 0; i < headers.size(); i++) {
-                HeaderProperty hp = (HeaderProperty) headers.get(i);
-                connection.setRequestProperty(hp.getKey(), hp.getValue());
-            }
-        }
-            
-        connection.setRequestMethod("POST");        
-
-        os = connection.openOutputStream();
-      
-        os.write(requestData, 0, requestData.length);
-        os.flush();
-        os.close();        
+        HeaderProperty ref = getHeader( headers, "Connection" );
         
-        if (debug) {
-            requestDump = new String(requestData);
-        } 
+        if ( ref == null ) {
+            ref = new HeaderProperty();
+            headers.add( ref );
+        }
         
-        requestData = null;
+        hp.setKey("Connection");
+        hp.setValue("keep-alive");       
         
-            
-        try {
-            retHeaders = connection.getResponseProperties();
-            
-            for (int i = 0; i < retHeaders.size(); i++) {
-                HeaderProperty hp = (HeaderProperty)retHeaders.get(i);
-                // HTTP response code has null key
-                if (null == hp.getKey()) {
-                    continue;
-                }
+        call(soapAction, envelope, headers );
                 
-                // If we know the size of the response, we should use the size to initiate vars
-                if (hp.getKey().equalsIgnoreCase("content-length") ) {
-                    if ( hp.getValue() != null ) {
-                        try {
-                            contentLenght = Integer.parseInt( hp.getValue() );
-                        } catch ( NumberFormatException nfe ) {
-                            contentLenght = -1;
-                        }
-                    }
-                }                
-                
-                // ignoring case since users found that all smaller case is used on some server
-                // and even if it is wrong according to spec, we rather have it work..
-                if (hp.getKey().equalsIgnoreCase("Content-Encoding")
-                     && hp.getValue().equalsIgnoreCase("gzip")) {
-                    gZippedContent = true;
-                    break;
-                }
-            }
-            
-            if (gZippedContent) {                
-                is = getUnZippedInputStream(connection.openInputStream());
-            } else {
-                is = connection.openInputStream();
-            }
-            
-        } catch (IOException e) {
-            if(gZippedContent) {
-                is = getUnZippedInputStream(connection.getErrorStream());   
-            } else {
-                is = connection.getErrorStream();
-            }
-
-            if (is == null) {
-                connection.disconnect();
-                throw (e);
-            }
-        }
-        
-        if (debug) {
-            // If known use the size if not use default value 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream( (contentLenght > 0 ) ? contentLenght : bufferLength);
-            buf = new byte[256];
-                    
-            while (true) {
-                int rd = is.read(buf, 0, 256);
-                if (rd == -1) {
-                    break;
-                }
-                bos.write(buf, 0, rd);
-            }
-                    
-            bos.flush();
-            buf = null;
-            buf = bos.toByteArray();
-            bos = null;            
-            responseDump = new String(buf);
-            
-            is.close();
-            is = new ByteArrayInputStream(buf);
-            
-        }
-                
-        // Parse response  before any debugging process
-        parseResponse(envelope, is);
-        
-        // release all resources   
-        is.close();
-        os = null;
-        buf = null;
-                
-        return retHeaders;
     }
 
-    private InputStream getUnZippedInputStream(InputStream inputStream) throws IOException {
-        /* workaround for Android 2.3 
-           (see http://stackoverflow.com/questions/5131016/)
-        */
-        try {
-            return (GZIPInputStream) inputStream;
-        } catch (ClassCastException e) {
-            return new GZIPInputStream(inputStream);
+    protected HeaderProperty getHeader(List lista, String key) {
+        HeaderProperty res = null;
+    
+        if ( lista != null ) {
+            for( int i = 0; i < lista.length; i++ ) {
+                HeaderProperty hp = (HeaderProperty)lista.get(i);
+                if ( key.equals( hp.getKey() ) ) {
+                    res = hp;
+                    break;
+                }
+            }
         }
+    
+        return res;
     }
 
     public ServiceConnection getServiceConnection() throws IOException {
