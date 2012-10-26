@@ -25,6 +25,7 @@
 package org.ksoap2.transport;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -40,10 +41,62 @@ import org.xmlpull.v1.*;
  */
 public class KeepAliveHttpTransportSE extends HttpTransportSE {
 
-    private ServiceConnection serviceConnection;
+    /**
+     * Creates instance of KeepAliveHttpTransportSE with set url
+     * 
+     * @param url
+     *            the destination to POST SOAP data
+     */
+    public KeepAliveHttpTransportSE(String url) {
+        super(null, url);
+    }
+        
+    /**
+     * Creates instance of KeepAliveHttpTransportSE with set url and defines a
+     * proxy server to use to access it
+     * 
+     * @param proxy
+     * Proxy information or <code>null</code> for direct access
+     * @param url
+     * The destination to POST SOAP data
+     */
+    public KeepAliveHttpTransportSE(Proxy proxy, String url) {
+        super(proxy, url);
+    }
+        
+    /**
+     * Creates instance of KeepAliveHttpTransportSE with set url
+     * 
+     * @param url
+     *            the destination to POST SOAP data
+     * @param timeout
+     *   timeout for connection and Read Timeouts (milliseconds)
+     */
+    public KeepAliveHttpTransportSE(String url, int timeout) {
+        super(url, timeout);
+    }
 
-   
+    public KeepAliveHttpTransportSE(Proxy proxy, String url, int timeout) {
+        super(proxy, url, timeout);
+    }
 
+    /**
+     * Creates instance of KeepAliveHttpTransportSE with set url
+     * 
+     * @param url
+     *            the destination to POST SOAP data
+     * @param timeout
+     *   timeout for connection and Read Timeouts (milliseconds)
+     * @param contentLength
+     *   Content Lenght in bytes if known in advance
+     */
+    public KeepAliveHttpTransportSE(String url, int timeout, int contentLength) {
+        super(url, timeout);
+    }
+
+    public KeepAliveHttpTransportSE(Proxy proxy, String url, int timeout, int contentLength) {
+        super(proxy, url, timeout);
+    }
     /**
      * 
      * set the desired soapAction header field
@@ -69,14 +122,13 @@ public class KeepAliveHttpTransportSE extends HttpTransportSE {
         HeaderProperty ref = getHeader( headers, "Connection" );
         
         if ( ref == null ) {
-            ref = new HeaderProperty();
+            ref = new HeaderProperty("Connection","keep-alive");
             headers.add( ref );
-        }
+        } else {
+            ref.setValue("keep-alive");
+        }        
         
-        hp.setKey("Connection");
-        hp.setValue("keep-alive");       
-        
-        call(soapAction, envelope, headers );
+        return call(soapAction, envelope, headers );
                 
     }
 
@@ -84,7 +136,7 @@ public class KeepAliveHttpTransportSE extends HttpTransportSE {
         HeaderProperty res = null;
     
         if ( lista != null ) {
-            for( int i = 0; i < lista.length; i++ ) {
+            for( int i = 0; i < lista.size(); i++ ) {
                 HeaderProperty hp = (HeaderProperty)lista.get(i);
                 if ( key.equals( hp.getKey() ) ) {
                     res = hp;
@@ -96,37 +148,5 @@ public class KeepAliveHttpTransportSE extends HttpTransportSE {
         return res;
     }
 
-    public ServiceConnection getServiceConnection() throws IOException {
-        if (serviceConnection == null) {
-            serviceConnection = new ServiceConnectionSE(proxy, url, timeout);
-        }
-        return serviceConnection;
-    }
-
-    public String getHost() {
-        
-        String retVal = null;
-        
-        retVal = serviceConnection.getHost();
-        
-        return retVal;
-    }
-        
-    public int getPort() {
-        
-        int retVal = -1;
-                
-        retVal = serviceConnection.getPort();
-        
-        return retVal;
-    }
-        
-    public String getPath() {
-        
-        String retVal = null;
-                
-        retVal = serviceConnection.getPath();
-                
-        return retVal;
-    }
+   
 }
