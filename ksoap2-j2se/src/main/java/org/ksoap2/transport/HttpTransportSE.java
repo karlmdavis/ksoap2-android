@@ -213,15 +213,15 @@ public class HttpTransportSE extends Transport {
                 }
             }
             if (gZippedContent) {                
-                is = getUnZippedInputStream(connection.openInputStream());
+                is = getUnZippedInputStream(new BufferedIputStream(connection.openInputStream(),contentLenght));
             } else {
-                is = connection.openInputStream();
+                is = new BufferedIputStream(connection.openInputStream(),contentLenght);
             }
         } catch (IOException e) {
             if(gZippedContent) {
-                is = getUnZippedInputStream(connection.getErrorStream());   
+                is = getUnZippedInputStream(new BufferedIputStream(connection.getErrorStream(),contentLenght));   
             } else {
-                is = connection.getErrorStream();
+                is = new BufferedIputStream(connection.getErrorStream(),contentLenght);
             }
 
             if (is == null) {
@@ -229,6 +229,12 @@ public class HttpTransportSE extends Transport {
                 throw (e);
             }
         }    
+        
+        is.mark(contentLenght);
+        parseResponse(envelope, is);
+        is.reset();
+        
+        
         if (debug) {
             // If known use the size if not use default value 
             ByteArrayOutputStream bos = new ByteArrayOutputStream( (contentLenght > 0 ) 
@@ -247,13 +253,13 @@ public class HttpTransportSE extends Transport {
             buf = bos.toByteArray();
             bos = null;
             responseDump = new String(buf);
-            is.close();
-            is = new ByteArrayInputStream(buf);
+            
         }
       
-        parseResponse(envelope, is);
+        
         // release all resources 
         // is will be released inside parseResponse
+        is.close();
         os = null;
         buf = null;
         return retHeaders;
