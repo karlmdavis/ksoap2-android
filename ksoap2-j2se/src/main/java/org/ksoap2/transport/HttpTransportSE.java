@@ -182,7 +182,7 @@ public class HttpTransportSE extends Transport {
         InputStream is;
         List retHeaders = null;
         byte[] buf = null; // To allow releasing the reource after used
-        int contentLenght = 0; // To determine the size of the response and adjust buffer size
+        int contentLenght = 8192; // To determine the size of the response and adjust buffer size
         boolean gZippedContent = false;
             
         try {
@@ -199,7 +199,7 @@ public class HttpTransportSE extends Transport {
                         try {
                             contentLenght = Integer.parseInt( hp.getValue() );
                         } catch ( NumberFormatException nfe ) {
-                            contentLenght = -1;
+                            contentLenght = 8192;
                         }
                     }
                 }  
@@ -213,15 +213,17 @@ public class HttpTransportSE extends Transport {
                 }
             }
             if (gZippedContent) {                
-                is = getUnZippedInputStream(new BufferedIputStream(connection.openInputStream(),contentLenght));
+                is = getUnZippedInputStream(
+                        new BufferedInputStream(connection.openInputStream(),contentLenght));
             } else {
-                is = new BufferedIputStream(connection.openInputStream(),contentLenght);
+                is = new BufferedInputStream(connection.openInputStream(),contentLenght);
             }
         } catch (IOException e) {
             if(gZippedContent) {
-                is = getUnZippedInputStream(new BufferedIputStream(connection.getErrorStream(),contentLenght));   
+                is = getUnZippedInputStream(
+                        new BufferedInputStream(connection.getErrorStream(),contentLenght));   
             } else {
-                is = new BufferedIputStream(connection.getErrorStream(),contentLenght);
+                is = new BufferedInputStream(connection.getErrorStream(),contentLenght);
             }
 
             if (is == null) {
@@ -230,10 +232,7 @@ public class HttpTransportSE extends Transport {
             }
         }    
         
-        is.mark(contentLenght);
-        parseResponse(envelope, is);
-        is.reset();
-        
+                        
         
         if (debug) {
             // If known use the size if not use default value 
@@ -253,13 +252,13 @@ public class HttpTransportSE extends Transport {
             buf = bos.toByteArray();
             bos = null;
             responseDump = new String(buf);
-            
+            is.close();
+            is = new ByteArrayInputStream(buf);
         }
-      
-        
+              
+        parseResponse(envelope, is);
         // release all resources 
         // is will be released inside parseResponse
-        is.close();
         os = null;
         buf = null;
         return retHeaders;
