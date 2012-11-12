@@ -129,16 +129,27 @@ public class HttpTransport extends Transport {
         super(proxy, url);
     }
 
-    public List call(String targetNamespace, SoapEnvelope envelope, List headers)
+    public List call(String soapAction, SoapEnvelope envelope, List headers)
             throws IOException, XmlPullParserException {
-        return call(targetNamespace, envelope, headers, null);
+        return call(soapAction, envelope, headers, null);
     }
 
     /**
-     * set the desired soapAction header field
-     * 
+     *
+     * Call the soapaction on the remote server.
+     *
      * @param soapAction
      *            the desired soapAction
+     * @param envelope
+     *            the envelope containing the information for the soap call.
+     * @param headers
+     *              a list of HeaderProperties to be http header properties when establishing the connection
+     * @param outputFile
+     *              a file to stream the response into rather than parsing it, streaming happens when file is not null
+     *
+     * @return <code>CookieJar</code> with any cookies sent by the server
+     * @throws IOException
+     * @throws XmlPullParserException
      */
     public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
             throws IOException, XmlPullParserException {

@@ -114,25 +114,28 @@ public class HttpTransportSE extends Transport {
         call(soapAction, envelope, null);
     }
 
-    public List call(String targetNamespace, SoapEnvelope envelope, List headers)
+    public List call(String soapAction, SoapEnvelope envelope, List headers)
             throws IOException, XmlPullParserException {
-        return call(targetNamespace, envelope, headers, null);
+        return call(soapAction, envelope, headers, null);
     }
 
     /**
-     * 
-     * set the desired soapAction header field
-     * 
+     * Perform a soap call with a given namespace and the given envelope providing
+     * any extra headers that the user requires such as cookies. Headers that are
+     * returned by the web service will be returned to the caller in the form of a
+     * <code>List</code> of <code>HeaderProperty</code> instances.
+     *
      * @param soapAction
-     *            the desired soapAction
+     *            the namespace with which to perform the call in.
      * @param envelope
-     *            the envelope containing the information for the soap call.
+     *            the envelope the contains the information for the call.
      * @param headers
-     *              a list of HeaderProperties to be http header properties when establishing the connection
-     *            
-     * @return <code>CookieJar</code> with any cookies sent by the server
-     * @throws IOException
-     * @throws XmlPullParserException
+     *   <code>List</code> of <code>HeaderProperty</code> headers to send with the SOAP request.
+     * @param outputFile
+     *              a file to stream the response into rather than parsing it, streaming happens when file is not null
+     *
+     * @return Headers returned by the web service as a <code>List</code> of
+     * <code>HeaderProperty</code> instances.
      */
     public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
         throws IOException, XmlPullParserException {

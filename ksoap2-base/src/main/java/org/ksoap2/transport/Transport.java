@@ -179,7 +179,7 @@ abstract public class Transport {
      * returned by the web service will be returned to the caller in the form of a
      * <code>List</code> of <code>HeaderProperty</code> instances.
      * 
-     * @param targetNamespace
+     * @param soapAction
      *            the namespace with which to perform the call in.
      * @param envelope
      *            the envelope the contains the information for the call.
@@ -189,7 +189,7 @@ abstract public class Transport {
      * @return Headers returned by the web service as a <code>List</code> of
      * <code>HeaderProperty</code> instances.
      */
-    abstract public List call(String targetNamespace, SoapEnvelope envelope, List headers)
+    abstract public List call(String soapAction, SoapEnvelope envelope, List headers)
             throws IOException, XmlPullParserException;
 
     /**
@@ -198,29 +198,31 @@ abstract public class Transport {
      * returned by the web service will be returned to the caller in the form of a
      * <code>List</code> of <code>HeaderProperty</code> instances.
      *
-     * @param targetNamespace
+     * @param soapAction
      *            the namespace with which to perform the call in.
      * @param envelope
      *            the envelope the contains the information for the call.
      * @param headers
      *   <code>List</code> of <code>HeaderProperty</code> headers to send with the SOAP request.
+     * @param outputFile
+     *              a file to stream the response into rather than parsing it, streaming happens when file is not null
      *
      * @return Headers returned by the web service as a <code>List</code> of
      * <code>HeaderProperty</code> instances.
      */
-    abstract public List call(String targetNamespace, SoapEnvelope envelope, List headers, File file)
+    abstract public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
             throws IOException, XmlPullParserException;
 
     /**
      * Perform a soap call with a given namespace and the given envelope.
      * 
-     * @param targetNamespace
+     * @param soapAction
      *            the namespace with which to perform the call in.
      * @param envelope
      *            the envelope the contains the information for the call.
      */
-    public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException {
-        call(targetNamespace, envelope, null);
+    public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
+        call(soapAction, envelope, null);
      }
 
     /**
