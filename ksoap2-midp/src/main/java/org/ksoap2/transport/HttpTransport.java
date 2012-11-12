@@ -129,13 +129,18 @@ public class HttpTransport extends Transport {
         super(proxy, url);
     }
 
+    public List call(String targetNamespace, SoapEnvelope envelope, List headers)
+            throws IOException, XmlPullParserException {
+        return call(targetNamespace, envelope, headers, null);
+    }
+
     /**
      * set the desired soapAction header field
      * 
      * @param soapAction
      *            the desired soapAction
      */
-    public List call(String soapAction, SoapEnvelope envelope, List headers)
+    public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
             throws IOException, XmlPullParserException {
         if (soapAction == null) {
             soapAction = "\"\"";
@@ -170,20 +175,28 @@ public class HttpTransport extends Transport {
             requestData = null;
             is = connection.openInputStream();
             if (debug) {
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                byte[] buf = new byte[256];
-                while (true) {
-                    int rd = is.read(buf, 0, 256);
-                    if (rd == -1) {
-                        break;
-                    }
-                    bos.write(buf, 0, rd);
+                OutputStream bos;
+                if (outputFile != null) {
+                    bos = new FileOutputStream(outputFile);
+                } else {
+                    bos = new ByteArrayOutputStream();
                 }
-                bos.flush();
-                buf = bos.toByteArray();
-                responseDump = new String(buf);
-                is.close();
-                is = new ByteArrayInputStream(buf);
+
+                    byte[] buf = new byte[256];
+                    while (true) {
+                        int rd = is.read(buf, 0, 256);
+                        if (rd == -1) {
+                            break;
+                        }
+                        bos.write(buf, 0, rd);
+                    }
+                    bos.flush();
+                    if (bos instanceof ByteArrayOutputStream) {
+                        buf = ((ByteArrayOutputStream) bos).toByteArray();
+                    }
+                    responseDump = new String(buf);
+                    is.close();
+                    is = new ByteArrayInputStream(buf);
             }
 
             retHeaders = connection.getResponseProperties();

@@ -114,6 +114,11 @@ public class HttpTransportSE extends Transport {
         call(soapAction, envelope, null);
     }
 
+    public List call(String targetNamespace, SoapEnvelope envelope, List headers)
+            throws IOException, XmlPullParserException {
+        return call(targetNamespace, envelope, headers, null);
+    }
+
     /**
      * 
      * set the desired soapAction header field
@@ -129,7 +134,7 @@ public class HttpTransportSE extends Transport {
      * @throws IOException
      * @throws XmlPullParserException
      */
-    public List call(String soapAction, SoapEnvelope envelope, List headers) 
+    public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
         throws IOException, XmlPullParserException {
 
         if (soapAction == null) {
@@ -235,9 +240,14 @@ public class HttpTransportSE extends Transport {
                         
         
         if (debug) {
-            // If known use the size if not use default value 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream( (contentLength > 0 )
-                            ? contentLength : 256*1024);
+            OutputStream bos;
+            if (outputFile != null) {
+                bos = new FileOutputStream(outputFile);
+            } else {
+                // If known use the size if not use default value
+                bos = new ByteArrayOutputStream( (contentLength > 0 ) ? contentLength : 256*1024);
+            }
+
             buf = new byte[256];
                     
             while (true) {
@@ -249,13 +259,15 @@ public class HttpTransportSE extends Transport {
             }
                     
             bos.flush();
-            buf = bos.toByteArray();
+            if (bos instanceof ByteArrayOutputStream) {
+                buf = ((ByteArrayOutputStream) bos).toByteArray();
+            }
             bos = null;
             responseDump = new String(buf);
             is.close();
             is = new ByteArrayInputStream(buf);
         }
-              
+
         parseResponse(envelope, is);
         // release all resources 
         // input stream is will be released inside parseResponse

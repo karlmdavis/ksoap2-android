@@ -1,5 +1,6 @@
 package org.ksoap2.transport.mock;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -38,7 +39,12 @@ public class MockTransport extends Transport
     {
         throw new RuntimeException("call not currently implemented");
     }
-    
+
+    public List call(String targetNamespace, SoapEnvelope envelope, List headers, File file)
+            throws IOException, XmlPullParserException {
+        throw new RuntimeException("call not currently implemented");
+    }
+
     public void AddHeaders(List headers) {
         throw new RuntimeException("call not currently implemented");
     }

@@ -1,5 +1,6 @@
 package org.ksoap2.transport;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -56,8 +57,17 @@ public class NtlmTransport extends Transport {
 
     }
 
-    public List call(String soapAction, SoapEnvelope envelope, List headers)
+    public List call(String targetNamespace, SoapEnvelope envelope, List headers)
             throws IOException, XmlPullParserException {
+        return call(targetNamespace, envelope, headers, null);
+    }
+
+    public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
+            throws IOException, XmlPullParserException {
+        if (outputFile != null) {
+            // implemented in HttpTransportSE if you are willing to port..
+            throw new RuntimeException("Writing to file not supported");
+        }
         HttpResponse resp = null;
 
         setupNtlm(urlString, user, password);
@@ -71,9 +81,9 @@ public class NtlmTransport extends Transport {
             setHeaders(soapAction, envelope, httppost, headers);
 
             resp = client.execute(httppost, localContext);
-            HttpEntity respEentity = resp.getEntity();
+            HttpEntity respEntity = resp.getEntity();
 
-            InputStream is = respEentity.getContent();
+            InputStream is = respEntity.getContent();
             parseResponse(envelope, is);
 
         } catch (Exception ex) {
