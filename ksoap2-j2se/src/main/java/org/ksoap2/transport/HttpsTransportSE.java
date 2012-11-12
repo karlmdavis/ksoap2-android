@@ -2,6 +2,7 @@ package org.ksoap2.transport;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 
 /**
@@ -13,6 +14,7 @@ import java.net.URL;
 public class HttpsTransportSE extends HttpTransportSE{
 
     static final String PROTOCOL = "https";
+    private static final String PROTOCOL_FULL = PROTOCOL + "://";
 
     private ServiceConnection serviceConnection = null;
     private final String host;
@@ -21,7 +23,22 @@ public class HttpsTransportSE extends HttpTransportSE{
     private final int timeout;
 
     public HttpsTransportSE (String host, int port, String file, int timeout) {
-        super(HttpsTransportSE.PROTOCOL + "://" + host + ":" + port + file);
+        super(HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file);
+        this.host = host;
+        this.port = port;
+        this.file = file;
+        this.timeout = timeout;
+    }
+
+    /**
+     * Creates instance of HttpTransportSE with set url and defines a
+     * proxy server to use to access it
+     *
+     * @param proxy
+     * Proxy information or <code>null</code> for direct access
+     */
+    public HttpsTransportSE(Proxy proxy, String host, int port, String file, int timeout) {
+        super(proxy, HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file);
         this.host = host;
         this.port = port;
         this.file = file;
@@ -35,7 +52,7 @@ public class HttpsTransportSE extends HttpTransportSE{
     public ServiceConnection getServiceConnection() throws IOException
     {
         if (serviceConnection == null) {
-            serviceConnection = new HttpsServiceConnectionSE(host, port, file, timeout);
+            serviceConnection = new HttpsServiceConnectionSE(proxy, host, port, file, timeout);
         }
         return serviceConnection;
     }

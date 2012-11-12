@@ -8,6 +8,7 @@ import org.ksoap2.HeaderProperty;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -47,8 +48,29 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
      * @param timeout the timeout for the connection in milliseconds
      * @throws IOException
      */
-    public HttpsServiceConnectionSE(String host, int port, String file,
-                                     int timeout) throws IOException {
+    public HttpsServiceConnectionSE(String host, int port, String file, int timeout) throws IOException {
+        this(null, host, port, file, timeout);
+    }
+
+    /**
+     * Create the transport with the supplied parameters.
+     * @param proxy proxy server to use
+     * @param host the name of the host e.g. webservices.somewhere.com
+     * @param port the http port to connect on
+     * @param file the path to the file on the webserver that represents the
+     * webservice e.g. /api/services/myservice.jsp
+     * @param timeout the timeout for the connection in milliseconds
+     * @throws IOException
+     */
+    public HttpsServiceConnectionSE(Proxy proxy, String host, int port, String file, int timeout) throws IOException {
+
+        if (proxy == null) {
+            connection = (HttpsURLConnection) new URL(HttpsTransportSE.PROTOCOL, host, port, file).openConnection();
+        } else {
+            connection =
+                    (HttpsURLConnection) new URL(HttpsTransportSE.PROTOCOL, host, port, file).openConnection(proxy);
+
+        }
         connection = (HttpsURLConnection) new URL(HttpsTransportSE.PROTOCOL, host, port, file).openConnection();
         updateConnectionParameters(timeout);
     }
