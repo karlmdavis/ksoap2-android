@@ -24,16 +24,17 @@
  * */
 package org.ksoap2.transport;
 
-import java.util.List;
-import java.util.zip.GZIPInputStream;
+import org.ksoap2.HeaderProperty;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
-
-import org.ksoap2.*;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.xmlpull.v1.*;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 /**
  * A J2SE based HttpTransport layer.
@@ -179,8 +180,6 @@ public class HttpTransportSE extends Transport {
         }
             
         connection.setRequestMethod("POST");
-        
-
         OutputStream os = connection.openOutputStream();
       
         os.write(requestData, 0, requestData.length);
@@ -194,6 +193,12 @@ public class HttpTransportSE extends Transport {
         boolean gZippedContent = false;
             
         try {
+            //first check the response code....
+            int status = connection.getResponseStatus();
+            if(status != 200) {
+                throw new IOException("HTTP request failed, HTTP status: " + status);
+            }
+
             retHeaders = connection.getResponseProperties();
             for (int i = 0; i < retHeaders.size(); i++) {
                 HeaderProperty hp = (HeaderProperty)retHeaders.get(i);
@@ -201,6 +206,7 @@ public class HttpTransportSE extends Transport {
                 if (null == hp.getKey()) {
                     continue;
                 }
+
                 // If we know the size of the response, we should use the size to initiate vars
                 if (hp.getKey().equalsIgnoreCase("content-length") ) {
                     if ( hp.getValue() != null ) {
@@ -238,9 +244,7 @@ public class HttpTransportSE extends Transport {
                 connection.disconnect();
                 throw (e);
             }
-        }    
-        
-                        
+        }
         
         if (debug) {
             OutputStream bos;
