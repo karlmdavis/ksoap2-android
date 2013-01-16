@@ -194,7 +194,7 @@ public class HttpTransportSE extends Transport {
             
         try {
             //first check the response code....
-            int status = connection.getResponseStatus();
+            int status = connection.getResponseCode();
             if(status != 200) {
                 throw new IOException("HTTP request failed, HTTP status: " + status);
             }

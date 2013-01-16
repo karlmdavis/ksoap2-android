@@ -394,7 +394,7 @@ public class ServiceConnectionFixture implements ServiceConnection {
     return new LinkedList();
     }
 
-    public int getResponseStatus() throws IOException {
+    public int getResponseCode() throws IOException {
         return 200;
     }
 

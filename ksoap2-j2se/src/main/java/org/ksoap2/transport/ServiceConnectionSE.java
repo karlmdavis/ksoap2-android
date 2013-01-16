@@ -99,7 +99,7 @@ public class ServiceConnectionSE implements ServiceConnection {
         return retList;
     }
 
-    public int getResponseStatus() throws IOException {
+    public int getResponseCode() throws IOException {
         return connection.getResponseCode();
     }
 

@@ -65,7 +65,7 @@ public interface ServiceConnection {
      * @return an integer status value
      * @throws IOException
      */
-    public int getResponseStatus() throws IOException;
+    public int getResponseCode() throws IOException;
 
     /**
      * Set properties on the outgoing connection.
