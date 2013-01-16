@@ -7,7 +7,7 @@
 
 <module name="Checker">
     <module name="FileTabCharacter"></module>
-    <module name="NewlineAtEndOfFile"/>
+    <!--<module name="NewlineAtEndOfFile"/>-->
     <module name="TreeWalker">
         <module name="RedundantImport">
             <!-- Checks for redundant import statements. -->
