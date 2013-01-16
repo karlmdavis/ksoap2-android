@@ -179,7 +179,7 @@ public class HttpTransportSE extends Transport {
             }
         }
             
-        connection.setRequestMethod("POST");
+        connection.setRequestMethod("POST");      
         OutputStream os = connection.openOutputStream();
       
         os.write(requestData, 0, requestData.length);
