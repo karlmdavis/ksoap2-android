@@ -240,39 +240,18 @@ public class HttpTransportSE extends Transport {
                 is = new BufferedInputStream(connection.getErrorStream(),contentLength);
             }
 
-            if (is == null) {
-                connection.disconnect();
-                throw (e);
-            }
-        }
-        
-        if (debug) {
-            OutputStream bos;
-            if (outputFile != null) {
-                bos = new FileOutputStream(outputFile);
-            } else {
-                // If known use the size if not use default value
-                bos = new ByteArrayOutputStream( (contentLength > 0 ) ? contentLength : 256*1024);
+            if (debug && is != null) {
+                //go ahead and read the error stream into the debug buffers/file if needed.
+                readDebug(is, contentLength, outputFile);
             }
 
-            buf = new byte[256];
-                    
-            while (true) {
-                int rd = is.read(buf, 0, 256);
-                if (rd == -1) {
-                    break;
-                }
-                bos.write(buf, 0, rd);
-            }
-                    
-            bos.flush();
-            if (bos instanceof ByteArrayOutputStream) {
-                buf = ((ByteArrayOutputStream) bos).toByteArray();
-            }
-            bos = null;
-            responseDump = new String(buf);
-            is.close();
-            is = new ByteArrayInputStream(buf);
+            //we never want to drop through to attempting to parse the HTTP error stream as a SOAP response.
+            connection.disconnect();
+            throw e;
+        }
+
+        if(debug) {
+            is = readDebug(is, contentLength, outputFile);
         }
 
         parseResponse(envelope, is);
@@ -281,6 +260,35 @@ public class HttpTransportSE extends Transport {
         os = null;
         buf = null;
         return retHeaders;
+    }
+
+    private InputStream readDebug(InputStream is, int contentLength, File outputFile) throws IOException {
+        OutputStream bos;
+        if (outputFile != null) {
+            bos = new FileOutputStream(outputFile);
+        } else {
+            // If known use the size if not use default value
+            bos = new ByteArrayOutputStream( (contentLength > 0 ) ? contentLength : 256*1024);
+        }
+
+        byte[] buf = new byte[256];
+
+        while (true) {
+            int rd = is.read(buf, 0, 256);
+            if (rd == -1) {
+                break;
+            }
+            bos.write(buf, 0, rd);
+        }
+
+        bos.flush();
+        if (bos instanceof ByteArrayOutputStream) {
+            buf = ((ByteArrayOutputStream) bos).toByteArray();
+        }
+        bos = null;
+        responseDump = new String(buf);
+        is.close();
+        return new ByteArrayInputStream(buf);
     }
 
     private InputStream getUnZippedInputStream(InputStream inputStream) throws IOException {
