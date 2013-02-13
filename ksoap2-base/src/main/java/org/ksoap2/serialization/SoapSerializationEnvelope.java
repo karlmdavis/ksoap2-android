@@ -680,6 +680,14 @@ public class SoapSerializationEnvelope extends SoapEnvelope
              writer.attribute(enc, ARRAY_TYPE_LABEL, writer.getPrefix((String) arrType[0], false) + ":"
                     + arrType[1] + "[" + cnt + "]");
         }
+        else
+        {
+            // Get the namespace from mappings if available when arrayType is removed for .Net
+            if (itemsNamespace == null)
+            {
+                itemsNamespace = (String)arrType[0];
+            }
+        }
 
         boolean skipped = false;
         for (int i = 0; i < cnt; i++) {
