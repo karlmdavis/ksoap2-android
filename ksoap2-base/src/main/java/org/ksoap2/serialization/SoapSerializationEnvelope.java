@@ -610,13 +610,13 @@ public class SoapSerializationEnvelope extends SoapEnvelope
                     name = (String) qName[QNAME_TYPE];
                 }
 
-                writer.startTag((dotNet) ? "" : namespace, name);
+                writer.startTag(namespace, name);
                 if (!implicitTypes) {
                     String prefix = writer.getPrefix(namespace, true);
                     writer.attribute(xsi, TYPE_LABEL, prefix + ":" + type);
                 }
                 writeObjectBody(writer, nestedSoap);
-                writer.endTag((dotNet) ? "" : namespace, name);
+                writer.endTag(namespace, name);
             }
         }
     }
