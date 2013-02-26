@@ -27,7 +27,6 @@ public class KeepAliveHttpsTransportSE extends HttpsTransportSE
     private final String host;
     private final int port;
     private final String file;
-    private final int timeout;
     private ServiceConnection serviceConnection;
 
     public KeepAliveHttpsTransportSE (String host, int port, String file, int timeout) {

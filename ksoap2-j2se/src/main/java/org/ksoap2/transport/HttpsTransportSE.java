@@ -20,7 +20,6 @@ public class HttpsTransportSE extends HttpTransportSE{
     private final String host;
     private final int port;
     private final String file;
-    private final int timeout;
 
     public HttpsTransportSE (String host, int port, String file, int timeout) {
         super(HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file);
