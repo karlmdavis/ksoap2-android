@@ -308,43 +308,4 @@ public class HttpTransportSE extends Transport {
         }
         return serviceConnection;
     }
-
-    public String getHost() {
-
-        String retVal = null;
-        
-        try {
-            retVal = new URL(url).getHost();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        
-        return retVal;
-    }
-        
-    public int getPort() {
-        
-        int retVal = -1;
-        
-        try {
-            retVal = new URL(url).getPort();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        
-        return retVal;
-    }
-        
-    public String getPath() {
-        
-        String retVal = null;
-        
-        try {
-            retVal = new URL(url).getPath();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        
-        return retVal;
-    }
 }
