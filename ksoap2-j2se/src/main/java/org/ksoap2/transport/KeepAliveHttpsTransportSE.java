@@ -28,7 +28,6 @@ public class KeepAliveHttpsTransportSE extends HttpsTransportSE
 
     public KeepAliveHttpsTransportSE (String host, int port, String file, int timeout) {
         super(host, port, file, timeout);
-        this.timeout = timeout;
     }
 
     /**

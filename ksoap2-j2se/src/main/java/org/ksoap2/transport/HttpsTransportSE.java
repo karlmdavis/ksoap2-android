@@ -22,11 +22,10 @@ public class HttpsTransportSE extends HttpTransportSE{
     protected final String file;
 
     public HttpsTransportSE (String host, int port, String file, int timeout) {
-        super(HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file);
+        super(HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file, timeout);
         this.host = host;
         this.port = port;
         this.file = file;
-        this.timeout = timeout;
     }
 
     /**
