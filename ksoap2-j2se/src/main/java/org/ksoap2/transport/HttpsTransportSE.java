@@ -16,7 +16,6 @@ public class HttpsTransportSE extends HttpTransportSE{
     static final String PROTOCOL = "https";
     private static final String PROTOCOL_FULL = PROTOCOL + "://";
 
-    private ServiceConnection serviceConnection = null;
     protected final String host;
     protected final int port;
     protected final String file;
@@ -49,9 +48,6 @@ public class HttpsTransportSE extends HttpTransportSE{
      */
     public ServiceConnection getServiceConnection() throws IOException
     {
-        if (serviceConnection == null) {
-            serviceConnection = new HttpsServiceConnectionSE(proxy, host, port, file, timeout);
-        }
-        return serviceConnection;
+        return new HttpsServiceConnectionSE(proxy, host, port, file, timeout);
     }
 }
