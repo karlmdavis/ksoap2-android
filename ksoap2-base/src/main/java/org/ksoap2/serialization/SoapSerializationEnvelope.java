@@ -614,7 +614,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
                 if (propertyInfo.namespace != null && propertyInfo.namespace.length() > 0) {
                     namespace = propertyInfo.namespace;
                 } else {
-                	namespace = (String) qName[QNAME_NAMESPACE];
+                    namespace = (String) qName[QNAME_NAMESPACE];
                 }
 
                 writer.startTag(namespace, name);
