@@ -37,7 +37,8 @@ public class KeepAliveHttpsTransportSE extends HttpsTransportSE
     //@Override
     public ServiceConnection getServiceConnection() throws IOException
     {
-        ServiceConnection serviceConnection = new HttpsServiceConnectionSEIgnoringConnectionClose(host, port, file, timeout);
+        ServiceConnection serviceConnection = 
+                new HttpsServiceConnectionSEIgnoringConnectionClose(host, port, file, timeout);
         serviceConnection.setRequestProperty("Connection", "keep-alive");
         return serviceConnection;
     }
