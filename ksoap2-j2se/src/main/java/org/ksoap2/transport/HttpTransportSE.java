@@ -285,7 +285,7 @@ public class HttpTransportSE extends Transport {
         responseDump = new String(buf);
         is.close();
         
-        return outputFile != null ? new FileInputStream(outFile) ? new ByteArrayInputStream(buf);
+        return outputFile != null ? new FileInputStream(outputFile) : new ByteArrayInputStream(buf);
     }
 
     private InputStream getUnZippedInputStream(InputStream inputStream) throws IOException {
