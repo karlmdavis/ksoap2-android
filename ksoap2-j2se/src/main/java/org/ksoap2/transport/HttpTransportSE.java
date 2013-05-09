@@ -26,13 +26,13 @@ package org.ksoap2.transport;
 
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.*;
 import java.net.Proxy;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
 
 /**
  * A J2SE based HttpTransport layer.
@@ -142,12 +142,12 @@ public class HttpTransportSE extends Transport {
         }
 
         byte[] requestData = createRequestData(envelope, "UTF-8");
-            
+
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
-            
+
         ServiceConnection connection = getServiceConnection();
-            
+
         connection.setRequestProperty("User-Agent", USER_AGENT);
         // SOAPAction is not a valid header for VER12 so do not add
         // it
@@ -166,7 +166,7 @@ public class HttpTransportSE extends Transport {
         connection.setRequestProperty("Accept-Encoding", "gzip");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
         connection.setFixedLengthStreamingMode(requestData.length);
-            
+
         // Pass the headers provided by the user along with the call
         if (headers != null) {
             for (int i = 0; i < headers.size(); i++) {
@@ -174,10 +174,12 @@ public class HttpTransportSE extends Transport {
                 connection.setRequestProperty(hp.getKey(), hp.getValue());
             }
         }
-            
-        connection.setRequestMethod("POST");      
+
+        connection.setRequestMethod("POST");
+
+
         OutputStream os = connection.openOutputStream();
-      
+
         os.write(requestData, 0, requestData.length);
         os.flush();
         os.close();
@@ -187,11 +189,13 @@ public class HttpTransportSE extends Transport {
         byte[] buf = null; // To allow releasing the resource after used
         int contentLength = 8192; // To determine the size of the response and adjust buffer size
         boolean gZippedContent = false;
-            
+
+        int status = connection.getResponseCode();
+        boolean xmlContent = false;
+
         try {
             //first check the response code....
-            int status = connection.getResponseCode();
-            if(status != 200) {
+            if (status != 200 && status != 500) {
                 throw new IOException("HTTP request failed, HTTP status: " + status);
             }
 
@@ -212,8 +216,15 @@ public class HttpTransportSE extends Transport {
                             contentLength = 8192;
                         }
                     }
-                }  
-                
+                }
+
+                // ignoring case since users found that all smaller case is used on some server
+                // and even if it is wrong according to spec, we rather have it work..
+                if (hp.getKey().equalsIgnoreCase("Content-Type")
+                        && hp.getValue().contains("xml")) {
+                    xmlContent = true;
+                }
+
                 // ignoring case since users found that all smaller case is used on some server
                 // and even if it is wrong according to spec, we rather have it work..
                 if (hp.getKey().equalsIgnoreCase("Content-Encoding")
@@ -222,7 +233,7 @@ public class HttpTransportSE extends Transport {
                     break;
                 }
             }
-            if (gZippedContent) {                
+            if (gZippedContent) {
                 is = getUnZippedInputStream(
                         new BufferedInputStream(connection.openInputStream(),contentLength));
             } else {
@@ -236,17 +247,19 @@ public class HttpTransportSE extends Transport {
                 is = new BufferedInputStream(connection.getErrorStream(),contentLength);
             }
 
-            if (debug && is != null) {
-                //go ahead and read the error stream into the debug buffers/file if needed.
-                readDebug(is, contentLength, outputFile);
-            }
+            if (status != 200 && xmlContent != true) {
+                if (debug && is != null) {
+                    //go ahead and read the error stream into the debug buffers/file if needed.
+                    readDebug(is, contentLength, outputFile);
+                }
 
-            //we never want to drop through to attempting to parse the HTTP error stream as a SOAP response.
-            connection.disconnect();
-            throw e;
+                //we never want to drop through to attempting to parse the HTTP error stream as a SOAP response.
+                connection.disconnect();
+                throw e;
+            }
         }
 
-        if(debug) {
+        if (debug) {
             is = readDebug(is, contentLength, outputFile);
         }
 
