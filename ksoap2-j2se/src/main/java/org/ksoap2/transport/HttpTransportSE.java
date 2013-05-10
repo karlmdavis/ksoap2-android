@@ -187,16 +187,10 @@ public class HttpTransportSE extends Transport {
         byte[] buf = null; // To allow releasing the resource after used
         int contentLength = 8192; // To determine the size of the response and adjust buffer size
         boolean gZippedContent = false;
-
-        int status = connection.getResponseCode();
         boolean xmlContent = false;
+        int status = connection.getResponseCode();
 
         try {
-            //first check the response code....
-            if (status != 200 && status != 500) {
-                throw new IOException("HTTP request failed, HTTP status: " + status);
-            }
-
             retHeaders = connection.getResponseProperties();
             for (int i = 0; i < retHeaders.size(); i++) {
                 HeaderProperty hp = (HeaderProperty)retHeaders.get(i);
@@ -216,8 +210,8 @@ public class HttpTransportSE extends Transport {
                     }
                 }
 
-                // ignoring case since users found that all smaller case is used on some server
-                // and even if it is wrong according to spec, we rather have it work..
+                // Check the content-type header to see if we're getting back XML, in case of a
+                // SOAP fault on 500 codes
                 if (hp.getKey().equalsIgnoreCase("Content-Type")
                         && hp.getValue().contains("xml")) {
                     xmlContent = true;
@@ -228,9 +222,14 @@ public class HttpTransportSE extends Transport {
                 if (hp.getKey().equalsIgnoreCase("Content-Encoding")
                      && hp.getValue().equalsIgnoreCase("gzip")) {
                     gZippedContent = true;
-                    break;
                 }
             }
+
+            //first check the response code....
+            if (status != 200) {
+                throw new IOException("HTTP request failed, HTTP status: " + status);
+            }
+
             if (gZippedContent) {
                 is = getUnZippedInputStream(
                         new BufferedInputStream(connection.openInputStream(),contentLength));
@@ -245,7 +244,7 @@ public class HttpTransportSE extends Transport {
                 is = new BufferedInputStream(connection.getErrorStream(),contentLength);
             }
 
-            if (status != 200 && xmlContent != true) {
+            if (status != 200 && !xmlContent) {
                 if (debug && is != null) {
                     //go ahead and read the error stream into the debug buffers/file if needed.
                     readDebug(is, contentLength, outputFile);
