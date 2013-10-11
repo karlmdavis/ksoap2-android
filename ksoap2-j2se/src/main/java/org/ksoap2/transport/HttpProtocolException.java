@@ -35,7 +35,7 @@ public class HttpProtocolException extends IOException {
     /**
      * Returns the unexpected Http response code
      *
-     * @return reponse code
+     * @return response code
      */
     public int getStatusCode() {
         return statusCode;
