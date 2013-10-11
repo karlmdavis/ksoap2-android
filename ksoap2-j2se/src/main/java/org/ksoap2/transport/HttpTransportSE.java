@@ -107,7 +107,8 @@ public class HttpTransportSE extends Transport {
      * @throws IOException
      * @throws XmlPullParserException
      */
-    public void call(String soapAction, SoapEnvelope envelope) throws HttpResponseException, IOException, XmlPullParserException {
+    public void call(String soapAction, SoapEnvelope envelope)
+            throws HttpResponseException, IOException, XmlPullParserException {
             
         call(soapAction, envelope, null);
     }
@@ -258,8 +259,8 @@ public class HttpTransportSE extends Transport {
 
                     //we never want to drop through to attempting to parse the HTTP error stream as a SOAP response.
                     connection.disconnect();
+                    throw e;
                 }
-                throw e;
             }
         }
 
