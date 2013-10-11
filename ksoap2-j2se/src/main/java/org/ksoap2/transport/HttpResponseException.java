@@ -3,31 +3,31 @@ package org.ksoap2.transport;
 import java.io.IOException;
 
 /**
- * HttpProtocolException is an IOException that is to be thrown when a Http response code is different from 200.
+ * HttpResponseException is an IOException that is to be thrown when a Http response code is different from 200.
  * It allows for easier retrieval of the Http response code from the connection.
  *
  * @author Rui Pereira <syshex@gmail.com>
  */
-public class HttpProtocolException extends IOException {
+public class HttpResponseException extends IOException {
 
     private int statusCode;
 
-    public HttpProtocolException(int statusCode) {
+    public HttpResponseException(int statusCode) {
         super();
         this.statusCode = statusCode;
     }
 
-    public HttpProtocolException(String detailMessage, int statusCode) {
+    public HttpResponseException(String detailMessage, int statusCode) {
         super(detailMessage);
         this.statusCode = statusCode;
     }
 
-    public HttpProtocolException(String message, Throwable cause, int statusCode) {
+    public HttpResponseException(String message, Throwable cause, int statusCode) {
         super(message, cause);
         this.statusCode = statusCode;
     }
 
-    public HttpProtocolException(Throwable cause, int statusCode) {
+    public HttpResponseException(Throwable cause, int statusCode) {
         super(cause);
         this.statusCode = statusCode;
     }
