@@ -133,9 +133,12 @@ public class HttpTransportSE extends Transport {
      *
      * @return Headers returned by the web service as a <code>List</code> of
      * <code>HeaderProperty</code> instances.
+     *
+     * @throws HttpProtocolException
+     *              an IOException when Http response code is different from 200
      */
     public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
-        throws IOException, XmlPullParserException {
+        throws HttpProtocolException, IOException, XmlPullParserException {
 
         if (soapAction == null) {
             soapAction = "\"\"";
@@ -227,7 +230,8 @@ public class HttpTransportSE extends Transport {
 
             //first check the response code....
             if (status != 200) {
-                throw new IOException("HTTP request failed, HTTP status: " + status);
+                //throw new IOException("HTTP request failed, HTTP status: " + status);
+                throw new HttpProtocolException("HTTP request failed, HTTP status: " + status, status);
             }
 
             if (gZippedContent) {
