@@ -13,7 +13,7 @@ public class HttpsServiceConnectionSEIgnoringConnectionClose extends HttpsServic
     public void setRequestProperty(String key, String value) {
         // We want to ignore any setting of "Connection: close" because
         // it is buggy with Android SSL.
-        if (!"Connection".equalsIgnoreCase(key) && !"close".equalsIgnoreCase(value)) {
+        if (!"Connection".equalsIgnoreCase(key) || !"close".equalsIgnoreCase(value)) {
             super.setRequestProperty(key, value);
         }
     }
