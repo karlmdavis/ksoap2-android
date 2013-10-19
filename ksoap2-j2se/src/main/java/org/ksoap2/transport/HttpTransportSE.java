@@ -167,7 +167,8 @@ public class HttpTransportSE extends Transport {
             connection.setRequestProperty("Content-Type", CONTENT_TYPE_XML_CHARSET_UTF_8);
         }
 
-        connection.setRequestProperty("Connection", "close");
+        // this seems to cause issues so we are removing it
+        //connection.setRequestProperty("Connection", "close");
         connection.setRequestProperty("Accept-Encoding", "gzip");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
         connection.setFixedLengthStreamingMode(requestData.length);
