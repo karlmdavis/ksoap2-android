@@ -2,8 +2,8 @@
     <modelVersion>4.0.0</modelVersion>
 	<parent>
 	    <groupId>com.simpligility.maven</groupId>
-	    <artifactId>progressive-company-super-pom</artifactId>
-	    <version>0.3.1</version>
+	    <artifactId>progressive-organization-pom</artifactId>
+	    <version>1.0.0</version>
 	</parent>
     <groupId>com.google.code.ksoap2-android</groupId>
     <artifactId>ksoap2-parent</artifactId>
