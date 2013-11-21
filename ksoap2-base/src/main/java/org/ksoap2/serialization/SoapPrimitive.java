@@ -36,9 +36,9 @@ package org.ksoap2.serialization;
 public class SoapPrimitive extends AttributeContainer {
     protected String namespace;
     protected String name;
-    protected String value;
+    protected Object value;
 
-    public SoapPrimitive(String namespace, String name, String value) {
+    public SoapPrimitive(String namespace, String name, Object value) {
         this.namespace = namespace;
         this.name = name;
         this.value = value;
