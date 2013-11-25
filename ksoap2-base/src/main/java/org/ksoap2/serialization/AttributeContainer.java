@@ -3,7 +3,7 @@ package org.ksoap2.serialization;
 import java.util.Vector;
 
 public class AttributeContainer {
-    private Vector attributes = new Vector();
+    protected Vector attributes = new Vector();
 
     /**
      * Places AttributeInfo of desired attribute into a designated AttributeInfo object
