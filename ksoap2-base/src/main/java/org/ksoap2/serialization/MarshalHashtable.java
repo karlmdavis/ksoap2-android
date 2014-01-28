@@ -80,7 +80,7 @@ public class MarshalHashtable implements Marshal {
             Object key = keys.nextElement();
             item.setProperty(0, key);
             item.setProperty(1, h.get(key));
-            envelope.writeObjectBody(writer, item);
+            envelope.writeObjectBodyWithAttributes(writer, item);
             writer.endTag("", "item");
         }
     }
