@@ -650,7 +650,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
         }
     }
 
-    private void writeElement(XmlSerializer writer, Object element, PropertyInfo type, Object marshal)
+    protected void writeElement(XmlSerializer writer, Object element, PropertyInfo type, Object marshal)
             throws IOException {
         if (marshal != null) {
             ((Marshal) marshal).writeInstance(writer, element);
