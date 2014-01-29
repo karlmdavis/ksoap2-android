@@ -64,6 +64,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope
     public boolean implicitTypes;
 
     /**
+     * If set to true then all properties with null value will be skipped from the soap message.
+     * If false then null properties will be sent as <element nil="true" />
+     */
+    public boolean skipNullProperties;
+
+    /**
      * Set this variable to true for compatibility with what seems to be the default encoding for
      * .Net-Services. This feature is an extremely ugly hack. A much better option is to change the
      * configuration of the .Net-Server to standard Soap Serialization!
@@ -591,9 +597,12 @@ public class SoapSerializationEnvelope extends SoapEnvelope
             if(!(prop instanceof SoapObject)) {
                 // prop is a PropertyInfo
                 if ((propertyInfo.flags & PropertyInfo.TRANSIENT) == 0) {
-                    writer.startTag(propertyInfo.namespace, propertyInfo.name);
-                    writeProperty(writer, obj.getProperty(i), propertyInfo);
-                    writer.endTag(propertyInfo.namespace, propertyInfo.name);
+                    if(prop!=null || !skipNullProperties)
+                    {
+                        writer.startTag(propertyInfo.namespace, propertyInfo.name);
+                        writeProperty(writer, obj.getProperty(i), propertyInfo);
+                        writer.endTag(propertyInfo.namespace, propertyInfo.name);
+                    }
                 }
             } else {
                 // prop is a SoapObject
