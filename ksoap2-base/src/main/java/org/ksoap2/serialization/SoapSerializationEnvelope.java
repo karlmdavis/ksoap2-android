@@ -493,7 +493,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
     public void addMapping(String namespace, String name, Class clazz, Marshal marshal) {
         qNameToClass
                 .put(new SoapPrimitive(namespace, name, null), marshal == null ? (Object) clazz : marshal);
-        classToQName.put(clazz.getName(), new Object[] { namespace, name, null, marshal });
+        classToQName.put(clazz.getName(), new Object[]{namespace, name, null, marshal});
     }
 
     /**
@@ -563,22 +563,24 @@ public class SoapSerializationEnvelope extends SoapEnvelope
         }
     }
 
-    /**
-     * Writes the body of an SoapObject. This method write the attributes and then calls
-     * "writeObjectBody (writer, (KvmSerializable)obj);"
-     */
-    public void writeObjectBody(XmlSerializer writer, SoapObject obj) throws IOException {
-        SoapObject soapObject = (SoapObject) obj;
+     private void writeAttributes(XmlSerializer writer,AttributeContainer obj) throws IOException {
+        AttributeContainer soapObject= (AttributeContainer) obj;
         int cnt = soapObject.getAttributeCount();
         for (int counter = 0; counter < cnt; counter++) {
             AttributeInfo attributeInfo = new AttributeInfo();
             soapObject.getAttributeInfo(counter, attributeInfo);
-            writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(), attributeInfo.getValue()
-                    .toString());
+            writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(), attributeInfo.getValue()!=null? attributeInfo.getValue().toString():"");
         }
-        writeObjectBody(writer, (KvmSerializable) obj);
     }
 
+    public void writeObjectBodyWithAttributes(XmlSerializer writer, KvmSerializable obj) throws IOException
+    {
+        if(obj instanceof AttributeContainer)
+        {
+            writeAttributes(writer, (AttributeContainer) obj);
+        }
+        writeObjectBody(writer, obj);
+    }
     /**
      * Writes the body of an KvmSerializable object. This method is public for access from Marshal subclasses.
      */
@@ -631,7 +633,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
                     String prefix = writer.getPrefix(namespace, true);
                     writer.attribute(xsi, TYPE_LABEL, prefix + ":" + type);
                 }
-                writeObjectBody(writer, nestedSoap);
+                writeObjectBodyWithAttributes(writer, nestedSoap);
                 writer.endTag(namespace, name);
             }
         }
@@ -663,10 +665,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
             throws IOException {
         if (marshal != null) {
             ((Marshal) marshal).writeInstance(writer, element);
-        } else if (element instanceof SoapObject) {
-            writeObjectBody(writer, (SoapObject) element);
         } else if (element instanceof KvmSerializable) {
-            writeObjectBody(writer, (KvmSerializable) element);
+            writeObjectBodyWithAttributes(writer, (KvmSerializable) element);
         } else if (element instanceof Vector) {
             writeVectorBody(writer, (Vector) element, type.elementType);
         } else {
