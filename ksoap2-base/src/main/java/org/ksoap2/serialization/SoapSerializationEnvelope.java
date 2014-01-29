@@ -569,7 +569,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
         for (int counter = 0; counter < cnt; counter++) {
             AttributeInfo attributeInfo = new AttributeInfo();
             soapObject.getAttributeInfo(counter, attributeInfo);
-            writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(), attributeInfo.getValue()!=null? attributeInfo.getValue().toString():"");
+            writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(),
+                    attributeInfo.getValue() != null ? attributeInfo.getValue().toString() : "");
         }
     }
 
