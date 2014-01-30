@@ -236,19 +236,22 @@ public class HttpTransportSE extends Transport {
                 //throw new IOException("HTTP request failed, HTTP status: " + status);
                 throw new HttpResponseException("HTTP request failed, HTTP status: " + status, status);
             }
-
-            if (gZippedContent) {
-                is = getUnZippedInputStream(
-                        new BufferedInputStream(connection.openInputStream(),contentLength));
-            } else {
-                is = new BufferedInputStream(connection.openInputStream(),contentLength);
+            if (contentLength > 0) {
+                if (gZippedContent) {
+                    is = getUnZippedInputStream(
+                            new BufferedInputStream(connection.openInputStream(),contentLength));
+                } else {
+                    is = new BufferedInputStream(connection.openInputStream(),contentLength);
+                }
             }
         } catch (IOException e) {
-            if(gZippedContent) {
-                is = getUnZippedInputStream(
-                        new BufferedInputStream(connection.getErrorStream(),contentLength));
-            } else {
-                is = new BufferedInputStream(connection.getErrorStream(),contentLength);
+            if (contentLength > 0) {
+                if(gZippedContent && contentLength > 0) {
+                    is = getUnZippedInputStream(
+                            new BufferedInputStream(connection.getErrorStream(),contentLength));
+                } else {
+                    is = new BufferedInputStream(connection.getErrorStream(),contentLength);
+                }
             }
 
             if ( e instanceof HttpResponseException) {
