@@ -188,7 +188,7 @@ public class HttpTransportSE extends Transport {
         os.flush();
         os.close();
         requestData = null;
-        InputStream is;
+        InputStream is = null;
         List retHeaders = null;
         byte[] buf = null; // To allow releasing the resource after used
         int contentLength = 8192; // To determine the size of the response and adjust buffer size
