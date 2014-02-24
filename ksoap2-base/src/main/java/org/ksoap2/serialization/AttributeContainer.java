@@ -2,7 +2,7 @@ package org.ksoap2.serialization;
 
 import java.util.Vector;
 
-public class AttributeContainer {
+public class AttributeContainer implements HasAttributes{
     protected Vector attributes = new Vector();
 
     /**
