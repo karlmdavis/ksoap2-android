@@ -290,8 +290,15 @@ public class SoapSerializationEnvelope extends SoapEnvelope
         if (value == null) {
             return dflt;
         }
-        return value.length() - start < 3 ? dflt : Integer.parseInt(value.substring(start + 1,
-                value.length() - 1));
+        try
+        {
+            return value.length() - start < 3 ? dflt : Integer.parseInt(value.substring(start + 1,
+                    value.length() - 1));
+        }
+        catch (Exception ex)
+        {
+            return dflt;
+        }
     }
 
     protected void readVector(XmlPullParser parser, Vector v, PropertyInfo elementType) throws IOException,
