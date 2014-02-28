@@ -290,8 +290,15 @@ public class SoapSerializationEnvelope extends SoapEnvelope
         if (value == null) {
             return dflt;
         }
-        return value.length() - start < 3 ? dflt : Integer.parseInt(value.substring(start + 1,
-                value.length() - 1));
+        try
+        {
+            return value.length() - start < 3 ? dflt : Integer.parseInt(value.substring(start + 1,
+                    value.length() - 1));
+        }
+        catch (Exception ex)
+        {
+            return dflt;
+        }
     }
 
     protected void readVector(XmlPullParser parser, Vector v, PropertyInfo elementType) throws IOException,
@@ -563,8 +570,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
         }
     }
 
-     private void writeAttributes(XmlSerializer writer,AttributeContainer obj) throws IOException {
-        AttributeContainer soapObject= (AttributeContainer) obj;
+     private void writeAttributes(XmlSerializer writer,HasAttributes obj) throws IOException {
+         HasAttributes soapObject= (HasAttributes) obj;
         int cnt = soapObject.getAttributeCount();
         for (int counter = 0; counter < cnt; counter++) {
             AttributeInfo attributeInfo = new AttributeInfo();
@@ -576,9 +583,9 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 
     public void writeObjectBodyWithAttributes(XmlSerializer writer, KvmSerializable obj) throws IOException
     {
-        if(obj instanceof AttributeContainer)
+        if(obj instanceof HasAttributes)
         {
-            writeAttributes(writer, (AttributeContainer) obj);
+            writeAttributes(writer, (HasAttributes) obj);
         }
         writeObjectBody(writer, obj);
     }
