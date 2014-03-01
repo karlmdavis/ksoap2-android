@@ -302,7 +302,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         Integer index = propertyIndex(name);
         if (index != null){
             PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(index.intValue());
-            if (propertyInfo.getType()!=SoapObject.class){
+            if (propertyInfo.getType()!=SoapObject.class && propertyInfo.getValue()!=null){
                 return propertyInfo.getValue();
             } else {
                 propertyInfo = new PropertyInfo();
@@ -327,7 +327,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         Integer index = propertyIndex(name);
         if (index != null){
             PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(index.intValue());
-            if (propertyInfo.getType()!=SoapObject.class){
+            if (propertyInfo.getType()!=SoapObject.class && propertyInfo.getValue()!=null){
                 return propertyInfo.getValue().toString();
             } else {
                 return EMPTY_STRING;
@@ -349,7 +349,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         Integer index = propertyIndex(name);
         if (index != null){
             PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(index.intValue());
-            if (propertyInfo.getType()!=SoapObject.class){
+            if (propertyInfo.getType()!=SoapObject.class && propertyInfo.getValue()!=null){
                 return propertyInfo.getValue().toString();
             } else {
                 propertyInfo = new PropertyInfo();
@@ -375,7 +375,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         Integer index = propertyIndex(name);
         if (index != null){
             PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(index.intValue());
-            if (propertyInfo.getType()!=SoapObject.class){
+            if (propertyInfo.getType()!=SoapObject.class && propertyInfo.getValue()!=null){
                 return propertyInfo.getValue().toString();
             } else {
                 return EMPTY_STRING;
