@@ -675,7 +675,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
             throws IOException {
         if (marshal != null) {
             ((Marshal) marshal).writeInstance(writer, element);
-        } else if (element instanceof KvmSerializable || element==SoapPrimitive.NullNilElement || element==SoapPrimitive.NullSkip) {
+        } else if (element instanceof KvmSerializable || element==SoapPrimitive.NullNilElement 
+                || element==SoapPrimitive.NullSkip) {
             writeObjectBodyWithAttributes(writer, (KvmSerializable) element);
         } else if (element instanceof Vector) {
             writeVectorBody(writer, (Vector) element, type.elementType);
