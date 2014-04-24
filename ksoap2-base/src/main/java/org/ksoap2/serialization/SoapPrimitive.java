@@ -38,6 +38,9 @@ public class SoapPrimitive extends AttributeContainer {
     protected String name;
     protected Object value;
 
+    public  static final Object NullSkip = new Object();
+    public  static final Object NullNilElement = new Object();
+
     public SoapPrimitive(String namespace, String name, Object value) {
         this.namespace = namespace;
         this.name = name;

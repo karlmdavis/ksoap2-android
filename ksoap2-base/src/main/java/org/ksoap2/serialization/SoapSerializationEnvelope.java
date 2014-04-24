@@ -42,8 +42,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
     protected static final int QNAME_MARSHAL = 3;
     private static final String ANY_TYPE_LABEL = "anyType";
     private static final String ARRAY_MAPPING_NAME = "Array";
-    private static final String NULL_LABEL = "null";
-    private static final String NIL_LABEL = "nil";
+    protected static final String NULL_LABEL = "null";
+    protected static final String NIL_LABEL = "nil";
     private static final String HREF_LABEL = "href";
     private static final String ID_LABEL = "id";
     private static final String ROOT_LABEL = "root";
@@ -606,11 +606,13 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 
             if(!(prop instanceof SoapObject)) {
                 // prop is a PropertyInfo
-                if ((propertyInfo.flags & PropertyInfo.TRANSIENT) == 0) {
-                    if(prop!=null || !skipNullProperties)
+                if ((propertyInfo.flags & PropertyInfo.TRANSIENT) == 0)
+                {
+                    Object objValue=obj.getProperty(i);
+                    if((prop!=null || !skipNullProperties) && (objValue != SoapPrimitive.NullSkip))
                     {
                         writer.startTag(propertyInfo.namespace, propertyInfo.name);
-                        writeProperty(writer, obj.getProperty(i), propertyInfo);
+                        writeProperty(writer,objValue , propertyInfo);
                         writer.endTag(propertyInfo.namespace, propertyInfo.name);
                     }
                 }
@@ -648,7 +650,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
     }
 
     protected void writeProperty(XmlSerializer writer, Object obj, PropertyInfo type) throws IOException {
-        if (obj == null) {
+        if (obj == null || obj== SoapPrimitive.NullNilElement) {
             writer.attribute(xsi, version >= VER12 ? NIL_LABEL : NULL_LABEL, "true");
             return;
         }
@@ -673,7 +675,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
             throws IOException {
         if (marshal != null) {
             ((Marshal) marshal).writeInstance(writer, element);
-        } else if (element instanceof KvmSerializable) {
+        } else if (element instanceof KvmSerializable || element==SoapPrimitive.NullNilElement || element==SoapPrimitive.NullSkip) {
             writeObjectBodyWithAttributes(writer, (KvmSerializable) element);
         } else if (element instanceof Vector) {
             writeVectorBody(writer, (Vector) element, type.elementType);
