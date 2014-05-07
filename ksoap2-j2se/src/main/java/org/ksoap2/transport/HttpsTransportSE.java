@@ -15,9 +15,9 @@ public class HttpsTransportSE extends HttpTransportSE{
 
     static final String PROTOCOL = "https";
     private static final String PROTOCOL_FULL = PROTOCOL + "://";
-	
-	//connection instance, used for setting the SSLSocketFactory
-	private HttpsServiceConnectionSE connection;
+    
+    //connection instance, used for setting the SSLSocketFactory
+    private HttpsServiceConnectionSE connection;
 
     protected final String host;
     protected final int port;
@@ -49,13 +49,13 @@ public class HttpsTransportSE extends HttpTransportSE{
      * Returns the HttpsServiceConnectionSE and creates it if necessary
      * @see org.ksoap2.transport.HttpsTransportSE#getServiceConnection()
      */
-	public ServiceConnection getServiceConnection() throws IOException
-	{
-		if(connection != null) {
-			return connection;
-		} else {
-			connection = new HttpsServiceConnectionSE(proxy, host, port, file, timeout);
-			return connection;
-		}
-	}
+    public ServiceConnection getServiceConnection() throws IOException
+    {
+        if(connection != null) {
+            return connection;
+        } else {
+            connection = new HttpsServiceConnectionSE(proxy, host, port, file, timeout);
+            return connection;
+        }
+    }
 }
