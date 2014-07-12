@@ -283,7 +283,9 @@ public class HttpTransportSE extends Transport {
         return retHeaders;
     }
 
-    protected void sendData(byte[] requestData, ServiceConnection connection, SoapEnvelope envelope) throws IOException {
+    protected void sendData(byte[] requestData, ServiceConnection connection, SoapEnvelope envelope)
+            throws IOException
+    {
         connection.setRequestProperty("Content-Length", "" + requestData.length);
         connection.setFixedLengthStreamingMode(requestData.length);
 
