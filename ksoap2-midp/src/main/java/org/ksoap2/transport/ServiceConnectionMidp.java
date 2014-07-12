@@ -77,6 +77,10 @@ public class ServiceConnectionMidp implements ServiceConnection {
         //  not implemented in MIDP
     }
 
+    public void setChunkedStreamingMode() {
+
+    }
+
     public OutputStream openOutputStream() throws IOException {
         return connection.openOutputStream();
     }

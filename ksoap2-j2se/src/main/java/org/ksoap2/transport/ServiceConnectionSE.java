@@ -122,6 +122,10 @@ public class ServiceConnectionSE implements ServiceConnection {
         connection.setFixedLengthStreamingMode(contentLength);
     }
 
+    public void setChunkedStreamingMode() {
+        connection.setChunkedStreamingMode(0);
+    }
+
     public OutputStream openOutputStream() throws IOException {
         return connection.getOutputStream();
     }
