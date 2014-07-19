@@ -411,6 +411,10 @@ public class ServiceConnectionFixture implements ServiceConnection {
         
     }
 
+    public void setChunkedStreamingMode() {
+
+    }
+
     public OutputStream openOutputStream() throws IOException {
         return outputStream;
     }

@@ -97,6 +97,8 @@ public interface ServiceConnection {
      **/
     public void setFixedLengthStreamingMode(int contentLength);
 
+    public void setChunkedStreamingMode();
+
     /**
      * Open and return the outputStream to the endpoint.
      * 
