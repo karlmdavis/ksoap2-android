@@ -245,7 +245,7 @@ public class HttpTransportSE extends Transport {
             }
         } catch (IOException e) {
             if (contentLength > 0) {
-                if(gZippedContent && contentLength > 0) {
+                if(gZippedContent) {
                     is = getUnZippedInputStream(
                             new BufferedInputStream(connection.getErrorStream(),contentLength));
                 } else {
