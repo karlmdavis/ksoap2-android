@@ -197,4 +197,17 @@ public class AttributeContainer implements HasAttributes{
             attributes.addElement(attributeInfo);
         }
     }
+
+
+    public void setAttribute(AttributeInfo info) {
+
+
+    }
+
+
+    public void getAttribute(int index, AttributeInfo info) {
+
+
+    }
+
 }
