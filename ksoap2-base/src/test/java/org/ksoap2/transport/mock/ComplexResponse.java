@@ -86,15 +86,9 @@ public class ComplexResponse implements KvmSerializable {
         }
         info.namespace = namespace;
     }
-
-	public String getInnerText() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setInnerText(String s) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    public String getInnerText() {
+        return null;
+   }
+   public void setInnerText(String s) {
+   }
 }

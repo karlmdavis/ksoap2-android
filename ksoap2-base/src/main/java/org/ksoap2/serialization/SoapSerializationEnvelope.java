@@ -373,7 +373,9 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
      * subclasses. Precondition: On the start tag of the object or property, so href can be read.
      */
 
-    public Object read(XmlPullParser parser, Object owner, int index, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
+    public Object read(XmlPullParser parser, Object owner, int index, String namespace, String name, 
+            PropertyInfo expected) 
+            throws IOException, XmlPullParserException {
         String elementName = parser.getName();
         String href = parser.getAttributeValue(null, HREF_LABEL);
         Object obj;
