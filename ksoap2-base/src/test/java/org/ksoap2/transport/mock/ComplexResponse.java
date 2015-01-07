@@ -86,5 +86,9 @@ public class ComplexResponse implements KvmSerializable {
         }
         info.namespace = namespace;
     }
-
+    public String getInnerText() {
+        return null;
+   }
+   public void setInnerText(String s) {
+   }
 }

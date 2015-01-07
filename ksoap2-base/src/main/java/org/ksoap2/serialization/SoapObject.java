@@ -133,7 +133,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         }
         return false;
     }
-
+    
     public String getName() {
         return name;
     }
@@ -609,5 +609,10 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         }
         buf.append("}");
         return buf.toString();
+    }
+    public String getInnerText() {
+         return null;
+    }
+    public void setInnerText(String s) {
     }
 }

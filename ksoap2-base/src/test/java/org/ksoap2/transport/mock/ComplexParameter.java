@@ -67,4 +67,9 @@ public class ComplexParameter implements KvmSerializable {
         }
     }
 
+    public String getInnerText() {
+        return null;
+   }
+   public void setInnerText(String s) {
+   }
 }
