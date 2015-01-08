@@ -12,7 +12,7 @@ http://code.google.com/p/ksoap2-android/[http://code.google.com/p/ksoap2-android
 
 For discussions with others users, questions and more:
 
-http://groups.google.com/group/ksoap2-android[http://groups.google.com/group/ksoap2-android
+http://groups.google.com/group/ksoap2-android[http://groups.google.com/group/ksoap2-android]
 
 === CI Build 
 
