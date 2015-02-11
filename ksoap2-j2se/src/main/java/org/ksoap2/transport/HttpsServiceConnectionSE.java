@@ -64,9 +64,8 @@ public class HttpsServiceConnectionSE implements ServiceConnection {
         } else {
             connection =
                     (HttpsURLConnection) new URL(HttpsTransportSE.PROTOCOL, host, port, file).openConnection(proxy);
-
         }
-        connection = (HttpsURLConnection) new URL(HttpsTransportSE.PROTOCOL, host, port, file).openConnection();
+
         updateConnectionParameters(timeout);
     }
 
