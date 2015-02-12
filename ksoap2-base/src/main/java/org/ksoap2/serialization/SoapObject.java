@@ -193,7 +193,9 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
         if (index != null) {
             return getProperty(index.intValue());
         }
-        return null;
+        else {
+            throw new RuntimeException("illegal property: " + name);
+        }
     }
 
     /**
@@ -202,7 +204,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * @return the property if it exists; if not, {@link NullSoapObject} is
      *         returned
      */
-    public Object getPropertySafely(final String namespace,final String name) {
+    public Object getPropertyByNamespaceSafely(final String namespace, final String name) {
         Integer i = propertyIndex(namespace,name);
         if (i != null) {
             return getProperty(i.intValue());
@@ -218,7 +220,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable {
      * @return the string value of the property if it exists; if not, #EMPTY_STRING is
      *         returned
      */
-    public String getPropertySafelyAsString(final String namespace,final String name) {
+    public String getPropertyByNamespaceSafelyAsString(final String namespace,final String name) {
         Integer i = propertyIndex(namespace,name);
         if (i != null) {
             Object foo = getProperty(i.intValue());
