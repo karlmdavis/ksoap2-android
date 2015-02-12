@@ -232,7 +232,7 @@ public class HttpTransportSE extends Transport {
             //first check the response code....
             if (status != 200) {
                 //throw new IOException("HTTP request failed, HTTP status: " + status);
-                throw new HttpResponseException("HTTP request failed, HTTP status: " + status, status);
+                throw new HttpResponseException("HTTP request failed, HTTP status: " + status, status,retHeaders);
             }
 
             if (contentLength > 0) {
