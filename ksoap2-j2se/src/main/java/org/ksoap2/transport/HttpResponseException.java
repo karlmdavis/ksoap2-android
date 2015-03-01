@@ -1,6 +1,7 @@
 package org.ksoap2.transport;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * HttpResponseException is an IOException that is to be thrown when a Http response code is different from 200.
@@ -11,6 +12,7 @@ import java.io.IOException;
 public class HttpResponseException extends IOException {
 
     private int statusCode;
+    private List responseHeaders;
 
     public HttpResponseException(int statusCode) {
         super();
@@ -20,6 +22,12 @@ public class HttpResponseException extends IOException {
     public HttpResponseException(String detailMessage, int statusCode) {
         super(detailMessage);
         this.statusCode = statusCode;
+    }
+
+    public HttpResponseException(String detailMessage, int statusCode,List responseHeaders) {
+        super(detailMessage);
+        this.statusCode = statusCode;
+        this.responseHeaders=responseHeaders;
     }
 
     public HttpResponseException(String message, Throwable cause, int statusCode) {
@@ -39,5 +47,14 @@ public class HttpResponseException extends IOException {
      */
     public int getStatusCode() {
         return statusCode;
+    }
+
+    /**
+     * Returns all http headers from this response
+     *
+     * @return response code
+     */
+    public List getResponseHeaders() {
+        return responseHeaders;
     }
 }
