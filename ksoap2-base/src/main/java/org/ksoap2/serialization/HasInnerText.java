@@ -1,6 +1,6 @@
 package org.ksoap2.serialization;
 /**
- * Interface for classes requiring inner text of xml tags
+ * Interface for classes requiring inner text of xml  tags
  *
  * @author satansly
  */
