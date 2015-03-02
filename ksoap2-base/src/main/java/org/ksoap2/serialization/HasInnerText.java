@@ -5,7 +5,7 @@ package org.ksoap2.serialization;
  * @author satansly
  */
 public interface HasInnerText {
-	 /**
+     /**
      * Gets the inner text of xml tags
      */
     String getInnerText();
