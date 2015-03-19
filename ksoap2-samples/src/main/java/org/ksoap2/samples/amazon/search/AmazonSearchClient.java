@@ -27,7 +27,8 @@ public class AmazonSearchClient {
 
             registerObjects(envelope);
 
-            HttpTransportSE httpTransportSE = new HttpTransportSE("http://soap.amazon.com/onca/soap?Service=AWSECommerceService");
+            HttpTransportSE httpTransportSE =
+                    new HttpTransportSE("http://soap.amazon.com/onca/soap?Service=AWSECommerceService");
             httpTransportSE.setXmlVersionTag("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             try {
                 httpTransportSE.call("http://soap.amazon.com", envelope);

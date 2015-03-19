@@ -1,3 +1,4 @@
+Copyright (c) 2009-2012 the ksoap2-android project (http://code.google.com/p/ksoap2-android)
 Copyright (c) 2006, James Seigel, Calgary, AB., Canada
 Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
  
@@ -18,4 +19,32 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE. 
+
+Further patches have been contributed under the same license by:
+
+Jorge Jimenez <jota@tuxpan.com> http://groups.google.com/groups/profile?enc_user=Ey3jEg8AAACg1wBgVrjM04pX08V0u_rp
+Karl Michael Davis <karl.michael.davis@gmail.com> https://github.com/karlmdavis
+Manfred Moser <manfred@simpligility.com> http://www.simpligility.com
+Matt Fletcher <fletcher@atomicobject.com>  http://www.atomicobject.com/pages/Matt+Fletcher
+Zachary Kurmasz <zachary.kurmas@atomicobject.com> http://www.cis.gvsu.edu/~kurmasz/
+Juraj Ivančić" <juraj.ivancic@gmail.com>
+Edgar Hernández García <edgar_hz@yahoo.com>
+Jim Redman <ergouser@sourceforge.net>
+Nebojsa Licina <nebe.daredevil@gmail.com>
+Rainer Klier <rainer.klier@gmail.com>
+Andreas Mattisson <andreas.mattisson@gmail.com>
+Mark Radbourne <markradb@gmail.com>
+Andrew Oppenlander <andrew.oppenlander@gmail.com> https://github.com/Usagimaru57
+Petter Uvesten <petter@everichon.com> http://www.everichon.com
+John Lindemann <jwlindemann@gmail.com>
+Finn Larsen <fl@digroli.com>
+Dawid Drozd <dordoz@debianPC.unauth.amu.edu.pl> https://github.com/gelldur
+Konrad Barth <Konrad.Barth@gmail.com>
+Nikolay Ivanets <> https://github.com/StenaviN
+Sergej Koščejev <> https://github.com/sergej-koscejev
+Anatoliy Shuba <ashuba@ya.ru> https://github.com/AShuba
+Jose Castellanos Molina <Jose_castellanos@hotmail.com> https://github.com/matlock08
+Dominik Maier domenukk@googlemail.com https://github.com/domenukk
+Vadim Kotov vkotovv@gmail.com https://github.com/vkotovv
+Ahmad Maziz Esa maziz.esa@gmail.com https://github.com/MazizEsa
 

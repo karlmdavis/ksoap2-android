@@ -31,41 +31,40 @@ public class StockQuoteDemo extends MIDlet implements CommandListener, Runnable 
     public void destroyApp(boolean unconditional) {
     }
 
-	
-	public void run(){
-		try {
-			// build request string
-			String symbol = symbolField.getString();
+    public void run(){
+        try {
+            // build request string
+            String symbol = symbolField.getString();
 
-			SoapObject rpc =
-				new SoapObject("urn:xmethods-delayed-quotes", "getQuote");
+            SoapObject rpc =
+                new SoapObject("urn:xmethods-delayed-quotes", "getQuote");
 
-			rpc.addProperty("symbol", symbol);
+            rpc.addProperty("symbol", symbol);
 
-			SoapSerializationEnvelope envelope =
-				new SoapSerializationEnvelope(SoapEnvelope.VER10);
+            SoapSerializationEnvelope envelope =
+                new SoapSerializationEnvelope(SoapEnvelope.VER10);
 
-			envelope.bodyOut = rpc;
+            envelope.bodyOut = rpc;
 
-			resultItem.setLabel(symbol);
+            resultItem.setLabel(symbol);
 
-			HttpTransport ht = new HttpTransport("http://services.xmethods.net/soap");
-			//ht.debug = true;
-             
-			ht.call("urn:xmethods-delayed-quotes#getQuote", envelope);
-			resultItem.setText("" + envelope.getResponse());
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			resultItem.setLabel("Error:");
-			resultItem.setText(e.toString());
-		}
-	
-	}
+            HttpTransport ht = new HttpTransport("http://services.xmethods.net/soap");
+            //ht.debug = true;
+
+            ht.call("urn:xmethods-delayed-quotes#getQuote", envelope);
+            resultItem.setText("" + envelope.getResponse());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            resultItem.setLabel("Error:");
+            resultItem.setText(e.toString());
+        }
+
+    }
 
 
     public void commandAction(Command c, Displayable d) {
-		new Thread(this).start();
+        new Thread(this).start();
     }
 
     /** for me4se */

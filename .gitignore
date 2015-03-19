@@ -2,9 +2,14 @@
 bin/
 target*/
 *.log
+out
+*~
 
 # Project config files
 .settings/
 .project
 .classpath
+.idea/
+*.iml
 
+.DS_Store

@@ -21,12 +21,18 @@
 
 package org.ksoap2.transport;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Interface to allow the abstraction of the raw transport information
  */
 public interface ServiceConnection {
+
+    public static final int DEFAULT_TIMEOUT = 20000; // 20 seconds
+    public static final int DEFAULT_BUFFER_SIZE = 256*1024; // 256 Kb
 
     /**
      * Make an outgoing connection.
@@ -41,6 +47,25 @@ public interface ServiceConnection {
      * @exception IOException
      */
     public void disconnect() throws IOException;
+
+    /**
+     * Returns to the caller all of the headers that were returned with the
+     * response to the SOAP request. Primarily this gives the caller an 
+     * opportunity to save the cookies for later use.
+     * 
+     * @return List of HeaderProperty instances that were returned as part of the http response as http header
+     * properties
+     * 
+     * @exception IOException
+     */
+    public List getResponseProperties() throws IOException;
+
+    /**
+     * Returns the numerical HTTP status to the caller
+     * @return an integer status value
+     * @throws IOException
+     */
+    public int getResponseCode() throws IOException;
 
     /**
      * Set properties on the outgoing connection.
@@ -62,6 +87,17 @@ public interface ServiceConnection {
      * @exception IOException
      */
     public void setRequestMethod(String requestMethodType) throws IOException;
+
+    /**
+     * If the length of a HTTP request body is known ahead, sets fixed length 
+     * to enable streaming without buffering. Sets after connection will cause an exception.
+     *
+     * @param contentLength the fixed length of the HTTP request body
+     * @see http://developer.android.com/reference/java/net/HttpURLConnection.html
+     **/
+    public void setFixedLengthStreamingMode(int contentLength);
+
+    public void setChunkedStreamingMode();
 
     /**
      * Open and return the outputStream to the endpoint.
@@ -86,4 +122,24 @@ public interface ServiceConnection {
      */
     public InputStream getErrorStream();
 
+    /**
+     * Return the name of the host that is specified as the web service target
+     *
+     * @return Host name
+     */
+    abstract public String getHost();
+
+    /**
+     * Return the port number of the host that is specified as the web service target
+     *
+     * @return Port number
+     */
+    abstract public int getPort();
+
+    /**
+     * Return the path to the web service target
+     *
+     * @return The URL's path
+     */
+    abstract public String getPath();
 }

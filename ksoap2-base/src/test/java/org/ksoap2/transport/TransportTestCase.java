@@ -25,16 +25,17 @@ public abstract class TransportTestCase extends TestCase {
         complexParameter.name = "Serenity";
         complexParameter.count = 56;
         envelope.addMapping(containerNameSpaceURI, "ComplexParameter", complexParameter.getClass());
-        envelope.addMapping(containerNameSpaceURI, ServiceConnectionFixture.RESPONSE_CLASS_NAME, ServiceConnectionFixture.RESPONSE_CLASS);
+        envelope.addMapping(containerNameSpaceURI, ServiceConnectionFixture.RESPONSE_CLASS_NAME,
+                ServiceConnectionFixture.RESPONSE_CLASS);
         soapObject.addProperty("complexFunction", complexParameter);
         envelope.setOutputSoapObject(soapObject);
     }
 
     protected void assertHeaderCorrect(ServiceConnectionFixture aServiceConnection, String aSoapAction) {
         assertEquals(aSoapAction, aServiceConnection.requestPropertyMap.get("SOAPAction"));
-        assertEquals("text/xml", aServiceConnection.requestPropertyMap.get("Content-Type"));
+        assertEquals("text/xml;charset=utf-8", aServiceConnection.requestPropertyMap.get("Content-Type"));
         assertNotNull(aServiceConnection.requestPropertyMap.get("Content-Length"));
-        assertEquals("kSOAP/2.0", aServiceConnection.requestPropertyMap.get("User-Agent"));
+        assertEquals("ksoap2-android/2.6.0+", aServiceConnection.requestPropertyMap.get("User-Agent"));
     }
 
     protected void assertSerializationDeserialization() throws SoapFault {

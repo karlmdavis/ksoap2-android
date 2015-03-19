@@ -46,7 +46,8 @@ public class MarshalHashtable implements Marshal {
     public static final Class HASHTABLE_CLASS = new Hashtable().getClass();
     SoapSerializationEnvelope envelope;
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected)
+            throws IOException, XmlPullParserException {
         Hashtable instance = new Hashtable();
         String elementName = parser.getName();
         while (parser.nextTag() != XmlPullParser.END_TAG) {
@@ -79,7 +80,7 @@ public class MarshalHashtable implements Marshal {
             Object key = keys.nextElement();
             item.setProperty(0, key);
             item.setProperty(1, h.get(key));
-            envelope.writeObjectBody(writer, item);
+            envelope.writeObjectBodyWithAttributes(writer, item);
             writer.endTag("", "item");
         }
     }
@@ -102,10 +103,11 @@ public class MarshalHashtable implements Marshal {
             } else {
                 // already have a key or value
                 Object resolved = resolvedIndex == 0 ? getProperty(0) : getProperty(1);
-                if (index == 0)
+                if (index == 0) {
                     h.put(value, resolved);
-                else
+                } else  {
                     h.put(resolved, value);
+                }
             }
         }
     }

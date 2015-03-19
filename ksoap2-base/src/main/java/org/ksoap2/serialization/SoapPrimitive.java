@@ -23,7 +23,7 @@ package org.ksoap2.serialization;
 /**
  * A class that is used to encapsulate primitive types (represented by a string
  * in XML serialization).
- * 
+ *
  * Basically, the SoapPrimitive class encapsulates "unknown" primitive types
  * (similar to SoapObject encapsulating unknown complex types). For example, new
  * SoapPrimitive (classMap.xsd, "float", "12.3") allows you to send a float from
@@ -33,12 +33,15 @@ package org.ksoap2.serialization;
  * namespace, name and string value (this is how the stockquote example works).
  */
 
-public class SoapPrimitive {
-    String namespace;
-    String name;
-    String value;
+public class SoapPrimitive extends AttributeContainer {
+    protected String namespace;
+    protected String name;
+    protected Object value;
 
-    public SoapPrimitive(String namespace, String name, String value) {
+    public  static final Object NullSkip = new Object();
+    public  static final Object NullNilElement = new Object();
+
+    public SoapPrimitive(String namespace, String name, Object value) {
         this.namespace = namespace;
         this.name = name;
         this.value = value;
@@ -49,7 +52,10 @@ public class SoapPrimitive {
             return false;
         }
         SoapPrimitive p = (SoapPrimitive) o;
-        return name.equals(p.name) && (namespace == null ? p.namespace == null:namespace.equals(p.namespace)) && (value == null ? (p.value == null) : value.equals(p.value));
+        boolean varsEqual = name.equals(p.name)
+                && (namespace == null ? p.namespace == null:namespace.equals(p.namespace))
+                && (value == null ? (p.value == null) : value.equals(p.value));
+        return varsEqual && attributesAreEqual(p);
     }
 
     public int hashCode() {
@@ -57,7 +63,7 @@ public class SoapPrimitive {
     }
 
     public String toString() {
-        return value;
+        return value != null ? value.toString() : null;
     }
 
     public String getNamespace() {
@@ -66,6 +72,10 @@ public class SoapPrimitive {
 
     public String getName() {
         return name;
+    }
+
+    public Object getValue() {
+        return value;
     }
 
 }

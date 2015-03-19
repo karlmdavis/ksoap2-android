@@ -26,11 +26,11 @@ package org.ksoap2.serialization;
  */
 public class AttributeInfo extends PropertyInfo
 {
-	/**
-	 * Constructor.
-	 */
-	public AttributeInfo()
-	{
-		super();
-	}
+    /**
+     * Constructor.
+     */
+    public AttributeInfo()
+    {
+        super();
+    }
 }

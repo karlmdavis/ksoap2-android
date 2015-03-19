@@ -12,7 +12,8 @@ public class MockXmlSerializer implements XmlSerializer {
     public String endtag = "";
     public String startTag = "";
 
-    public XmlSerializer attribute(String arg0, String label, String type) throws IOException, IllegalArgumentException, IllegalStateException {
+    public XmlSerializer attribute(String arg0, String label, String type)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         propertyType += (type + ";");
         return this;
     }
@@ -33,7 +34,8 @@ public class MockXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException("MockXmlSerializer.endDocument is not implemented yet");
     }
 
-    public XmlSerializer endTag(String arg0, String tag) throws IOException, IllegalArgumentException, IllegalStateException {
+    public XmlSerializer endTag(String arg0, String tag)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         endtag += (tag + ";");
         return this;
     }
@@ -70,11 +72,13 @@ public class MockXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException("MockXmlSerializer.getProperty is not implemented yet");
     }
 
-    public void ignorableWhitespace(String arg0) throws IOException, IllegalArgumentException, IllegalStateException {
+    public void ignorableWhitespace(String arg0)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException("MockXmlSerializer.ignorableWhitespace is not implemented yet");
     }
 
-    public void processingInstruction(String arg0) throws IOException, IllegalArgumentException, IllegalStateException {
+    public void processingInstruction(String arg0)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException("MockXmlSerializer.processingInstruction is not implemented yet");
     }
 
@@ -86,11 +90,13 @@ public class MockXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException("MockXmlSerializer.setOutput is not implemented yet");
     }
 
-    public void setOutput(OutputStream arg0, String arg1) throws IOException, IllegalArgumentException, IllegalStateException {
+    public void setOutput(OutputStream arg0, String arg1)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException("MockXmlSerializer.setOutput is not implemented yet");
     }
 
-    public void setPrefix(String arg0, String arg1) throws IOException, IllegalArgumentException, IllegalStateException {
+    public void setPrefix(String arg0, String arg1)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException("MockXmlSerializer.setPrefix is not implemented yet");
     }
 
@@ -98,11 +104,13 @@ public class MockXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException("MockXmlSerializer.setProperty is not implemented yet");
     }
 
-    public void startDocument(String arg0, Boolean arg1) throws IOException, IllegalArgumentException, IllegalStateException {
+    public void startDocument(String arg0, Boolean arg1)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException("MockXmlSerializer.startDocument is not implemented yet");
     }
 
-    public XmlSerializer startTag(String arg0, String key) throws IOException, IllegalArgumentException, IllegalStateException {
+    public XmlSerializer startTag(String arg0, String key)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         startTag += (key + ";");
         return this;
     }
@@ -112,7 +120,8 @@ public class MockXmlSerializer implements XmlSerializer {
         return this;
     }
 
-    public XmlSerializer text(char[] arg0, int arg1, int arg2) throws IOException, IllegalArgumentException, IllegalStateException {
+    public XmlSerializer text(char[] arg0, int arg1, int arg2)
+            throws IOException, IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException("MockXmlSerializer.text is not implemented yet");
     }
 

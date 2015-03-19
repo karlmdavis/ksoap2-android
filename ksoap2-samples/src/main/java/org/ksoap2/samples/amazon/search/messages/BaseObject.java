@@ -9,5 +9,4 @@ public abstract class BaseObject implements KvmSerializable {
     public BaseObject() {
         super();
     }
-
 }

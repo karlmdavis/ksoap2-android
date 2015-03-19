@@ -52,7 +52,7 @@ public class WorldCupSoccer2006Client {
         // contained objects to their classes.
 
         SoapObject template = new SoapObject(NAMESPACE, "StadiumNamesResponse");
-        template.addProperty(info, "not important what this is");
+        template.addProperty(info);
 
         envelope.addTemplate(template);
     }
