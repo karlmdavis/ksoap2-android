@@ -159,9 +159,27 @@ public class SoapObjectTest extends TestCase {
         assertFalse(soapObject.hasProperty("Prop1"));
     }
 
+    public void testHasProperty_namespace() {
+        soapObject.addProperty("test_namespace","Prop8", "Eight");
+        assertTrue(soapObject.hasProperty("test_namespace","Prop8"));
+        assertTrue(soapObject.hasProperty("Prop8"));
+        assertFalse(soapObject.hasProperty("wrong_namespace","Prop8"));
+    }
+
     public void testGetProperty_ThrowsWhenIllegalPropertyName() {
         try {
             soapObject.getProperty("blah");
+            fail();
+        } catch (RuntimeException e) {
+            assertEquals(RuntimeException.class.getName(), e.getClass()
+                    .getName());
+            assertEquals("illegal property: blah", e.getMessage());
+        }
+    }
+
+    public void testGetProperty_namespace_ThrowsWhenIllegalPropertyName() {
+        try {
+            Object obj=soapObject.getProperty("namespace", "blah");
             fail();
         } catch (RuntimeException e) {
             assertEquals(RuntimeException.class.getName(), e.getClass()
@@ -178,8 +196,24 @@ public class SoapObjectTest extends TestCase {
         assertEquals("Eight", soapObject.getPropertySafely("Prop8"));
     }
 
+    public void testGetPropertySafely_namespace_GivesPropertyWhenItExists() {
+        soapObject.addProperty("namespace","Prop1", "One");
+        soapObject.addProperty("namespace","Prop8", "Eight");
+
+        assertEquals("One", soapObject.getPropertyByNamespaceSafely("namespace","Prop1"));
+        assertEquals("Eight", soapObject.getPropertyByNamespaceSafely("namespace", "Prop8"));
+        assertEquals("One", soapObject.getPropertySafely("Prop1"));
+        assertEquals("Eight", soapObject.getPropertySafely("Prop8"));
+    }
+
     public void testGetPropertySafely_GivesANullObjectWhenThePropertyDoesNotExist() {
         Object nullObject = soapObject.getPropertySafely("Prop1");
+        assertNotNull(nullObject);
+        assertNull(nullObject.toString());
+    }
+
+    public void testGetPropertySafely_namespace_GivesANullObjectWhenThePropertyDoesNotExist() {
+        Object nullObject = soapObject.getPropertyByNamespaceSafely("namespace", "Prop1");
         assertNotNull(nullObject);
         assertNull(nullObject.toString());
     }
@@ -210,6 +244,25 @@ public class SoapObjectTest extends TestCase {
 
         soapObject.addPropertyIfValue(propertyInfo, "GotOne");
         assertTrue(soapObject.hasProperty(name));
+    }
+
+    public void testAddPropertyIfValue_namespace() {
+        String name = "NotHere";
+        String value = null;
+        soapObject.addPropertyIfValue("namespace",name, value);
+        assertFalse(soapObject.hasProperty(name));
+        assertFalse(soapObject.hasProperty("namespace",name));
+
+        PropertyInfo propertyInfo = new PropertyInfo();
+        propertyInfo.name = name;
+        propertyInfo.value = value;
+        propertyInfo.namespace = "namespace";
+
+        soapObject.addPropertyIfValue(propertyInfo);
+
+        assertFalse(soapObject.hasProperty(name));
+        assertFalse(soapObject.hasProperty("namespace",name));
+
     }
 
     public void testAddAttributeIfValue() {
@@ -257,6 +310,30 @@ public class SoapObjectTest extends TestCase {
         assertTrue("".equals(soapObject.getPropertySafelyAsString(null, null)));
 
         assertTrue("test".equals(soapObject.getPropertySafelyAsString(null, "test")));
+    }
+
+    public void getPropertyByNamespaceSafelyAsString() {
+        String name = "StringProperty";
+        String value = "a string";
+        String namespace = "namespace";
+        soapObject.addProperty(namespace,name, value);
+
+        assertEquals(value, soapObject.getPropertyByNamespaceSafelyAsString(namespace,name));
+
+        String name2 = "NotThere";
+        assertEquals("", soapObject.getPropertyByNamespaceSafelyAsString(namespace,name2));
+        assertEquals(value, soapObject.getPropertyByNamespaceSafelyAsString(namespace,name));
+
+        String anInteger = "AnInteger";
+        String integerValue = "12";
+
+        soapObject.addProperty(anInteger, new Integer(12));
+        assertEquals(integerValue, soapObject.getPropertyByNamespaceSafelyAsString(namespace,anInteger));
+
+        mojSoapObejObject.addProperty(namespace,"jaaa", null);
+        assertEquals("",
+                mojSoapObejObject.getPropertyByNamespaceSafelyAsString(namespace,"jaaa"));
+
     }
 
     public void testGetAttributeAsString() {
