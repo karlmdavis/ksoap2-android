@@ -51,27 +51,28 @@
         <module>ksoap2-servlet</module>
     </modules>
 
-    <distributionManagement>
-        <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>googlecode</id>
-            <url>svn:https://ksoap2-android.googlecode.com/svn/m2-repo</url>
-        </repository>
-    </distributionManagement>
-    <repositories>
-        <repository>
-            <id>googlecode-ksoap2-android</id>
-            <name>googlecode-ksoap2-android</name>
-            <url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>googlecode-ksoap2-android</id>
-            <name>googlecode-ksoap2-android</name>
-            <url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
-        </pluginRepository>
-    </pluginRepositories>
+  <distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/ksoap2-android-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/ksoap2-android-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <repositories>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/ksoap2-android-releases/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/ksoap2-android-releases/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
