@@ -2,6 +2,6 @@ sudo: false
 language: java
 jdk: oraclejdk7
 
-script: mvnw clean install
+script: ./mvnw clean install
 
 after_script:
