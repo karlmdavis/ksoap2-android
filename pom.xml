@@ -16,7 +16,7 @@
         ]]>
     </description>
 
-    <url>http://code.google.com/p/ksoap2-android/</url>
+    <url>http://mosabua.github.io/ksoap2-android/</url>
     <inceptionYear>2002</inceptionYear>
 
     <scm>
@@ -80,10 +80,6 @@
 
     <profiles>
         <profile>
-            <!--
-                The "release" profile ensures that the source and javadoc JARs are
-                included in deployments
-            -->
             <id>release</id>
             <build>
                 <plugins>
@@ -114,8 +110,32 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-    </profiles>
+          </profile>
+    <profile>
+      <id>site</id>
+      <build>
+        <plugins>
+          <plugin>
+            <!-- deploy the site to github pages -->
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <configuration>
+              <server>github</server> <!-- the id of the server with the passwords in settings.xml -->
+              <message>Creating site for ${project.version}</message>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>site</phase>
+                <goals>
+                  <goal>site</goal> <!-- the site goal uploads to ghpages -->
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
     <dependencyManagement>
         <dependencies>
@@ -361,13 +381,14 @@
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <!--
-                            The preparationGoals setting is a workarounf for
+                            The preparationGoals setting is a workaround for
                             http://jira.codehaus.org/browse/MJAR-68 and
                             http://jira.codehaus.org/browse/MRELEASE-285
                         -->
                         <preparationGoals>clean install</preparationGoals>
                         <useReleaseProfile>false</useReleaseProfile>
                         <arguments>-Prelease</arguments>
+                        <goals>deploy site</goals>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -379,8 +400,22 @@
                             <artifactId>maven-scm-provider-gitexe</artifactId>
                         </dependency>
                     </dependencies>
+                  </plugin>
+                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-site-plugin</artifactId>
+                  <!-- careful with upgrades, e.g. 3.4 does not work with asciidoctor (yet?) -->
+                  <version>3.3</version>
+                  <dependencies>
+                    <dependency>
+                      <groupId>org.asciidoctor</groupId>
+                      <artifactId>asciidoctor-maven-plugin</artifactId>
+                      <version>1.5.0</version>
+                    </dependency>
+                  </dependencies>
                 </plugin>
-            </plugins>
+              </plugins>
         </pluginManagement>
+        
     </build>
 </project>
