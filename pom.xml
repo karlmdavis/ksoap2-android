@@ -1,43 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-  <parent>
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
       <groupId>com.simpligility.maven</groupId>
       <artifactId>progressive-organization-pom</artifactId>
       <version>2.4.0</version>
   </parent>
-    <groupId>com.google.code.ksoap2-android</groupId>
-    <artifactId>ksoap2-parent</artifactId>
-    <version>3.5.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
 
-    <name>ksoap2-android Project</name>
-    <description><![CDATA[
+   <groupId>com.google.code.ksoap2-android</groupId>
+   <artifactId>ksoap2-parent</artifactId>
+   <version>3.5.0-SNAPSHOT</version>
+   <packaging>pom</packaging>
+
+   <name>ksoap2-android Project</name>
+   <description><![CDATA[
         A lightweight and efficient SOAP library for the Android platform.
         ]]>
     </description>
+   <url>http://simpligility.github.io/ksoap2-android/</url>
+   <inceptionYear>2002</inceptionYear>
 
-    <url>http://simpligility.github.io/ksoap2-android/</url>
-    <inceptionYear>2002</inceptionYear>
-
-    <scm>
-        <connection>scm:git:git://github.com/simpligility/ksoap2-android.git
-        </connection>
-        <developerConnection>scm:git:git@github.com:simpligility/ksoap2-android.git
-        </developerConnection>
-        <url>http://github.com/simpligility/ksoap2-android/tree/master</url>
-      <tag>HEAD</tag>
-    </scm>
-
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/simpligility/ksoap2-android/issues</url>
-    </issueManagement>
-
-    <prerequisites>
+   <prerequisites>
         <maven>3.1.1</maven>
     </prerequisites>
 
-    <modules>
+   <modules>
         <module>build-tools</module>
         <module>ksoap2-base</module>
         <module>ksoap2-android</module>
@@ -51,7 +39,19 @@
         <module>ksoap2-servlet</module>
     </modules>
 
-  <distributionManagement>
+   <scm>
+        <connection>scm:git:git://github.com/simpligility/ksoap2-android.git
+        </connection>
+        <developerConnection>scm:git:git@github.com:simpligility/ksoap2-android.git
+        </developerConnection>
+        <url>http://github.com/simpligility/ksoap2-android/tree/master</url>
+      <tag>HEAD</tag>
+    </scm>
+   <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/simpligility/ksoap2-android/issues</url>
+    </issueManagement>
+   <distributionManagement>
     <repository>
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/ksoap2-android-releases/</url>
@@ -61,83 +61,25 @@
       <url>https://oss.sonatype.org/content/repositories/ksoap2-android-snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
-  <repositories>
+
+   <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+   <repositories>
     <repository>
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/ksoap2-android-releases/</url>
     </repository>
   </repositories>
-  <pluginRepositories>
+   <pluginRepositories>
     <pluginRepository>
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/ksoap2-android-releases/</url>
     </pluginRepository>
   </pluginRepositories>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                    <goal>test-jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-          </profile>
-    <profile>
-      <id>site</id>
-      <build>
-        <plugins>
-          <plugin>
-            <!-- deploy the site to github pages -->
-            <groupId>com.github.github</groupId>
-            <artifactId>site-maven-plugin</artifactId>
-            <configuration>
-              <server>github</server> <!-- the id of the server with the passwords in settings.xml -->
-              <message>Creating site for ${project.version}</message>
-            </configuration>
-            <executions>
-              <execution>
-                <phase>site</phase>
-                <goals>
-                  <goal>site</goal> <!-- the site goal uploads to ghpages -->
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
-    <dependencyManagement>
+   <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.google.code.ksoap2-android</groupId>
@@ -310,7 +252,7 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
+   <build>
         <resources>
             <resource>
                 <filtering>false</filtering>
@@ -416,6 +358,64 @@
                 </plugin>
               </plugins>
         </pluginManagement>
-        
     </build>
+
+   <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                    <goal>test-jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+          </profile>
+    <profile>
+      <id>site</id>
+      <build>
+        <plugins>
+          <plugin>
+            <!-- deploy the site to github pages -->
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <configuration>
+              <server>github</server> <!-- the id of the server with the passwords in settings.xml -->
+              <message>Creating site for ${project.version}</message>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>site</phase>
+                <goals>
+                  <goal>site</goal> <!-- the site goal uploads to ghpages -->
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
