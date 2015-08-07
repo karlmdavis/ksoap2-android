@@ -22,7 +22,8 @@ and more.
 For more information check out the pages and linked content of this site and 
 join http://groups.google.com/group/ksoap2-android[our mailing list].
 
-And for the impatient the jars are available in a Maven repository or for download from there as a bundle. More on the How to Use page.
+And for the impatient the jars are available in a Maven repository or for
+download from there as a bundle. More at link:getting-started[Getting Started].
 
 == License
 
@@ -32,7 +33,7 @@ link:license-information.html[Licensing page].
 
 == Users
 
-You are interested to see a list of projects using ksoap2-android -> Check it out
+You are interested to see a list of projects using ksoap2-android -> link:users.html[Check it out]
 
 == Sponsor
 
