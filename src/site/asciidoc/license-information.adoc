@@ -1,4 +1,4 @@
-== License Information'
+== License Information
 
 Ksoap2-android itself is licensed under an MIT license. It depends on other 
 libraries licensed under different licenses.

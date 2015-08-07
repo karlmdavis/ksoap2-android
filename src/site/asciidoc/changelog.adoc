@@ -357,22 +357,3 @@ Manfred
 My apologies for the long hiatus in updates to this project. I was actually quite surprised to discover today that others were making use of it. I just pushed out a new release (2.3) to resolve the issues folks were having making use of it.
 
 If you'd like to help contribute to this project, please let me know. I'll try to put up a page with build instructions sometime in the near future.
-
-
-=== Complete History
-
-Long ago there was the ksoap and then the ksoap2 projects. After a successful 
-phase SOAP and with it the library pretty much died. (at least there were no 
-release since 2006 or so)
-
-Android then revived that since a lightweight framework to talk to legacy SOAP services was needed.
-
-A patch set for Android emerged on the "Android Developers" Google group 
-authored by Jorge Jimenez.
-
-Karl Michael Davis then took this patchset, set up a proper Apache Maven build 
-as well as this project and did a few releases.
-
-Since the project was largely unmaintained in 2009/2010 Manfred Moser from simpligility technologies inc. took over the project, updated the wiki, created 
-a mailinglist, applied and created further patches and released 2.5.1 and has 
-been cutting numerous releases with a number of enhancements since then.
