@@ -29,6 +29,8 @@
   <body>
     <menu name="General">
       <item name="Introduction" href="index.html"/>
+      <item name="Getting Started" href="getting-started.html"/>
+      <item name="Users" href="users.html"/>
       <item name="Changelog" href="changelog.html"/>
       <item name="License Information" href="license-information.html"/>
     </menu>
