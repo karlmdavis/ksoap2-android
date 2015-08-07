@@ -29,8 +29,8 @@
     </scm>
 
     <issueManagement>
-        <system>Google Code</system>
-        <url>http://code.google.com/p/ksoap2-android/issues/list</url>
+        <system>GitHub</system>
+        <url>https://github.com/simpligility/ksoap2-android/issues</url>
     </issueManagement>
 
     <prerequisites>
