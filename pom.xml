@@ -10,21 +10,21 @@
     <version>3.5.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>ksoap2-parent</name>
+    <name>ksoap2-android Project</name>
     <description><![CDATA[
         A lightweight and efficient SOAP library for the Android platform.
         ]]>
     </description>
 
-    <url>http://mosabua.github.io/ksoap2-android/</url>
+    <url>http://simpligility.github.io/ksoap2-android/</url>
     <inceptionYear>2002</inceptionYear>
 
     <scm>
-        <connection>scm:git:git://github.com/mosabua/ksoap2-android.git
+        <connection>scm:git:git://github.com/simpligility/ksoap2-android.git
         </connection>
-        <developerConnection>scm:git:git@github.com:mosabua/ksoap2-android.git
+        <developerConnection>scm:git:git@github.com:simpligility/ksoap2-android.git
         </developerConnection>
-        <url>http://github.com/mosabua/ksoap2-android/tree/master</url>
+        <url>http://github.com/simpligility/ksoap2-android/tree/master</url>
       <tag>HEAD</tag>
     </scm>
 
