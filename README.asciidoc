@@ -16,7 +16,7 @@ http://groups.google.com/group/ksoap2-android[http://groups.google.com/group/kso
 
 === CI Build 
 
-image:https://travis-ci.org/mosabua/ksoap2-android.png["Build Status", link="https://travis-ci.org/mosabua/ksoap2-android"]
+image:https://travis-ci.org/simpligility/ksoap2-android.png["Build Status", link="https://travis-ci.org/simpligility/ksoap2-android"]
 
 === Contributions
 
