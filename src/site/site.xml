@@ -30,6 +30,8 @@
     <menu name="General">
       <item name="Introduction" href="index.html"/>
       <item name="Getting Started" href="getting-started.html"/>
+      <item name="How To" href="howto.html"/>
+      <item name="Tips and Tricks" href="tips.html"/>
       <item name="Users" href="users.html"/>
       <item name="Changelog" href="changelog.html"/>
       <item name="License Information" href="license-information.html"/>

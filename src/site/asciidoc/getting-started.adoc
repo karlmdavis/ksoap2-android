@@ -69,4 +69,6 @@ https://oss.sonatype.org/content/repositories/ksoap2-android-releases/com/google
 
 === Next Steps 
 
-And in terms of how to write your code please look at the [http://code.google.com/p/ksoap2-android/wiki/NeedHelp help wiki page].
+In terms of how to write your code please look at the 
+link:howto.html[some of the many tutorials from the community] and check out
+our link:tips.html[collection of tips and tricks].
