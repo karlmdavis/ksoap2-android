@@ -4,4 +4,3 @@ jdk: oraclejdk7
 
 script: ./mvnw clean install
 
-after_script:
