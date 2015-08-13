@@ -16,11 +16,15 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * Support for namespace extensions
 ** see https://github.com/mosabua/ksoap2-android/pull/62
 ** contributed by https://github.com/robocik, Quasar Development from http://easywsdl.com
-* Site migration to github
+* Site migration to github 
 ** contributed by Manfred Moser http://www.simpligility.com
 * Maven repository migration to Sonatype
 ** contributed by Manfred Moser http://www.simpligility.com 
 ** and Sonatype http://www.sonatype.com 
+* Updated and reworded all documentation for Maven/asciidoc powered site 
+** contributed by Manfred Moser http://www.simpligility.com
+* Adapted project for changed release process
+** contributed by Manfred Moser http://www.simpligility.com
 
 === 3.4.0 Release, 2015-01-07
 
