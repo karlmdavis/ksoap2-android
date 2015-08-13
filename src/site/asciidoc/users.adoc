@@ -47,21 +47,21 @@ Quote: Firstly I want to thank you for maintaining ksoap2android; it is the best
 * https://play.google.com/store/apps/details?id=se.kalixtele24.trinity[Google Play]
 * http://www.everichon.com[Developer Everichon]
 
-== WCF Connection Tester and WCF Connection Tester Pro
+=== WCF Connection Tester and WCF Connection Tester Pro
 
 * https://play.google.com/store/apps/details?id=pl.citadelsystems.wcfconnectiontesterpro[App on Google Play]
 
-== xyzmo SIGNificant e-sign App
+=== xyzmo SIGNificant e-sign App
 
 * https://play.google.com/store/apps/details?id=com.xyzmo.signature[App on Google Play]
 * http://www.xyzmo.com/de/products/Pages/Unterschreiben-iPad-Android.aspx[Developer xyzmo SIGNificant]
 
-== android-http framework ==
+=== android-http framework
 
 * https://github.com/the-diamond-dogs-group-oss/android-http
 * from the diamond dogs group - http://www.diamonddogs.cc/
 
-== wsdl2code tool ==
+=== wsdl2code tool
 
 * http://www.wsdl2code.com
 * allows automatic creation of ksoap2-android code 
