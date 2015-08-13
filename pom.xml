@@ -18,6 +18,25 @@
   <description>A lightweight and efficient SOAP library for the Android platform.</description>
   <url>http://simpligility.github.io/ksoap2-android/</url>
   <inceptionYear>2002</inceptionYear>
+  <licenses>
+    <license>
+      <name>MIT and others</name>
+      <url>http://simpligility.github.io/ksoap2-android/license-information.html</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Manfred Moser</name>
+      <email>manfred@simpligility.com</email>
+      <organization>simpligility technologies inc.</organization>
+      <organizationUrl>http://www.simpligility.com</organizationUrl>
+    </developer>
+    <developer>
+      <name>Many others</name>
+      <url>https://github.com/simpligility/ksoap2-android/graphs/contributors</url>
+    </developer>
+  </developers>
 
   <prerequisites>
     <maven>3.1.1</maven>
@@ -47,6 +66,10 @@
     <system>GitHub</system>
     <url>https://github.com/simpligility/ksoap2-android/issues</url>
   </issueManagement>
+  <ciManagement>
+    <system>Travis</system>
+    <url>https://travis-ci.org/simpligility/ksoap2-android</url>
+  </ciManagement>
   <distributionManagement>
     <repository>
       <id>ossrh</id>
@@ -62,8 +85,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <!--  these repositories are just here so people without a repo manager 
-  can build out of the box with Maven -->
+  <!-- these repositories are just here so people without a repo manager 
+    can build out of the box with Maven -->
   <repositories>
     <repository>
       <id>ossrh</id>
@@ -323,7 +346,7 @@
             <preparationGoals>clean install</preparationGoals>
             <useReleaseProfile>false</useReleaseProfile>
             <arguments>-Prelease</arguments>
-            <goals>deploy site</goals>
+            <goals>deploy</goals>
           </configuration>
         </plugin>
         <plugin>
@@ -353,6 +376,25 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>issue-tracking</report>
+              <report>scm</report>
+              <report>summary</report>
+              <report>cim</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles>
     <profile>
