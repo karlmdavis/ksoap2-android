@@ -2,16 +2,38 @@
 
 The documentation for ksoap2-android is a bit sparse on the site here. We 
 welcome contributions. Fortunately there is a lot of other documentation 
-available. 
+available.
 
-The code base has numerous examples as well as tests that can be used as a 
-resource for your own code.
+== Mailing list == 
 
-=== Useful External Resources
+Join the mailing list http://groups.google.com/group/ksoap2-android as it is the
+main forum for discussion and help. Please send any questions there.
 
-* Ksoap2 tag on stackoverflow and related questions and answers - http://stackoverflow.com/questions/tagged/ksoap2 
-* Useful introduction to ksoap on android as a video by Falafel Software - http://vimeo.com/9633556
-* http://ksoap2.sourceforge.net/ - KSoap2 upstream project site, no longer maintained
+== Stackoverflow == 
+
+You can also create a question on Stackoverflow and use the ksoap2 and android 
+tag or the android-ksoap2 tag and we might find your question there.. 
+
+* http://stackoverflow.com/questions/tagged/ksoap2
+* http://stackoverflow.com/questions/tagged/android-ksoap2
+
+== Source and Javadoc == 
+
+A very good source of documentation are the javadoc as well as the source both 
+of which you can find in the project Maven repository. The source in the github
+repository also contains numerous test that show how to do various things like 
+creating requests and parsing results and so on.
+
+If you use Maven javadoc and sources will all be hooked up in your IDE 
+automatically and you can browse the source and documentation right during 
+development. This should also work with Gradle.
+
+To do the same with Ant or plain Android Development Toolkit (Eclipse plugin) 
+based environment you will have to manually download the source and javadoc jar
+files.
+
+=== Useful External Resources and Tutorials
+
 * http://www.helloandroid.com/tutorials/using-ksoap2-android-and-parsing-output-data - Parsing tutorial on helloandroid
 * http://www.simpligility.com/2010/05/attribute-support-for-ksoap2-on-android/- First announcement of patch for working attribute support published by current project maintainer on his company website
 * KSoap Android Web Service Tutorial With Sample Code - http://seesharpgears.blogspot.com/2010/10/ksoap-android-web-service-tutorial-with.html
@@ -26,28 +48,8 @@ resource for your own code.
 * http://roderickbarnes.com/blog/droid-chronicles-web-services-handling-complex-parameters
 * http://roderickbarnes.com/blog/the-droid-chronicles-an-android-webrowset-implementation-bifrowset
 * Useful tips for dealing with SSL/HTTPShttp://donmacvittie.ulitzer.com/node/2596103] 
+* http://ksoap2.sourceforge.net/ - KSoap2 upstream project site, no longer maintained
 
-== Mailing list == 
+=== Other Tips & Tricks
 
-Join the mailing list http://groups.google.com/group/ksoap2-android as it is the 
-main forum for discussion and help. Please send any questions there.
-
-== Stackoverflow == 
-
-You can also create a question on Stackoverflow and use the ksoap2 and android 
-tags and we might find your question there.. * http://stackoverflow.com/questions/tagged/ksoap2]
-
-
-
-== Source and Javadoc == 
-
-A very good source of documentation are the javadoc as well as the source both of which you can find in the project Maven repository. Of course the source code is also on github.. 
-
-e.g.
-* http://code.google.com/p/ksoap2-android/source/browse/m2-repo/com/google/code/ksoap2-android/ksoap2-base/3.0.0-RC.2/ksoap2-base-3.0.0-RC.2-javadoc.jar]
-
-* http://code.google.com/p/ksoap2-android/source/browse/m2-repo/com/google/code/ksoap2-android/ksoap2-base/3.0.0-RC.2/ksoap2-base-3.0.0-RC.2-sources.jar]
-
-If you use Maven it will all be hooked up into your IDE automatically and you can browse the source and documentation right during development.
-
-To do the same with Ant or plain Android Development Toolkit (Eclipse plugin) based environment you will have to manually download the * http://code.google.com/p/ksoap2-android/source/browse/#svn/m2-repo/com/google/code/ksoap2-android/ksoap2-android-assembly/ source and javadoc jar files from the assembly project].
+... can be found on link:tips.html[our dedicated page].
