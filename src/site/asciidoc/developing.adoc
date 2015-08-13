@@ -40,5 +40,12 @@ mvn clean site -N
 
 with the resulting HTML found in +target/site/+.
 
+=== Coding Style
 
+The Maven build enforces a code style with the Maven Checkstyle Plugin to 
+make the code more readable and consistent as well as to avoid problems with 
+merges we had in the past when it comes to tabs vs. spaces and others.
+
+The checkstyle rules are all defined 
+https://github.com/simpligility/ksoap2-android/blob/master/build-tools/src/main/resources/simpligility/checkstyle.xml
 
