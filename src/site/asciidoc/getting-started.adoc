@@ -19,7 +19,7 @@ To make use of this library in a Maven project, add the following to your projec
     <dependency>
       <groupId>com.google.code.ksoap2-android</groupId>
       <artifactId>ksoap2-android</artifactId>
-      <version>3.4.0</version>
+      <version>3.5.0</version>
     </dependency>
   </dependencies>
   ...
@@ -44,7 +44,17 @@ settings.xml or pom.xml:
 ----
 
 Further libraries as part of the project are also published as part of the build 
-and can be declared as dependencies as well, if needed.
+and can be declared as dependencies as well, if needed. E.g.
+
+----
+   <dependency>
+      <groupId>com.google.code.ksoap2-android</groupId>
+      <artifactId>ksoap2-extra-ntlm</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+----
+
+And a number of others. Check out the project source for more.
 
 === Gradle
 
@@ -65,7 +75,7 @@ The different version of these files are available at  https://oss.sonatype.org/
 
 The latest release artifact of the bundle is available at 
 
-https://oss.sonatype.org/content/repositories/ksoap2-android-releases/com/google/code/ksoap2-android/ksoap2-android-assembly/3.4.0/ksoap2-android-assembly-3.4.0-jar-with-dependencies.jar 
+https://oss.sonatype.org/content/repositories/ksoap2-android-releases/com/google/code/ksoap2-android/ksoap2-android-assembly/3.5.0/ksoap2-android-assembly-3.5.0-jar-with-dependencies.jar 
 
 === Next Steps 
 
