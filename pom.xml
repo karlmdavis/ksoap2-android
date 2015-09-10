@@ -336,11 +336,12 @@
             <dependency>
               <groupId>org.apache.maven.scm</groupId>
               <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.7</version>
+              <version>1.9.4</version>
             </dependency>
           </dependencies>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
+            <tagNameFormat>@{project.version}</tagNameFormat>
             <!-- The preparationGoals setting is a workaround for http://jira.codehaus.org/browse/MJAR-68 
               and http://jira.codehaus.org/browse/MRELEASE-285 -->
             <preparationGoals>clean install</preparationGoals>
