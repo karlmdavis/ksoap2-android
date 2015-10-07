@@ -27,7 +27,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -722,13 +721,26 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 writer.endTag(namespace, name);
             }
         }
-        if(obj instanceof HasInnerText){
-            
-        if (((HasInnerText)obj).getInnerText() != null) {
-            writer.cdsect(((HasInnerText)obj).getInnerText());
-        }
-        }
+        writeInnerText(writer, obj);
 
+    }
+
+    private void writeInnerText(XmlSerializer writer, KvmSerializable obj) throws IOException {
+        if(obj instanceof HasInnerText){
+
+            Object value=((HasInnerText)obj).getInnerText();
+            if (value != null) {
+                if(value instanceof IValueWriter)
+                {
+                    ((IValueWriter)value).write(writer);
+                }
+                else
+                {
+                    writer.cdsect(value.toString());
+                }
+
+            }
+        }
     }
 
     protected void writeProperty(XmlSerializer writer, Object obj, PropertyInfo type) throws IOException {
@@ -829,13 +841,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
                 writer.endTag(namespace, name);
             }
         }
-        if(obj instanceof HasInnerText){
-        if (((HasInnerText)obj).getInnerText() != null) {
-            writer.cdsect(((HasInnerText)obj).getInnerText());
-
-        }
-        }
-
+        writeInnerText(writer, obj);
     }
 
     protected void writeVectorBody(XmlSerializer writer, Vector vector, PropertyInfo elementType)
