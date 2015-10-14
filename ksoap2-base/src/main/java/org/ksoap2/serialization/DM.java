@@ -93,9 +93,9 @@ class DM implements Marshal {
             }
         }
 
-        if(instance  instanceof IValueWriter)
+        if(instance  instanceof ValueWriter)
         {
-            ((IValueWriter)instance).write(writer);
+            ((ValueWriter)instance).write(writer);
         }
         else
         {

@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created by robocik on 2015-09-25.
  */
-public interface IValueWriter
+public interface ValueWriter
 {
     void write(XmlSerializer writer) throws IOException;
 }

@@ -730,9 +730,9 @@ public class SoapSerializationEnvelope extends SoapEnvelope {
 
             Object value=((HasInnerText)obj).getInnerText();
             if (value != null) {
-                if(value instanceof IValueWriter)
+                if(value instanceof ValueWriter)
                 {
-                    ((IValueWriter)value).write(writer);
+                    ((ValueWriter)value).write(writer);
                 }
                 else
                 {
