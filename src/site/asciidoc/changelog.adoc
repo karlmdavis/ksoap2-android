@@ -2,6 +2,10 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
+=== 3.6.1 or higher, upcoming
+
+* Your contributions could be here. 
+
 === 3.6.0 Release, 2015-10-15
 
 * Added extensions which allows to customize soap message
