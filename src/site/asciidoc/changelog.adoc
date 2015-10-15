@@ -2,9 +2,14 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
-=== 3.5.1 or higher, upcoming
+=== 3.6.0 Release, 2015-10-15
 
-* your contributions could be here
+* Added extensions which allows to customize soap message
+** see https://github.com/simpligility/ksoap2-android/pull/74
+** contributed by https://github.com/robocik, Quasar Development from http://easywsdl.com
+** minor API incompatibility triggered minor version update to 3.6.0
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 3.5.0 Release, 2015-09-09
 
@@ -35,6 +40,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 ** see https://github.com/simpligility/ksoap2-android/pull/69
 ** contributed by Can Yapan https://www.canyapan.com/
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 3.4.0 Release, 2015-01-07
 
 * Support for different namespaces and pre** fixes for attribute values, in case the value and the attribute are not in the same namespace.
@@ -49,6 +56,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 ** see https://github.com/mosabua/ksoap2-android/pull/58
 ** contributed by Omar Hussein https://github.com/satansly
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 3.3.0 Release, 2014-05-09
 
 * Prevent NPE when getting property value
@@ -61,6 +70,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * Added feature to control a null value representation in SOAP message
 ** see https://github.com/mosabua/ksoap2-android/pull/51
 ** contributed by https://github.com/robocik, Quasar Development from http://easywsdl.com
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 3.2.0 Release, 2014-02-23
 
@@ -84,11 +95,15 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 ** see https://github.com/mosabua/ksoap2-android/pull/49/files
 ** contributed by https://github.com/robocik, Quasar Development from http://easywsdl.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 3.1.1 Release, 2013-11-29
 
 * Making SoapPrimitive? more open and flexibile for reuse
 ** see commits around https://github.com/mosabua/ksoap2-android/commit/320c2560444cedfbca5be894750f0239eebde44d
 ** contributed by Sergey Kolebanov <skoleban@mera.ru> and Manfred Moser
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 3.1.0 Release, 2013-10-24
 
@@ -113,6 +128,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * Updated parent pom, set to require Maven 3.1.1 and added travis ci build
 ** contributed by Manfred Moser http://www.simpligility.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 3.0.0 Release, 2013-03-05
 
 * Added support to stream response into a file rather than parsing it
@@ -132,6 +149,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 ** see https://github.com/mosabua/ksoap2-android/pull/35
 ** contributed by Anatoliy Shuba, https://github.com/AShuba
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 3.0.0-RC.4 Release, 2012-11-12
 
 * Added BufferedInputStream? to wrap the InputStream? in transports
@@ -143,12 +162,16 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * Release process
 ** contributed by Manfred Moser http://www.simpligility.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 3.0.0-RC.3 Release, 2012-11-06
 
 * Connection keep-alive or close Fix
 ** fixes  issue 132 
 ** see https://github.com/mosabua/ksoap2-android/pull/30
 ** contributed by Jose Castellanos Molina https://github.com/matlock08
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 3.0.0-RC.2 Release, 2012-10-22
 
@@ -169,6 +192,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * Plugin updates and release process
 ** contributed by Manfred Moser http://www.simpligility.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 3.0.0-RC.1 Release, 2012-07-19
 
 * fix for gzip support on servers that use lower case header properties
@@ -188,6 +213,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * added module with support for NTLM support
 ** contributed by Manfred Moser http://www.simpligility.com based off contribution on the mailing list
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.6.5 Release, 2012-05-31
 
 * Gzip encoding support
@@ -202,6 +229,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 ** fixes  issue 122 
 ** see https://github.com/mosabua/ksoap2-android/pull/20
 ** contributed by Jose Castellanos Molina https://github.com/matlock08
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2.6.4 Release, 2012-05-01
 
@@ -222,6 +251,8 @@ use avoidExceptionForUnknownProperty property to activate
 ** fixes second part of  issue 94 
 ** contributed by Manfred Moser, http://www.simpligility.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.6.3 Release, 2012-04-10
 
 * Ensure that attributes on SoapPrimitives? are serialized out correctly and not list
@@ -234,6 +265,8 @@ use avoidExceptionForUnknownProperty property to activate
 * Forcing code style on test code
 ** contributed by Manfred Moser, http://www.simpligility.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.6.2 Release, 2012-03-19
 
 * convenience methods in SoapObject? to get primitive data without the anyType
@@ -243,6 +276,8 @@ use avoidExceptionForUnknownProperty property to activate
 ** see https://github.com/mosabua/ksoap2-android/pull/12
 ** contributed by Andrew Oppenlander http://themented.com
 * Loss of data type in serialization fixed so that request produced is the same as for 
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2.6.0 release
 
@@ -257,6 +292,8 @@ use avoidExceptionForUnknownProperty property to activate
 ** see https://github.com/mosabua/ksoap2-android/commit/e56e72e1b3162e35aa02c3b14ad1bf4d952e64b6
 ** contributed by Manfred Moser, http://www.simpligility.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.6.1 Release, 2012-01-16
  
 *  issue 94  fix, no NPE with non string properties
@@ -264,6 +301,8 @@ use avoidExceptionForUnknownProperty property to activate
 * added support to manage the order of SoapObject? properties (PropertyInfos? and SoapObjects?)
 ** see https://github.com/mosabua/ksoap2-android/pull/10
 ** contributed by Andrew Oppenlander http://themented.com
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2.6.0 Release, 2011-11-17
 
@@ -275,6 +314,8 @@ use avoidExceptionForUnknownProperty property to activate
 ** see https://github.com/mosabua/ksoap2-android/commit/352841817a8898d4c794e2b8d3d6bdfb81da96be
 ** contributed by Manfred Moser, http://www.simpligility.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.5.8 Release, 2011-09-26
  
 * issue 75  fix, removing array type if implicitTypes is on
@@ -284,6 +325,8 @@ use avoidExceptionForUnknownProperty property to activate
 ** contributed by Finn Larsen and Manfred Moser
 * implemented correct SoapFault? for SOAP 1.2
 ** contributed by Petter Uvesten, http://www.everichon.com
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2.5.7 Release, 2011-07-06
  
@@ -296,12 +339,16 @@ use avoidExceptionForUnknownProperty property to activate
 * correct header for 1.2, ** fixes  issue 68 
 ** contributed by Petter Uvesten, http://www.everichon.com
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.5.6 Release, 2011-06-22
 
 * convenience methods for getting string representation of attributes and properties off SoapObjects?
 ** contributed by Manfred Moser
 * convenience methods for adding attributes and properties to SoapObject? only if not null
 ** contributed by Manfred Moser
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2.5.5 Release, 2011-06-06
 
@@ -311,6 +358,8 @@ use avoidExceptionForUnknownProperty property to activate
 * refactored safeGetX to getXSafely in SoapObject?
 ** contributed by Manfred Moser
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.5.4 Release, 2011-02-04
 
 * fixed bug in URI properties acquisition
@@ -318,6 +367,8 @@ use avoidExceptionForUnknownProperty property to activate
 * javadoc updates
 * exposed connection in transport for access
 * fixed property count returned in getResponse https://github.com/mosabua/ksoap2-android/commit/1184019043cc63e7439f577cf740cc3cdb88e923
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2.5.3 Release, 2011-02-04
 
@@ -331,6 +382,8 @@ use avoidExceptionForUnknownProperty property to activate
 * applied vector node patch fixing  issue 29  http://code.google.com/p/ksoap2-android/issues/detail?id=29
 * updated copyright file with more details from contributors
 
+Release performed by Manfred Moser http://www.simpligility.com
+
 === 2.5.1 Release, 2010-10-12
 
 After merging a bunch patches and figuring out how to do a release I have created a 2.5.1 release and deployed it to the Maven repo on google code. Included fixes
@@ -338,6 +391,8 @@ After merging a bunch patches and figuring out how to do a release I have create
 * attribute reading working issues http://code.google.com/p/ksoap2-android/issues/detail?id=17 and http://code.google.com/p/ksoap2-android/issues/detail?id=4
 * patch for empty soap fault detail
 * a bunch of convenience methods for working with soapobjects
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2.3 Release, 2009-08-16
 
@@ -350,6 +405,8 @@ Other Announcements
 
 2010-10-12 Wiki overhaul
 I did a major overhaul of the wiki and the content on it as well as adding more content.
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 2010-10-08 Project Owner Change
 
