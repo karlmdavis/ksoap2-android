@@ -54,7 +54,7 @@ public class SoapObject extends AttributeContainer implements KvmSerializable, H
      */
     protected Vector properties = new Vector();
 
-    protected String innerText;
+    protected Object innerText;
 
     // TODO: accessing properties and attributes would work much better if we
     // kept a list of known properties instead of iterating through the list
@@ -692,6 +692,17 @@ public class SoapObject extends AttributeContainer implements KvmSerializable, H
         }
     }
 
+    public PropertyInfo getPropertyInfo(int index) {
+        Object element = properties.elementAt(index);
+        if (element instanceof PropertyInfo) {
+            PropertyInfo p = (PropertyInfo) element;
+            return p;
+        } else {
+            // SoapObject
+            return null;
+        }
+    }
+
     /**
      * Creates a new SoapObject based on this, allows usage of SoapObjects as
      * templates. One application is to set the expected return type of a soap
@@ -887,13 +898,17 @@ public class SoapObject extends AttributeContainer implements KvmSerializable, H
         buf.append("}");
         return buf.toString();
     }
-    public String getInnerText() {
+    public Object getInnerText() {
          return innerText;
     }
 
-    public void setInnerText(String innerText)
+    public void setInnerText(Object innerText)
     {
         this.innerText=innerText;
     }
 
+    public void removePropertyInfo(Object info)
+    {
+        properties.remove(info);
+    }
 }

@@ -92,7 +92,16 @@ class DM implements Marshal {
                 }
             }
         }
-        writer.text(instance.toString());
+
+        if(instance  instanceof ValueWriter)
+        {
+            ((ValueWriter)instance).write(writer);
+        }
+        else
+        {
+            writer.text(instance.toString());
+        }
+
     }
 
     public void register(SoapSerializationEnvelope cm) {

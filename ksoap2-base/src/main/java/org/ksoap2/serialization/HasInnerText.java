@@ -8,10 +8,10 @@ public interface HasInnerText {
      /**
      * Gets the inner text of xml tags
      */
-    String getInnerText();
+    Object getInnerText();
 
     /**
      * @param s String to be set as inner text for an outgoing soap object
      */
-    void setInnerText(String s);
+    void setInnerText(Object s);
 }
