@@ -39,9 +39,9 @@ deployment to github pages to work:
 
 === Deploy a SNAPSHOT version
 
-If you want to make a binary version of Android Maven Plugin available for someone to test, 
+If you want to make a binary version available for someone to test, 
 before making a proper release, deploy a SNAPSHOT version. This will make it available in the 
-OSSRH snapshots repo (see above). It won't end up on the Central Repository.
+snapshots repo at https://oss.sonatype.org/content/repositories/ksoap2-android-snapshots
 
 To perform the SNAPSHOT release:
 
@@ -49,7 +49,6 @@ To perform the SNAPSHOT release:
 mvn clean deploy -P release
 ----
 
-That should deploy the artifacts directly to the SNAPSHOT repo on http://oss.sonatype.org. 
 
 === Perform a RELEASE
 
@@ -64,7 +63,6 @@ Once you are happy with the state of everything - Do it!
 To perform the release:
 
 ----
-cd android-maven-plugin
 mvn release:prepare release:perform
 ----
 
@@ -72,17 +70,15 @@ If something goes wrong during the perform phase you can deploy from the target/
 or checkout a branch of the tag.
 
 ----
-mvn deploy site -P official-release
+mvn deploy -P release
 ----
 
 With the right setup this will
 
 * create a tag and push it to github
 * prepare and deploy everything for the plugin release (jar, sources, javadoc..) to OSSRH
-* release the staging repository on OSSRH so the plugin is automatically synced to the Central Repository
-* deploy the site to github pages 
 
-Check here http://repo1.maven.org/maven2/com/simpligility/maven/plugins/android-maven-plugin/
+Check https://oss.sonatype.org/content/repositories/ksoap2-android-releases/
 
 Announce on the mailing list, G+, Twitter and maybe ADT and other lists as desired.
 
@@ -104,3 +100,5 @@ Deploying the site to github pages can be done any time with:
 ----
 mvn clean site -P site -N
 ----
+
+For a release check out the tag in git or right after running the release run the command in `target/checkout`.
