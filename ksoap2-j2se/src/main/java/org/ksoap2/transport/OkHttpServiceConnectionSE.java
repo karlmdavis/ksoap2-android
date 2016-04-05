@@ -1,7 +1,6 @@
 package org.ksoap2.transport;
 
 import org.ksoap2.HeaderProperty;
-import org.ksoap2.transport.ServiceConnection;
 
 import java.io.IOException;
 import java.io.InputStream;
