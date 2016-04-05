@@ -11,5 +11,5 @@ out
 .classpath
 .idea/
 *.iml
-
+.checkstyle
 .DS_Store
