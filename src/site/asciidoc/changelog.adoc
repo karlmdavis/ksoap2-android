@@ -2,11 +2,14 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
-=== 3.6.1 or higher, upcoming
+=== 3.6.1 Release, 2016-05-24
 
 * New transport and connection classes using OKHttp
 ** see https://github.com/simpligility/ksoap2-android/pull/83
 ** contributed by Nicola Beghin https://github.com/nicolabeghin
+* Updated junit and maven plugin versions
+
+Release performed by Manfred Moser http://www.simpligility.com
 
 === 3.6.0 Release, 2015-10-15
 
