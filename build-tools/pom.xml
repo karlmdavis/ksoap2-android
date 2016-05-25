@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.google.code.ksoap2-android</groupId>
         <artifactId>ksoap2-parent</artifactId>
-        <version>3.6.1</version>
+        <version>3.6.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>build-tools</artifactId>
