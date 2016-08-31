@@ -51,10 +51,15 @@ public class OkHttpServiceConnectionSE implements ServiceConnection {
     }
 
     public OkHttpServiceConnectionSE(Proxy proxy, String url, int timeout) throws IOException {
-        client = new OkHttpClient.Builder()
+        this(new OkHttpClient.Builder()
                 .connectTimeout(timeout, TimeUnit.MILLISECONDS)
                 .readTimeout(timeout, TimeUnit.MILLISECONDS)
-                .build();
+                .build(),
+             proxy, url, timeout);
+    }      
+                
+    public OkHttpServiceConnectionSE(OkHttpClient client, Proxy proxy, String url, int timeout) throws IOException {
+        this.client = client;
         connection = new HttpURLConnectionImpl(new URL(url), client);
 //        connection = (proxy == null)
 //                ? new HttpURLConnectionImpl(new URL(url), client)
