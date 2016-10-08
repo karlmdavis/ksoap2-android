@@ -2,6 +2,12 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
+=== 3.6.2 or higher, upcoming
+
+* Accept 202 http status code
+** see https://github.com/simpligility/ksoap2-android/pull/102
+** contributed by https://github.com/robocik, Quasar Development from http://easywsdl.com
+
 === 3.6.1 Release, 2016-05-24
 
 * New transport and connection classes using OKHttp
