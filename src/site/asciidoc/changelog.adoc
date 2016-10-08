@@ -10,6 +10,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * Allow to specify an existing OkHttpClient instance for transport
 ** see https://github.com/simpligility/ksoap2-android/pull/99
 ** contributed by https://github.com/rob-X1
+* Changed site publishing to use scm-publish
+** contributed by Manfred Moser http://www.simpligility.com
 
 === 3.6.1 Release, 2016-05-24
 

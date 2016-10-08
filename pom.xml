@@ -79,6 +79,10 @@
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/ksoap2-android-snapshots/</url>
     </snapshotRepository>
+    <site>
+      <id>github</id>
+      <url>scm:git:ssh://git@github.com/simpligility/ksoap2-android.git</url>
+    </site>
   </distributionManagement>
 
   <properties>
@@ -340,13 +344,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.9.4</version>
-            </dependency>
-          </dependencies>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <tagNameFormat>@{project.version}</tagNameFormat>
@@ -360,30 +357,43 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-scm-plugin</artifactId>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-provider-gitexe</artifactId>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <!-- careful with upgrades, e.g. 3.4 does not work with asciidoctor 
-            (yet?) -->
-          <version>3.3</version>
+          <!-- careful with upgrades, e.g. 3.5.1 does not work with asciidoctor (yet?) -->
+          <version>3.4</version>
+          <configuration>
+            <skipDeploy>true</skipDeploy><!-- don't deploy site with maven-site-plugin -->
+          </configuration>
           <dependencies>
             <dependency>
               <groupId>org.asciidoctor</groupId>
               <artifactId>asciidoctor-maven-plugin</artifactId>
-              <version>1.5.0</version>
+              <version>1.5.3</version>
             </dependency>
           </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <configuration>
+          <pubScmUrl>${project.scm.developerConnection}</pubScmUrl>
+          <scmBranch>gh-pages</scmBranch>
+          <content>${project.reporting.outputDirectory}</content>
+        </configuration>
+        <executions>
+          <execution>
+            <id>scm-publish</id>
+            <phase>site-deploy</phase><!-- deploy site with maven-scm-publish-plugin -->
+            <goals>
+              <goal>publish-scm</goal>
+            </goals>
+          </execution>
+       </executions>
+      </plugin>
+    </plugins>
+    
   </build>
 
   <reporting>
@@ -431,30 +441,6 @@
                 <id>attach-javadocs</id>
                 <goals>
                   <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>site</id>
-      <build>
-        <plugins>
-          <plugin>
-            <!-- deploy the site to github pages -->
-            <groupId>com.github.github</groupId>
-            <artifactId>site-maven-plugin</artifactId>
-            <configuration>
-              <server>github</server> <!-- the id of the server with the passwords in settings.xml -->
-              <message>Creating site for ${project.version}</message>
-            </configuration>
-            <executions>
-              <execution>
-                <phase>site</phase>
-                <goals>
-                  <goal>site</goal> <!-- the site goal uploads to ghpages -->
                 </goals>
               </execution>
             </executions>

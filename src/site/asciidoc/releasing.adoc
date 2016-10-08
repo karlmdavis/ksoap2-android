@@ -98,7 +98,7 @@ Once you are done with it all, celebrate as desired ;-)
 Deploying the site to github pages can be done any time with:
 
 ----
-mvn clean site -P site -N
+mvn clean site-deploy -N
 ----
 
 For a release check out the tag in git or right after running the release run the command in `target/checkout`.
