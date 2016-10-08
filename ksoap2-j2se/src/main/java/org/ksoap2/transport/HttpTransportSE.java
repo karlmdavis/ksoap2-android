@@ -230,8 +230,8 @@ public class HttpTransportSE extends Transport {
             }
 
             //first check the response code....
-            if (status != 200) {
-                //throw new IOException("HTTP request failed, HTTP status: " + status);
+            if (status != 200 && status != 202) {
+                //202 is a correct status returned by WCF OneWay operation
                 throw new HttpResponseException("HTTP request failed, HTTP status: " + status, status,retHeaders);
             }
 
@@ -271,7 +271,10 @@ public class HttpTransportSE extends Transport {
             is = readDebug(is, contentLength, outputFile);
         }
 
-        parseResponse(envelope, is,retHeaders);
+        if(is!=null)
+        {
+            parseResponse(envelope, is,retHeaders);
+        }
 
         // release all resources 
         // input stream is will be released inside parseResponse
