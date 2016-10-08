@@ -19,7 +19,7 @@ To make use of this library in a Maven project, add the following to your projec
     <dependency>
       <groupId>com.google.code.ksoap2-android</groupId>
       <artifactId>ksoap2-android</artifactId>
-      <version>3.6.1</version>
+      <version>3.6.2</version>
     </dependency>
   </dependencies>
   ...
@@ -50,7 +50,7 @@ and can be declared as dependencies as well, if needed. E.g.
    <dependency>
       <groupId>com.google.code.ksoap2-android</groupId>
       <artifactId>ksoap2-extra-ntlm</artifactId>
-      <version>3.6.1</version>
+      <version>3.6.2</version>
     </dependency>
 ----
 
@@ -75,7 +75,7 @@ The different version of these files are available at  https://oss.sonatype.org/
 
 The latest release artifact of the bundle is available at 
 
-https://oss.sonatype.org/content/repositories/ksoap2-android-releases/com/google/code/ksoap2-android/ksoap2-android-assembly/3.6.1/ksoap2-android-assembly-3.6.1-jar-with-dependencies.jar 
+https://oss.sonatype.org/content/repositories/ksoap2-android-releases/com/google/code/ksoap2-android/ksoap2-android-assembly/3.6.2/ksoap2-android-assembly-3.6.2-jar-with-dependencies.jar 
 
 === Next Steps 
 
