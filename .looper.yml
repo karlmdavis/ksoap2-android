@@ -5,7 +5,7 @@ tools:
     - 3.3.9
 
 flows:
-   master:
-   - (on master, name build) mvn clean install -B
-   pr:
-   - call: master
+  master:
+    - (on master, name build) mvn clean install -B
+  pr:
+    - call: master
