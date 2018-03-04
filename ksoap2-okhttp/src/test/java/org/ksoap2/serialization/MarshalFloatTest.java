@@ -6,8 +6,6 @@ import java.math.*;
 import org.junit.*;
 
 import org.ksoap2.*;
-import org.ksoap2.serialization.MarshalFloat;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.mock.*;
 import org.xmlpull.v1.*;
 
