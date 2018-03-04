@@ -1,4 +1,4 @@
-package org.ksoap2.transport;
+package org.ksoap2.transport.authenticator;
 
 import okhttp3.*;
 

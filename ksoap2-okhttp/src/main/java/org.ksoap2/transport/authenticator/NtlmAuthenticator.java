@@ -1,4 +1,4 @@
-package org.ksoap2.transport;
+package org.ksoap2.transport.authenticator;
 
 import okhttp3.*;
 
@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class NtlmAuthenticator implements Authenticator {
-    private final JCIFSEngine engine;
-
     private final String userName;
     private final String password;
     private final String ntDomain;
@@ -18,8 +16,6 @@ public class NtlmAuthenticator implements Authenticator {
         this.password = password;
         this.ntDomain = ntDomain;
         this.ntWorkstation = ntWorkstation;
-
-        engine = new JCIFSEngine();
     }
 
     @Override

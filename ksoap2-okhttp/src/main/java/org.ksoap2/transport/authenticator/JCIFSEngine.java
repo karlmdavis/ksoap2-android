@@ -1,4 +1,4 @@
-package org.ksoap2.transport;
+package org.ksoap2.transport.authenticator;
 
 import jcifs.ntlmssp.NtlmFlags;
 import jcifs.ntlmssp.Type1Message;
@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Class taken from http://hc.apache.org/httpcomponents-client-ga/ntlm.html
  */
-public final class JCIFSEngine {
+final class JCIFSEngine {
 
     private static final int TYPE_1_FLAGS =
             NtlmFlags.NTLMSSP_NEGOTIATE_56 |
@@ -20,13 +20,13 @@ public final class JCIFSEngine {
                     NtlmFlags.NTLMSSP_NEGOTIATE_ALWAYS_SIGN |
                     NtlmFlags.NTLMSSP_REQUEST_TARGET;
 
-    public static String generateType1Msg(final String domain, final String workstation)
+    static String generateType1Msg(final String domain, final String workstation)
             throws JCIFSEngineException {
         final Type1Message type1Message = new Type1Message(TYPE_1_FLAGS, domain, workstation);
         return Base64.encode(type1Message.toByteArray());
     }
 
-    public static String generateType3Msg(final String username, final String password,
+    static String generateType3Msg(final String username, final String password,
                                    final String domain, final String workstation, final String challenge)
             throws JCIFSEngineException {
         Type2Message type2Message;
