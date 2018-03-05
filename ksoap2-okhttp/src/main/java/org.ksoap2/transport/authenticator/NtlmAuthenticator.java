@@ -5,13 +5,22 @@ import okhttp3.*;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * A ntlm authenticator implementation of {@link Authenticator} interface to use with OkHttpTransport.
+ */
 public class NtlmAuthenticator implements Authenticator {
     private final String userName;
     private final String password;
     private final String ntDomain;
     private final String ntWorkstation;
 
-    NtlmAuthenticator(String userName, String password, String ntDomain, String ntWorkstation) {
+    /**
+     * @param userName User name
+     * @param password Password
+     * @param ntDomain Domain
+     * @param ntWorkstation Workstation
+     */
+    public NtlmAuthenticator(final String userName, final String password, final String ntDomain, final String ntWorkstation) {
         this.userName = userName;
         this.password = password;
         this.ntDomain = ntDomain;
@@ -19,38 +28,22 @@ public class NtlmAuthenticator implements Authenticator {
     }
 
     @Override
-    public Request authenticate(Route route, Response response) throws IOException {
-        List<String> authHeaders = response.headers("WWW-Authenticate");
+    public Request authenticate(final Route route, final Response response) throws IOException {
+        final List<String> authHeaders = response.headers("WWW-Authenticate");
         if (authHeaders != null) {
-            boolean negociate = false;
-            boolean ntlm = false;
-            String ntlmValue = null;
+            boolean negotiate = false;
             for (String authHeader : authHeaders) {
                 if (authHeader.equalsIgnoreCase("Negotiate")) {
-                    negociate = true;
-                }
-                if (authHeader.equalsIgnoreCase("NTLM")) {
-                    ntlm = true;
-                }
-                if (authHeader.startsWith("NTLM ")) {
-                    ntlmValue = authHeader.substring(5);
+                    negotiate = true;
+                } else if (negotiate && authHeader.equalsIgnoreCase("NTLM") && responseCount(response) <= 3) {
+                    final String type1Msg = JCIFSEngine.generateType1Msg(ntDomain, ntWorkstation);
+                    return response.request().newBuilder().header("Authorization", "NTLM " + type1Msg).build();
+                } else if (authHeader.startsWith("NTLM ")) {
+                    final String challenge = authHeader.substring(5);
+                    final String type3Msg = JCIFSEngine.generateType3Msg(userName, password, ntDomain, ntWorkstation, challenge);
+                    return response.request().newBuilder().header("Authorization", "NTLM " + type3Msg).build();
                 }
             }
-
-            if (negociate && ntlm) {
-                String type1Msg = JCIFSEngine.generateType1Msg(ntDomain, ntWorkstation);
-                String header = "NTLM " + type1Msg;
-                return response.request().newBuilder().header("Authorization", header).build();
-            } else if (ntlmValue != null) {
-                String type3Msg = JCIFSEngine.generateType3Msg(userName, password, ntDomain, ntWorkstation, ntlmValue);
-                String ntlmHeader = "NTLM " + type3Msg;
-                return response.request().newBuilder().header("Authorization", ntlmHeader).build();
-            }
-        }
-
-        if (responseCount(response) <= 3) {
-            String credential = Credentials.basic(userName, password);
-            return response.request().newBuilder().header("Authorization", credential).build();
         }
 
         return null;
@@ -63,5 +56,4 @@ public class NtlmAuthenticator implements Authenticator {
         }
         return result;
     }
-
 }

@@ -58,7 +58,7 @@ public class OkHttpTransport {
     public static final int DEFAULT_TIMEOUT = 20000;
     protected static final String CONTENT_TYPE_XML_CHARSET_UTF_8 = "text/xml;charset=utf-8";
     protected static final String CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8 = "application/soap+xml;charset=utf-8";
-    protected static final String USER_AGENT_PREFIX = "ksoap2-android/2.6.0+";
+    protected static final String USER_AGENT_PREFIX = "ksoap2-okhttp/3.6.3";
 
     private final String userAgent;
     private final OkHttpClient client;
@@ -108,11 +108,10 @@ public class OkHttpTransport {
             return builder.userAgent;
         } else {
             // Try to get default agent to not loose environment definitions.
-            String agent = System.getProperty("http.agent");
+            final String agent = System.getProperty("http.agent");
 
             if (null != agent) {
-                Pattern p = Pattern.compile("(\\s\\(.*\\))");
-                Matcher m = p.matcher(agent);
+                Matcher m = Pattern.compile("(\\s\\(.*\\))").matcher(agent);
 
                 if (m.find() && m.groupCount() > 0 && m.group(1).length() > 0) {
                     return USER_AGENT_PREFIX + m.group(1);
@@ -214,8 +213,8 @@ public class OkHttpTransport {
 
             // first check the response status...
             if (!response.isSuccessful()) {
-                throw new HttpResponseException("HTTP request failed, HTTP status: " +
-                        response.code(), response.code(), resHeaders);
+                throw new HttpResponseException("HTTP request failed, HTTP status: " + response.code(),
+                        response.code(), resHeaders);
             }
 
             ResponseBody responseBody = response.body();
@@ -276,55 +275,126 @@ public class OkHttpTransport {
         private Authenticator authenticator = null;
         private Authenticator proxyAuthenticator = null;
 
+        /**
+         * Transport builder for OkHttp client.
+         * @param url the destination to POST SOAP data.
+         */
         public Builder(HttpUrl url) {
             this.url = url;
         }
 
+        /**
+         * Transport builder for OkHttp client.
+         * @param url the destination to POST SOAP data.
+         */
         public Builder(String url) {
             this.url = HttpUrl.parse(url);
         }
 
+        /**
+         * @param client User defined OkHttpClient
+         * @return builder chain
+         */
         public Builder client(OkHttpClient client) {
             this.client = client;
             return this;
         }
 
+        /**
+         * @param proxy Proxy server
+         * @return builder chain
+         */
         public Builder proxy(Proxy proxy) {
             this.proxy = proxy;
             return this;
         }
 
+        /**
+         * @param timeout Connection and Read timeout
+         * @return builder chain
+         */
         public Builder timeout(int timeout) {
             this.timeout = timeout;
             return this;
         }
 
+        /**
+         * @param userAgent User defined http.agent
+         * @return builder chain
+         */
         public Builder userAgent(String userAgent) {
             this.userAgent = userAgent;
             return this;
         }
 
+        /**
+         * @param headers HTTP headers those will be added as default.
+         * @return builder chain
+         */
         public Builder headers(Headers headers) {
             this.headers = headers;
             return this;
         }
 
+        /**
+         * SSLSocketFactory and X509TrustManager objects to verify SSL/TLS certificate.
+         *
+         * Example:
+         * <code>
+         * KeyStore trustStore = KeyStore.getInstance("BKS");
+         * InputStream trustStoreStream = getResources().openRawResource(R.raw.truststore);
+         * trustStore.load(trustStoreStream, null);
+         * trustStoreStream.close();
+         *
+         * TrustManagerFactory trustManagerFactory =
+         *         TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+         * trustManagerFactory.init(trustStore);
+         * X509TrustManager x509TrustManager = (X509TrustManager) trustManagerFactory.getTrustManagers()[0];
+         *
+         * KeyManagerFactory keyManagerFactory =
+         *         KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+         * keyManagerFactory.init(trustStore, null);     // BouncyCastle keystore don't
+         *                                               // require password to load certificates.
+         *
+         * SSLContext sslContext = SSLContext.getInstance("TLS");
+         * sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+         *
+         * SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+         * OkHttpTransport transport = new OkHttpTransport.Builder(webServiceUrl)
+         *         .sslSocketFactory(sslSocketFactory, x509TrustManager)
+         * </code>
+         *
+         * @param sslSocketFactory {@link SSLSocketFactory} object
+         * @param trustManager {@link X509TrustManager} object
+         * @return builder chain
+         */
         public Builder sslSocketFactory(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager) {
             this.sslSocketFactory = sslSocketFactory;
             this.trustManager = trustManager;
             return this;
         }
 
+        /**
+         * @param authenticator An implementation of {@link okhttp3.Authenticator} interface.
+         * @return builder chain
+         */
         public Builder authenticator(Authenticator authenticator) {
             this.authenticator = authenticator;
             return this;
         }
 
+        /**
+         * @param authenticator An implementation of {@link okhttp3.Authenticator} interface.
+         * @return builder chain
+         */
         public Builder proxyAuthenticator(Authenticator authenticator) {
             this.proxyAuthenticator = authenticator;
             return this;
         }
 
+        /**
+         * @return OkHttpTransport object.
+         */
         public OkHttpTransport build() {
             return new OkHttpTransport(this);
         }

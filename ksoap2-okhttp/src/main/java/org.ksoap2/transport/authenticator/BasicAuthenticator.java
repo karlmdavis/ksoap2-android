@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A basic authenticator implementation of {@link Authenticator} interface to use with OkHttpTransport.
+ */
 public class BasicAuthenticator implements Authenticator {
     private static final String DEFAULT_CHARSET = "ISO-8859-1";
     private static Pattern charsetMatcher = Pattern.compile("(?i)charset=(?-i)\"([a-zA-Z0-9-]+)\"");
@@ -16,6 +19,10 @@ public class BasicAuthenticator implements Authenticator {
     private final String userName;
     private final String password;
 
+    /**
+     * @param userName User name
+     * @param password Password
+     */
     public BasicAuthenticator(String userName, String password) {
         this.userName = userName;
         this.password = password;
