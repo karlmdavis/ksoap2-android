@@ -27,7 +27,7 @@ public class OkHttpTransportTest {
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
 
-        Headers responseHeaders = transport.call("http://www.webserviceX.NET/GetWeather", envelope, null);
+        Headers responseHeaders = transport.call("http://www.webserviceX.NET/GetWeather", envelope);
 
         assertNotNull(responseHeaders);
 
@@ -52,7 +52,7 @@ public class OkHttpTransportTest {
         envelope.setOutputSoapObject(request);
 
         try {
-            transport.call("http://www.webserviceX.NET/GetWeather", envelope, null);
+            transport.call("http://www.webserviceX.NET/GetWeather", envelope);
         } catch (HttpResponseException e) {
             assertNotNull(envelope.bodyIn);
             assertTrue(envelope.bodyIn instanceof SoapFault);

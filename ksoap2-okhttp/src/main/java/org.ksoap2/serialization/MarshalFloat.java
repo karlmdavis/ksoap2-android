@@ -29,18 +29,16 @@ public class MarshalFloat implements Marshal {
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo propertyInfo)
             throws IOException, XmlPullParserException {
-        String stringValue = parser.nextText();
-        Object result;
+        final String stringValue = parser.nextText();
         if (name.equals("float")) {
-            result = new Float(stringValue);
+            return Float.valueOf(stringValue);
         } else if (name.equals("double")) {
-            result = new Double(stringValue);
+            return Double.valueOf(stringValue);
         } else if (name.equals("decimal")) {
-            result = new java.math.BigDecimal(stringValue);
+            return new java.math.BigDecimal(stringValue);
         } else {
             throw new RuntimeException("float, double, or decimal expected");
         }
-        return result;
     }
 
     public void writeInstance(XmlSerializer writer, Object instance) throws IOException {
