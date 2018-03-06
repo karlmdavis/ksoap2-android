@@ -15,9 +15,9 @@ public class NtlmAuthenticator implements Authenticator {
     private final String ntWorkstation;
 
     /**
-     * @param userName User name
-     * @param password Password
-     * @param ntDomain Domain
+     * @param userName      User name
+     * @param password      Password
+     * @param ntDomain      Domain
      * @param ntWorkstation Workstation
      */
     public NtlmAuthenticator(final String userName, final String password,
@@ -36,7 +36,8 @@ public class NtlmAuthenticator implements Authenticator {
             for (String authHeader : authHeaders) {
                 if (authHeader.equalsIgnoreCase("Negotiate")) {
                     negotiate = true;
-                } else if (negotiate && authHeader.equalsIgnoreCase("NTLM") && AuthenticatorHelper.responseCount(response) <= 3) {
+                } else if (negotiate && authHeader.equalsIgnoreCase("NTLM")
+                        && AuthenticatorHelper.responseCount(response) <= 3) {
                     final String type1Msg = JCIFSEngine.generateType1Msg(ntDomain, ntWorkstation);
                     return response.request().newBuilder().header("Authorization", "NTLM " + type1Msg).build();
                 } else if (authHeader.startsWith("NTLM ")) {
