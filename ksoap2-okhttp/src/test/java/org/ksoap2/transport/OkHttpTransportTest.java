@@ -3,6 +3,7 @@ package org.ksoap2.transport;
 import okhttp3.Headers;
 import org.junit.Test;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -18,14 +19,12 @@ public class OkHttpTransportTest {
                 new OkHttpTransport.Builder("http://www.webservicex.net/globalweather.asmx")
                         .build();
 
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-
-        envelope.dotNet = true;
-
         SoapObject request = new SoapObject("http://www.webserviceX.NET", "GetWeather");
         request.addProperty(getStringPropertyInfoEnvelope("CountryName", "Turkey"));
         request.addProperty(getStringPropertyInfoEnvelope("CityName", "Ankara"));
 
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
 
         Headers responseHeaders = transport.call("http://www.webserviceX.NET/GetWeather", envelope, null);
@@ -37,6 +36,29 @@ public class OkHttpTransportTest {
         assertNotNull(response);
 
         assertTrue(response.getValue().toString().length() > 0);
+    }
+
+    @Test(expected = HttpResponseException.class)
+    public void testCallGlobalWeatherServiceForFault() throws Throwable {
+        OkHttpTransport transport =
+                new OkHttpTransport.Builder("http://www.webservicex.net/globalweather.asmx")
+                        .build();
+
+        SoapObject request = new SoapObject("http://www.webserviceX.NET", "GetWeather");
+        // Missing values should generate a SoapFault with 500 status
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+
+        try {
+            transport.call("http://www.webserviceX.NET/GetWeather", envelope, null);
+        } catch (HttpResponseException e) {
+            assertNotNull(envelope.bodyIn);
+            assertTrue(envelope.bodyIn instanceof SoapFault);
+
+            throw e;
+        }
     }
 
     private PropertyInfo getStringPropertyInfoEnvelope(String key, String value) {

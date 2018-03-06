@@ -35,7 +35,6 @@ import org.xmlpull.v1.XmlSerializer;
 
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,8 +55,6 @@ import java.util.regex.Pattern;
  */
 public class OkHttpTransport {
     public static final int DEFAULT_TIMEOUT = 20000;
-    protected static final String CONTENT_TYPE_XML_CHARSET_UTF_8 = "text/xml;charset=utf-8";
-    protected static final String CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8 = "application/soap+xml;charset=utf-8";
     protected static final String USER_AGENT_PREFIX = "ksoap2-okhttp/3.6.3";
 
     private final String userAgent;
@@ -165,9 +162,9 @@ public class OkHttpTransport {
 
         MediaType contentType;
         if (envelope.version == SoapSerializationEnvelope.VER12) {
-            contentType = MediaType.parse(CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8);
+            contentType = MediaType.parse(Transport.CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8);
         } else {
-            contentType = MediaType.parse(CONTENT_TYPE_XML_CHARSET_UTF_8);
+            contentType = MediaType.parse(Transport.CONTENT_TYPE_XML_CHARSET_UTF_8);
         }
 
         byte[] requestData = createRequestData(envelope);
@@ -199,37 +196,39 @@ public class OkHttpTransport {
             }
         }
 
-        Request request = builder.build();
-        Response response = client.newCall(request).execute();
-
-        Headers resHeaders;
-        InputStream is = null;
+        final Request request = builder.build();
+        final Response response = client.newCall(request).execute();
+        ResponseBody responseBody = null;
         try {
             if (response == null) {
                 throw new HttpResponseException("Null response.", -1);
             }
 
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                is = new BufferedInputStream(responseBody.byteStream(), 8 * 1024);
-
-                parseResponse(envelope, is);
+            responseBody = response.body();
+            if (responseBody == null) {
+                throw new HttpResponseException("Null response body.", response.code());
             }
 
-            resHeaders = response.headers();
+            final Headers resHeaders = response.headers();
             if (!response.isSuccessful()) {
                 throw new HttpResponseException("HTTP request failed, HTTP status: " + response.code(),
                         response.code(), resHeaders);
             }
 
+            parseResponse(envelope, responseBody.byteStream());
+
             return resHeaders;
-        } finally {
-            if (is != null) {
-                is.close();
+        } catch (HttpResponseException e) {
+            if (null != responseBody) { // Try to get soap fault
+                try {
+                    parseResponse(envelope, responseBody.byteStream());
+                } catch (XmlPullParserException ignore) { }
             }
 
-            if (null != response) {
-                response.close();
+            throw e;
+        } finally {
+            if (null != responseBody) {
+                responseBody.close(); // Release resources..
             }
         }
     }
