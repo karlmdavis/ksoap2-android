@@ -36,7 +36,7 @@ public class NtlmAuthenticator implements Authenticator {
             for (String authHeader : authHeaders) {
                 if (authHeader.equalsIgnoreCase("Negotiate")) {
                     negotiate = true;
-                } else if (negotiate && authHeader.equalsIgnoreCase("NTLM") && responseCount(response) <= 3) {
+                } else if (negotiate && authHeader.equalsIgnoreCase("NTLM") && AuthenticatorHelper.responseCount(response) <= 3) {
                     final String type1Msg = JCIFSEngine.generateType1Msg(ntDomain, ntWorkstation);
                     return response.request().newBuilder().header("Authorization", "NTLM " + type1Msg).build();
                 } else if (authHeader.startsWith("NTLM ")) {
@@ -48,14 +48,7 @@ public class NtlmAuthenticator implements Authenticator {
             }
         }
 
-        return null;
+        throw new AuthenticatorException("Failed NTLM Authentication.");
     }
 
-    private int responseCount(Response response) {
-        int result = 1;
-        while ((response = response.priorResponse()) != null) {
-            result++;
-        }
-        return result;
-    }
 }

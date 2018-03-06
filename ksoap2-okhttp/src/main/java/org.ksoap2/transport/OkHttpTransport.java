@@ -47,10 +47,10 @@ import java.util.regex.Pattern;
 /**
  * A OkHttp based HttpTransport layer. Keep in mind that OkHttp supports Android 2.3 and above.
  * For Java, the minimum requirement is 1.7. (see https://square.github.io/okhttp/ )
- *
+ * <p>
  * You should also add okhttp dependency to your android projects.
  * compile 'com.squareup.okhttp3:okhttp:3.9.1'
- *
+ * <p>
  * If you use NTLM authentication, you should also add jcifs.
  * compile 'jcifs:jcifs:1.3.17'
  */
@@ -137,7 +137,7 @@ public class OkHttpTransport {
      * @throws XmlPullParserException an XmlPullParserException when XML Parse fails
      */
     public Headers call(String soapAction, SoapEnvelope envelope)
-            throws  IOException, XmlPullParserException {
+            throws IOException, XmlPullParserException {
         return call(soapAction, envelope, null);
     }
 
@@ -209,19 +209,17 @@ public class OkHttpTransport {
                 throw new HttpResponseException("Null response.", -1);
             }
 
-            resHeaders = response.headers();
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                is = new BufferedInputStream(responseBody.byteStream(), 8 * 1024);
 
-            // first check the response status...
+                parseResponse(envelope, is);
+            }
+
+            resHeaders = response.headers();
             if (!response.isSuccessful()) {
                 throw new HttpResponseException("HTTP request failed, HTTP status: " + response.code(),
                         response.code(), resHeaders);
-            }
-
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                is = new BufferedInputStream(responseBody.byteStream(), 8*1024);
-
-                parseResponse(envelope, is);
             }
 
             return resHeaders;
@@ -277,6 +275,7 @@ public class OkHttpTransport {
 
         /**
          * Transport builder for OkHttp client.
+         *
          * @param url the destination to POST SOAP data.
          */
         public Builder(HttpUrl url) {
@@ -285,6 +284,7 @@ public class OkHttpTransport {
 
         /**
          * Transport builder for OkHttp client.
+         *
          * @param url the destination to POST SOAP data.
          */
         public Builder(String url) {
@@ -365,7 +365,7 @@ public class OkHttpTransport {
          * </code>
          *
          * @param sslSocketFactory {@link SSLSocketFactory} object
-         * @param trustManager {@link X509TrustManager} object
+         * @param trustManager     {@link X509TrustManager} object
          * @return builder chain
          */
         public Builder sslSocketFactory(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager) {

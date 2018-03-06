@@ -40,16 +40,18 @@ public class BasicAuthenticator implements Authenticator {
         List<String> authHeaders = response.headers("WWW-Authenticate");
         if (authHeaders != null) {
             for (String authHeader : authHeaders) {
-                if (authHeader.startsWith("Basic")) {
+                if (authHeader.startsWith("Basic") && AuthenticatorHelper.responseCount(response) <= 3) {
                     final Matcher matcher = charsetMatcher.matcher(authHeader);
                     if (matcher.find()) {
                         charset = matcher.group(1);
                     }
+
+                    final String credential = Credentials.basic(userName, password, Charset.forName(charset));
+                    return response.request().newBuilder().header("Authorization", credential).build();
                 }
             }
         }
 
-        final String credential = Credentials.basic(userName, password, Charset.forName(charset));
-        return response.request().newBuilder().header("Authorization", credential).build();
+        throw new AuthenticatorException("Failed Basic Authentication.");
     }
 }
