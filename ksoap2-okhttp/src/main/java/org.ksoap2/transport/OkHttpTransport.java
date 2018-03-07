@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2003,2004, Stefan Haustein, Oberhausen, Rhld., Germany
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -47,13 +47,15 @@ import java.util.regex.Pattern;
  * A OkHttp based HttpTransport layer. Keep in mind that OkHttp supports Android 2.3 and above.
  * For Java, the minimum requirement is 1.7. (see https://square.github.io/okhttp/ )
  * <p>
- * You should also add okhttp dependency to your android projects.
+ * You should also add OkHttp3 dependency to your android projects.
  * compile 'com.squareup.okhttp3:okhttp:3.9.1'
  * <p>
- * If you use NTLM authentication, you should also add jcifs.
+ * If you use NTLM authentication, you should also add JCIFS Library.
  * compile 'jcifs:jcifs:1.3.17'
  */
 public class OkHttpTransport {
+    private static final String DEFAULT_CHARSET = "UTF-8";
+
     public static final int DEFAULT_TIMEOUT = 20000;
     protected static final String USER_AGENT_PREFIX = "ksoap2-okhttp/3.6.3";
 
@@ -227,9 +229,8 @@ public class OkHttpTransport {
 
             throw e;
         } finally {
-            if (null != responseBody) {
+            if (null != responseBody)
                 responseBody.close(); // Release resources..
-            }
         }
     }
 
@@ -240,7 +241,7 @@ public class OkHttpTransport {
             throws IOException {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream(8 * 1024);
         final XmlSerializer xw = new KXmlSerializer();
-        xw.setOutput(bos, "UTF-8");
+        xw.setOutput(bos, DEFAULT_CHARSET);
         envelope.write(xw);
         xw.flush();
         bos.write('\r');

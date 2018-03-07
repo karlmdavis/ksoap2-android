@@ -27,17 +27,18 @@ public class MarshalFloatTest {
     public void testMarshalDateInbound() throws IOException, XmlPullParserException {
         MockXmlPullParser mockXmlPullParser = new MockXmlPullParser();
         mockXmlPullParser.nextText = FLOATING_POINT_VALUE;
+
         Number floatingPointValue = (Number) marshalFloat.readInstance(mockXmlPullParser, null, FLOAT_LABEL, null);
         assertTrue(floatingPointValue instanceof Float);
         assertEquals(Float.valueOf(FLOATING_POINT_VALUE), floatingPointValue.floatValue(), 0.01f);
 
         floatingPointValue = (Number) marshalFloat.readInstance(mockXmlPullParser, null, "double", null);
         assertTrue(floatingPointValue instanceof Double);
-        assertEquals(Double.valueOf(FLOATING_POINT_VALUE), floatingPointValue.doubleValue(), 0.01);
+        assertEquals(Double.valueOf(FLOATING_POINT_VALUE), floatingPointValue.doubleValue(), 0.01d);
 
         floatingPointValue = (Number) marshalFloat.readInstance(mockXmlPullParser, null, "decimal", null);
         assertTrue(floatingPointValue instanceof BigDecimal);
-        assertEquals(new BigDecimal(FLOATING_POINT_VALUE).doubleValue(), floatingPointValue.doubleValue(), 0.01);
+        assertEquals(new BigDecimal(FLOATING_POINT_VALUE).doubleValue(), floatingPointValue.doubleValue(), 0.01d);
 
         try {
             floatingPointValue = (Number) marshalFloat.readInstance(mockXmlPullParser, null, "unknown type", null);
@@ -56,16 +57,16 @@ public class MarshalFloatTest {
     }
 
     @Test
-    public void testmarshalDateOutbound_Double() throws IOException {
+    public void testMarshalDateOutbound_Double() throws IOException {
         MockXmlSerializer writer = new MockXmlSerializer();
         marshalFloat.writeInstance(writer, 12.0d);
         assertEquals(FLOATING_POINT_VALUE, writer.getOutputText());
     }
 
     @Test
-    public void testmarshalDateOutbound_Decimal() throws IOException {
+    public void testMarshalDateOutbound_Decimal() throws IOException {
         MockXmlSerializer writer = new MockXmlSerializer();
-        marshalFloat.writeInstance(writer, new BigDecimal(12.0));
+        marshalFloat.writeInstance(writer, new BigDecimal(12.0d));
         assertEquals("12", writer.getOutputText());
     }
 
