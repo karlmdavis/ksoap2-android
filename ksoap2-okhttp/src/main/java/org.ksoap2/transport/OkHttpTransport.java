@@ -39,7 +39,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,12 +62,24 @@ public class OkHttpTransport {
     public static final int DEFAULT_TIMEOUT = 20000;
     protected static final String USER_AGENT_PREFIX = "ksoap2-okhttp/3.6.3";
 
+    static {
+        URL loggingConfig = OkHttpTransport.class.getClassLoader()
+                .getResource("logging.properties");
+        if (null != loggingConfig) {
+            System.setProperty("java.util.logging.config.file", loggingConfig.getFile());
+        }
+    }
+
     private final String userAgent;
     private final OkHttpClient client;
     private final HttpUrl url;
     private final Headers headers;
+    private final Logger logger;
 
     private OkHttpTransport(OkHttpTransport.Builder builder) {
+        logger = Logger.getLogger(OkHttpTransport.class.getName());
+        logger.setLevel(builder.debug ? Level.FINEST : Level.INFO);
+
         OkHttpClient.Builder clientBuilder;
         if (null != builder.client) {
             clientBuilder = builder.client.newBuilder();
@@ -161,6 +176,7 @@ public class OkHttpTransport {
         if (soapAction == null) {
             soapAction = "\"\"";
         }
+        logger.fine("SoapAction: " + soapAction);
 
         MediaType contentType;
         if (envelope.version == SoapSerializationEnvelope.VER12) {
@@ -168,8 +184,13 @@ public class OkHttpTransport {
         } else {
             contentType = MediaType.parse(Transport.CONTENT_TYPE_XML_CHARSET_UTF_8);
         }
+        logger.finer("ContentType: " + contentType);
+
 
         byte[] requestData = createRequestData(envelope);
+        if (logger.getLevel().intValue() <= Level.FINEST.intValue()) {
+            logger.finest("Request Payload: " + new String(requestData, DEFAULT_CHARSET));
+        }
 
         RequestBody body = RequestBody.create(contentType, requestData);
 
@@ -199,6 +220,8 @@ public class OkHttpTransport {
         }
 
         final Request request = builder.build();
+        logger.finer("Request Headers: " + request.headers().toString());
+
         final Response response = client.newCall(request).execute();
         ResponseBody responseBody = null;
         try {
@@ -211,20 +234,27 @@ public class OkHttpTransport {
                 throw new HttpResponseException("Null response body.", response.code());
             }
 
-            final Headers resHeaders = response.headers();
+            final Headers responseHeaders = response.headers();
+            logger.finer("Response Headers: " + responseHeaders.toString());
+
+            if (logger.getLevel().intValue() <= Level.FINEST.intValue()) {
+                logger.finest("Response Payload (max first 32KB): " + response.peekBody(32 * 1024).string());
+            }
+
             if (!response.isSuccessful()) {
                 throw new HttpResponseException("HTTP request failed, HTTP status: " + response.code(),
-                        response.code(), resHeaders);
+                        response.code(), responseHeaders);
             }
 
             parseResponse(envelope, responseBody.byteStream());
 
-            return resHeaders;
+            return responseHeaders;
         } catch (HttpResponseException e) {
             if (null != responseBody) { // Try to get soap fault
                 try {
                     parseResponse(envelope, responseBody.byteStream());
-                } catch (XmlPullParserException ignore) { }
+                } catch (XmlPullParserException ignore) {
+                }
             }
 
             throw e;
@@ -273,6 +303,7 @@ public class OkHttpTransport {
         private X509TrustManager trustManager = null;
         private Authenticator authenticator = null;
         private Authenticator proxyAuthenticator = null;
+        private boolean debug = false;
 
         /**
          * Transport builder for OkHttp client.
@@ -339,7 +370,7 @@ public class OkHttpTransport {
 
         /**
          * SSLSocketFactory and X509TrustManager objects to verify SSL/TLS certificate.
-         *
+         * <p>
          * Example:
          * <code>
          * KeyStore trustStore = KeyStore.getInstance("BKS");
@@ -390,6 +421,17 @@ public class OkHttpTransport {
          */
         public Builder proxyAuthenticator(Authenticator authenticator) {
             this.proxyAuthenticator = authenticator;
+            return this;
+        }
+
+        /**
+         * Don't use this in production.
+         *
+         * @param debug activate printing debug info.
+         * @return builder chain
+         */
+        public Builder debug(boolean debug) {
+            this.debug = debug;
             return this;
         }
 
