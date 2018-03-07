@@ -229,8 +229,9 @@ public class OkHttpTransport {
 
             throw e;
         } finally {
-            if (null != responseBody)
+            if (null != responseBody) {
                 responseBody.close(); // Release resources..
+            }
         }
     }
 

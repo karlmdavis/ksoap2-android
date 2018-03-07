@@ -38,19 +38,23 @@ public class BasicAuthenticator implements Authenticator {
         String charset = DEFAULT_CHARSET;
 
         List<String> authHeaders = response.headers("WWW-Authenticate");
-        if (authHeaders == null)
+        if (authHeaders == null) {
             return null;
+        }
 
         for (String authHeader : authHeaders) {
-            if (!authHeader.startsWith("Basic"))
+            if (!authHeader.startsWith("Basic")) {
                 continue;
+            }
 
-            if (AuthenticatorHelper.responseCount(response) > 3)
+            if (AuthenticatorHelper.responseCount(response) > 3) {
                 throw new AuthenticatorException("Failed Basic Authentication.");
+            }
 
             final Matcher matcher = charsetMatcher.matcher(authHeader);
-            if (matcher.find())
+            if (matcher.find()) {
                 charset = matcher.group(1);
+            }
 
             final String credential = Credentials.basic(userName, password, Charset.forName(charset));
             return response.request().newBuilder().header("Authorization", credential).build();
