@@ -39,9 +39,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,10 +63,28 @@ public class OkHttpTransport {
     protected static final String USER_AGENT_PREFIX = "ksoap2-okhttp/3.6.3";
 
     static {
-        URL loggingConfig = OkHttpTransport.class.getClassLoader()
-                .getResource("logging.properties");
-        if (null != loggingConfig) {
-            System.setProperty("java.util.logging.config.file", loggingConfig.getFile());
+        InputStream stream = null;
+        try {
+            stream = OkHttpTransport.class.getResourceAsStream("logging.properties");
+            if (null == stream) {
+                stream = OkHttpTransport.class.getClassLoader()
+                        .getResourceAsStream("logging.properties");
+            }
+
+            if (null != stream) {
+                LogManager.getLogManager().readConfiguration(stream);
+            } else {
+                System.err.println("Couldn't find logger configuration.");
+            }
+        } catch (IOException e) {
+            System.err.println("Couldn't read logger configuration.");
+            e.printStackTrace();
+        } finally {
+            if (null != stream) {
+                try {
+                    stream.close();
+                } catch (IOException ignore) { }
+            }
         }
     }
 
