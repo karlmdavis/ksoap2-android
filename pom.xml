@@ -54,6 +54,7 @@
     <module>ksoap2-samples-axis</module>
     <module>ksoap2-servlet</module>
     <module>ksoap2-jsoup</module>
+    <module>ksoap2-okhttp</module>
   </modules>
 
   <scm>
