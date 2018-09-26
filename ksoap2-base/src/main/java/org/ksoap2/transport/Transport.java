@@ -51,6 +51,7 @@ abstract public class Transport {
     protected Proxy proxy;
     protected String url;
     protected int timeout = ServiceConnection.DEFAULT_TIMEOUT;
+    protected int readTimeout = ServiceConnection.DEFAULT_TIMEOUT;
     /** Set to true if debugging */
     public boolean debug;
     /** String dump of request for debugging. */
@@ -71,6 +72,10 @@ abstract public class Transport {
         return prefixes;
     }
 
+    public void setReadTimeout(int readTimeout){
+        this.readTimeout = readTimeout;
+    }
+
     public Transport() {
     }
 
@@ -86,6 +91,7 @@ abstract public class Transport {
     public Transport(String url, int timeout, int bufferLength) {
         this.url = url;
         this.timeout = timeout;
+        this.readTimeout = timeout;
         this.bufferLength = bufferLength;
     }
 
@@ -109,12 +115,14 @@ abstract public class Transport {
         this.proxy = proxy;
         this.url = url;
         this.timeout = timeout;
+        this.readTimeout = timeout;
     }
 
     public Transport(Proxy proxy, String url, int timeout, int bufferLength) {
         this.proxy = proxy;
         this.url = url;
         this.timeout = timeout;
+        this.readTimeout = timeout;
         this.bufferLength = bufferLength;
     }
 

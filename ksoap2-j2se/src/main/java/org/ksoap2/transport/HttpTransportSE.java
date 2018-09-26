@@ -351,6 +351,6 @@ public class HttpTransportSE extends Transport {
     }
 
     public ServiceConnection getServiceConnection() throws IOException {
-        return new ServiceConnectionSE(proxy, url, timeout);
+        return new ServiceConnectionSE(proxy, url, timeout, readTimeout);
     }
 }
