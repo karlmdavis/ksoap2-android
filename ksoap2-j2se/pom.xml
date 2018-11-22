@@ -21,18 +21,20 @@
         <dependency>
             <groupId>com.google.code.ksoap2-android</groupId>
             <artifactId>ksoap2-base</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.ksoap2-android</groupId>
             <artifactId>ksoap2-base</artifactId>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-		<dependency>
-		  <groupId>com.squareup.okhttp3</groupId>
-		  <artifactId>okhttp-urlconnection</artifactId>
-		  <version>3.2.0</version>
-		</dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp-urlconnection</artifactId>
+            <version>3.2.0</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

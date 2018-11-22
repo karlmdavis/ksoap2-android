@@ -21,6 +21,7 @@
         <dependency>
             <groupId>com.google.code.ksoap2-android</groupId>
             <artifactId>ksoap2-android</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
