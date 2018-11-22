@@ -24,7 +24,11 @@ public class HttpsTransportSE extends HttpTransportSE{
     protected final String file;
 
     public HttpsTransportSE (String host, int port, String file, int timeout) {
-        super(HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file, timeout);
+        this(host, port, file, timeout, timeout);
+    }
+
+    public HttpsTransportSE (String host, int port, String file, int connectTimeout, int readTimeout) {
+        super(HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file, connectTimeout, readTimeout);
         this.host = host;
         this.port = port;
         this.file = file;
@@ -38,11 +42,23 @@ public class HttpsTransportSE extends HttpTransportSE{
      * Proxy information or <code>null</code> for direct access
      */
     public HttpsTransportSE(Proxy proxy, String host, int port, String file, int timeout) {
+        this(proxy, host, port, file, timeout, timeout);
+    }
+
+    /**
+     * Creates instance of HttpTransportSE with set url and defines a
+     * proxy server to use to access it
+     *
+     * @param proxy
+     * Proxy information or <code>null</code> for direct access
+     */
+    public HttpsTransportSE(Proxy proxy, String host, int port, String file, int connectTimeout, int readTimeout) {
         super(proxy, HttpsTransportSE.PROTOCOL_FULL + host + ":" + port + file);
         this.host = host;
         this.port = port;
         this.file = file;
-        this.timeout = timeout;
+        this.timeout = connectTimeout;
+        this.readTimeout = readTimeout;
     }
 
     /**
@@ -54,7 +70,7 @@ public class HttpsTransportSE extends HttpTransportSE{
         if(connection != null) {
             return connection;
         } else {
-            connection = new HttpsServiceConnectionSE(proxy, host, port, file, timeout);
+            connection = new HttpsServiceConnectionSE(proxy, host, port, file, timeout, readTimeout);
             return connection;
         }
     }

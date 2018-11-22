@@ -62,14 +62,18 @@ public class ServiceConnectionSE implements ServiceConnection {
     }
 
     public ServiceConnectionSE(Proxy proxy, String url, int timeout) throws IOException {
+        this(proxy, url, timeout, timeout);
+    }
+
+    public ServiceConnectionSE(Proxy proxy, String url, int connectTimeout, int readTimeout) throws IOException {
         connection = (proxy == null)
             ? (HttpURLConnection) new URL(url).openConnection()
             : (HttpURLConnection) new URL(url).openConnection(proxy);
         connection.setUseCaches(false);
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        connection.setConnectTimeout(timeout);
-        connection.setReadTimeout(timeout); // even if we connect fine we want to time out if we cant read anything..
+        connection.setConnectTimeout(connectTimeout);
+        connection.setReadTimeout(readTimeout);
     }
 
     public void connect() throws IOException {
