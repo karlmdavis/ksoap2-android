@@ -10,9 +10,11 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class OkHttpTransportTest {
 
+    @Ignore
     @Test
     public void testCallGlobalWeatherService() throws Throwable {
         OkHttpTransport transport =
@@ -38,6 +40,7 @@ public class OkHttpTransportTest {
         assertTrue(response.getValue().toString().length() > 0);
     }
 
+    @Ignore
     @Test(expected = HttpResponseException.class)
     public void testCallGlobalWeatherServiceForFault() throws Throwable {
         OkHttpTransport transport =
