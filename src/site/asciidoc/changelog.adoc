@@ -2,6 +2,15 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
+=== 3.6.3 Release, 2018-11-21
+
+* Differentiating read and connection timeout
+** see https://github.com/simpligility/ksoap2-android/pull/124
+* Added in okkhttp support module into release
+** see https://github.com/simpligility/ksoap2-android/pull/121
+** contributed by https://github.com/canyapan
+* Removed dep mgt
+
 === 3.6.2 Release, 2016-10-08
 
 * Accept 202 http status code
