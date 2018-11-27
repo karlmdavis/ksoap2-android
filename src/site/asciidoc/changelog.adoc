@@ -2,6 +2,11 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
+=== 3.6.4 Release, Upcoming
+
+* upgrade to okhttp 3.12.0
+
+
 === 3.6.3 Release, 2018-11-26
 
 * Differentiating read and connection timeout
