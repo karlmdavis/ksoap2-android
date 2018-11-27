@@ -2,7 +2,7 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
-=== 3.6.3 Release, 2018-11-21
+=== 3.6.3 Release, 2018-11-26
 
 * Differentiating read and connection timeout
 ** see https://github.com/simpligility/ksoap2-android/pull/124
