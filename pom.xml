@@ -10,7 +10,7 @@
 
   <groupId>com.google.code.ksoap2-android</groupId>
   <artifactId>ksoap2-parent</artifactId>
-  <version>3.6.3</version>
+  <version>3.6.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>ksoap2-android Project</name>
@@ -61,7 +61,7 @@
     <connection>scm:git:git://github.com/simpligility/ksoap2-android.git</connection>
     <developerConnection>scm:git:git@github.com:simpligility/ksoap2-android.git</developerConnection>
     <url>http://github.com/simpligility/ksoap2-android/tree/master</url>
-    <tag>3.6.3</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub</system>
