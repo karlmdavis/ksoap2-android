@@ -1,5 +1,7 @@
 package org.ksoap2.transport;
 
+import okhttp3.OkHttpClient;
+import okhttp3.internal.huc.OkHttpURLConnection;
 import org.ksoap2.HeaderProperty;
 
 import java.io.IOException;
@@ -8,15 +10,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
-import okhttp3.internal.huc.HttpURLConnectionImpl;
 
 /**
  * A simple ServiceConnection based on OkHttp3's URLConnection implementation
@@ -60,7 +55,7 @@ public class OkHttpServiceConnectionSE implements ServiceConnection {
                 
     public OkHttpServiceConnectionSE(OkHttpClient client, Proxy proxy, String url, int timeout) throws IOException {
         this.client = client;
-        connection = new HttpURLConnectionImpl(new URL(url), client);
+        connection = new OkHttpURLConnection(new URL(url), client);
 //        connection = (proxy == null)
 //                ? new HttpURLConnectionImpl(new URL(url), client)
 //                : (HttpURLConnectionImpl) new URL(url).openConnection(proxy);
