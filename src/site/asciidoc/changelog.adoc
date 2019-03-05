@@ -4,14 +4,17 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 
 === 3.6.4 Release, Upcoming
 
-* upgrade to okhttp 3.12.0
+* upgrade to okhttp 3.12.1
+** see https://github.com/simpligility/ksoap2-android/pull/127
+** contributed by Isaac Pateau https://github.com/zaclimon and Manfred Moser http://www.simpligility.com
+
 
 
 === 3.6.3 Release, 2018-11-26
 
 * Differentiating read and connection timeout
 ** see https://github.com/simpligility/ksoap2-android/pull/124
-* Added in okkhttp support module into release
+* Added in okhttp support module into release
 ** see https://github.com/simpligility/ksoap2-android/pull/121
 ** contributed by https://github.com/canyapan
 * Removed dep mgt
