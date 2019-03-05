@@ -5,6 +5,9 @@ applications. This is for those developers of ksoap2-android who perform release
 
 === Getting Ready
 
+Ensure that the upcoming release version is used in
+`org.ksoap2.transport.Transport.USER_AGENT`.
+
 You have to be able to do full build as well as be able to build the site: 
 
 ----

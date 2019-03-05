@@ -62,7 +62,7 @@ abstract public class Transport {
 
     protected static final String CONTENT_TYPE_XML_CHARSET_UTF_8 = "text/xml;charset=utf-8";
     protected static final String CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8 = "application/soap+xml;charset=utf-8";
-    protected static final String USER_AGENT = "ksoap2-android/2.6.0+";
+    protected static final String USER_AGENT = "ksoap2-android/2.6.0+;version=3.6.4";
 
     private int bufferLength = ServiceConnection.DEFAULT_BUFFER_SIZE;
 

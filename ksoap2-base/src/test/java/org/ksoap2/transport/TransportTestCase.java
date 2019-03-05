@@ -35,7 +35,8 @@ public abstract class TransportTestCase extends TestCase {
         assertEquals(aSoapAction, aServiceConnection.requestPropertyMap.get("SOAPAction"));
         assertEquals("text/xml;charset=utf-8", aServiceConnection.requestPropertyMap.get("Content-Type"));
         assertNotNull(aServiceConnection.requestPropertyMap.get("Content-Length"));
-        assertEquals("ksoap2-android/2.6.0+", aServiceConnection.requestPropertyMap.get("User-Agent"));
+        assertTrue(aServiceConnection.requestPropertyMap.get("User-Agent").toString()
+            .startsWith("ksoap2-android/2.6.0+"));
     }
 
     protected void assertSerializationDeserialization() throws SoapFault {
