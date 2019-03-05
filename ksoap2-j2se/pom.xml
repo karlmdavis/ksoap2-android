@@ -33,7 +33,6 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp-urlconnection</artifactId>
-            <version>3.12.1</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

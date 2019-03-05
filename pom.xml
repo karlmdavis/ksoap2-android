@@ -138,6 +138,12 @@
         <type>jar</type>
         <scope>test</scope>
       </dependency>
+
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp-urlconnection</artifactId>
+        <version>3.12.1</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
