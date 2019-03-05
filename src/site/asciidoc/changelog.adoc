@@ -10,7 +10,7 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 * updated Maven wrapper
 ** contributed by Manfred Moser http://www.simpligility.com
 * added current release version to default HTTP header user agetnt string
-** see
+** see https://github.com/simpligility/ksoap2-android/commit/e9e57231ac5fb683f6df5dffbbde3383c2d789bb
 ** fixes https://github.com/simpligility/ksoap2-android/issues/120
 ** contributed by Manfred Moser http://www.simpligility.com
 
