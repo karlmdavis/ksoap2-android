@@ -13,7 +13,8 @@ The commit log is available at https://github.com/mosabua/ksoap2-android/commits
 ** see https://github.com/simpligility/ksoap2-android/commit/e9e57231ac5fb683f6df5dffbbde3383c2d789bb
 ** fixes https://github.com/simpligility/ksoap2-android/issues/120
 ** contributed by Manfred Moser http://www.simpligility.com
-
+* Removed dead link to wsdl2code from site nav
+** contributed by Manfred Moser http://www.simpligility.com
 
 
 === 3.6.3 Release, 2018-11-26
