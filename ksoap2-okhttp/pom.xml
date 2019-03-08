@@ -3,7 +3,7 @@
     <parent>
         <artifactId>ksoap2-parent</artifactId>
         <groupId>com.google.code.ksoap2-android</groupId>
-        <version>3.6.4</version>
+        <version>3.6.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
