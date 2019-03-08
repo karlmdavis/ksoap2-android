@@ -2,7 +2,7 @@
 
 The commit log is available at https://github.com/mosabua/ksoap2-android/commits/
 
-=== 3.6.4 Release, Upcoming
+=== 3.6.4 Release, 2019-03-07
 
 * upgrade to okhttp 3.12.1
 ** see https://github.com/simpligility/ksoap2-android/pull/127
