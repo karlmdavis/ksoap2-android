@@ -44,7 +44,7 @@ public class HttpTransportSETest extends TransportTestCase {
             super(url);
         }
 
-        protected ServiceConnection getServiceConnection() throws IOException {
+        public ServiceConnection getServiceConnection() throws IOException {
             return serviceConnection;
         }
     }

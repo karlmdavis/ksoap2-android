@@ -24,12 +24,18 @@
 
 package org.ksoap2.transport;
 
+import java.util.List;
 import java.io.*;
 
 import javax.microedition.io.*;
 
 import org.ksoap2.*;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.xmlpull.v1.*;
+
+import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.URL;
 
 /**
  * Methods to facilitate SOAP calls over HTTP using the J2ME generic connection
@@ -119,25 +125,60 @@ public class HttpTransport extends Transport {
         super(url);
     }
 
+    public HttpTransport(Proxy proxy, String url) {
+        super(proxy, url);
+    }
+
+    public List call(String soapAction, SoapEnvelope envelope, List headers)
+            throws IOException, XmlPullParserException {
+        return call(soapAction, envelope, headers, null);
+    }
+
     /**
-     * set the desired soapAction header field
-     * 
+     *
+     * Call the soapaction on the remote server.
+     *
      * @param soapAction
      *            the desired soapAction
+     * @param envelope
+     *            the envelope containing the information for the soap call.
+     * @param headers
+     *              a list of HeaderProperties to be http header properties when establishing the connection
+     * @param outputFile
+     *              a file to stream the response into rather than parsing it, streaming happens when file is not null
+     *
+     * @return <code>CookieJar</code> with any cookies sent by the server
+     * @throws IOException
+     * @throws XmlPullParserException
      */
-    public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
-        if (soapAction == null)
+    public List call(String soapAction, SoapEnvelope envelope, List headers, File outputFile)
+            throws IOException, XmlPullParserException {
+        if (soapAction == null) {
             soapAction = "\"\"";
+        }
         byte[] requestData = createRequestData(envelope);
+        List retHeaders = null; 
+
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
         try {
             connected = true;
             connection = getServiceConnection();
             connection.setRequestProperty("SOAPAction", soapAction);
-            connection.setRequestProperty("Content-Type", "text/xml");
+            if (envelope.version == SoapSerializationEnvelope.VER12) {
+                connection.setRequestProperty("Content-Type", CONTENT_TYPE_SOAP_XML_CHARSET_UTF_8);
+            } else {
+                connection.setRequestProperty("Content-Type", CONTENT_TYPE_XML_CHARSET_UTF_8);
+            }
             connection.setRequestProperty("Content-Length", "" + requestData.length);
-            connection.setRequestProperty("User-Agent", "kSOAP/2.0");
+            connection.setRequestProperty("User-Agent", USER_AGENT);
+
+            if (headers != null) {
+                for (int i = 0; i < headers.size(); i++) {
+                    HeaderProperty hp = (HeaderProperty) headers.get(i);
+                    connection.setRequestProperty(hp.getKey(), hp.getValue());
+                }
+            }
             connection.setRequestMethod(HttpConnection.POST);
             os = connection.openOutputStream();
             os.write(requestData, 0, requestData.length);
@@ -145,28 +186,42 @@ public class HttpTransport extends Transport {
             requestData = null;
             is = connection.openInputStream();
             if (debug) {
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                byte[] buf = new byte[256];
-                while (true) {
-                    int rd = is.read(buf, 0, 256);
-                    if (rd == -1)
-                        break;
-                    bos.write(buf, 0, rd);
+                OutputStream bos;
+                if (outputFile != null) {
+                    bos = new FileOutputStream(outputFile);
+                } else {
+                    bos = new ByteArrayOutputStream();
                 }
-                bos.flush();
-                buf = bos.toByteArray();
-                responseDump = new String(buf);
-                is.close();
-                is = new ByteArrayInputStream(buf);
+
+                    byte[] buf = new byte[256];
+                    while (true) {
+                        int rd = is.read(buf, 0, 256);
+                        if (rd == -1) {
+                            break;
+                        }
+                        bos.write(buf, 0, rd);
+                    }
+                    bos.flush();
+                    if (bos instanceof ByteArrayOutputStream) {
+                        buf = ((ByteArrayOutputStream) bos).toByteArray();
+                    }
+                    responseDump = new String(buf);
+                    is.close();
+                    is = new ByteArrayInputStream(buf);
             }
+
+            retHeaders = connection.getResponseProperties();
             parseResponse(envelope, is);
         } finally {
-            if (!connected)
+            if (!connected) {
                 throw new InterruptedIOException();
+            }
             reset();
         }
-        if (envelope.bodyIn instanceof SoapFault)
+        if (envelope.bodyIn instanceof SoapFault) {
             throw ((SoapFault) envelope.bodyIn);
+        }
+        return retHeaders;
     }
 
     /**
@@ -197,8 +252,46 @@ public class HttpTransport extends Transport {
         }
     }
 
-    protected ServiceConnection getServiceConnection() throws IOException {
+    public ServiceConnection getServiceConnection() throws IOException {
         return new ServiceConnectionMidp(url);
     }
 
+    public String getHost() {
+
+        String retVal = null;
+
+        try {
+            retVal = new URL(url).getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
+    }
+
+    public int getPort() {
+
+        int retVal = -1;
+
+        try {
+            retVal = new URL(url).getPort();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
+    }
+
+    public String getPath() {
+
+        String retVal = null;
+
+        try {
+            retVal = new URL(url).getPath();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return retVal;
+    }
 }

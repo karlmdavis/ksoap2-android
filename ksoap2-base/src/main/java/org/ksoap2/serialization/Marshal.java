@@ -41,7 +41,8 @@ public interface Marshal {
      *            the namespace.
      * @return the object read from the xml stream.
      */
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException;
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected)
+            throws IOException, XmlPullParserException;
 
     /**
      * Write the instance to the given XmlSerializer. In contrast to

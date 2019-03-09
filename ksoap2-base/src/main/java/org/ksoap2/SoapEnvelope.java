@@ -39,8 +39,8 @@ public class SoapEnvelope {
     public static final int VER11 = 110;
     /** SOAP Version 1.2 constant */
     public static final int VER12 = 120;
-    public static final String ENV2001 = "http://www.w3.org/2001/12/soap-envelope";
-    public static final String ENC2001 = "http://www.w3.org/2001/12/soap-encoding";
+    public static final String ENV2003 = "http://www.w3.org/2003/05/soap-envelope";
+    public static final String ENC2003 = "http://www.w3.org/2003/05/soap-encoding";
     /** Namespace constant: http://schemas.xmlsoap.org/soap/envelope/ */
     public static final String ENV = "http://schemas.xmlsoap.org/soap/envelope/";
     /** Namespace constant: http://schemas.xmlsoap.org/soap/encoding/ */
@@ -59,8 +59,9 @@ public class SoapEnvelope {
      * case and whitespace, false otherwise.
      */
     public static boolean stringToBoolean(String booleanAsString) {
-        if (booleanAsString == null)
+        if (booleanAsString == null) {
             return false;
+        }
         booleanAsString = booleanAsString.trim().toLowerCase();
         return (booleanAsString.equals("1") || booleanAsString.equals("true"));
     }
@@ -116,8 +117,8 @@ public class SoapEnvelope {
             enc = SoapEnvelope.ENC;
             env = SoapEnvelope.ENV;
         } else {
-            enc = SoapEnvelope.ENC2001;
-            env = SoapEnvelope.ENV2001;
+            enc = SoapEnvelope.ENC2003;
+            env = SoapEnvelope.ENV2003;
         }
     }
 
@@ -127,7 +128,9 @@ public class SoapEnvelope {
         parser.require(XmlPullParser.START_TAG, env, "Envelope");
         encodingStyle = parser.getAttributeValue(env, "encodingStyle");
         parser.nextTag();
-        if (parser.getEventType() == XmlPullParser.START_TAG && parser.getNamespace().equals(env) && parser.getName().equals("Header")) {
+        if (parser.getEventType() == XmlPullParser.START_TAG
+                && parser.getNamespace().equals(env)
+                && parser.getName().equals("Header")) {
             parseHeader(parser);
             parser.require(XmlPullParser.END_TAG, env, "Header");
             parser.nextTag();
@@ -149,23 +152,33 @@ public class SoapEnvelope {
         int count = 0;
         for (int i = 0; i < headers.getChildCount(); i++) {
             Element child = headers.getElement(i);
-            if (child != null)
+            if (child != null) {
                 count++;
+            }
         }
         headerIn = new Element[count];
         count = 0;
         for (int i = 0; i < headers.getChildCount(); i++) {
             Element child = headers.getElement(i);
-            if (child != null)
+            if (child != null) {
                 headerIn[count++] = child;
+            }
         }
     }
 
     public void parseBody(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.nextTag();
         // insert fault generation code here
-        if (parser.getEventType() == XmlPullParser.START_TAG && parser.getNamespace().equals(env) && parser.getName().equals("Fault")) {
-            SoapFault fault = new SoapFault();
+        if (parser.getEventType() == XmlPullParser.START_TAG
+                && parser.getNamespace().equals(env)
+                && parser.getName().equals("Fault")) {
+
+            SoapFault fault;
+            if (this.version < SoapEnvelope.VER12) {
+                fault = new SoapFault(this.version);
+            } else {
+                fault = new SoapFault12(this.version);
+            }
             fault.parse(parser);
             bodyIn = fault;
         } else {
@@ -210,8 +223,9 @@ public class SoapEnvelope {
      * method for customized writing of the soap message body.
      */
     public void writeBody(XmlSerializer writer) throws IOException {
-        if (encodingStyle != null)
+        if (encodingStyle != null) {
             writer.attribute(env, "encodingStyle", encodingStyle);
+        }
         ((Node) bodyOut).write(writer);
     }
 

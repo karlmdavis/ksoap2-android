@@ -16,8 +16,9 @@ public abstract class LiteralArrayVector extends Vector implements KvmSerializab
     private void registerElementClass(SoapSerializationEnvelope envelope, String namespace) {
         final Class elementClass = getElementClass();
         try {
-            if (elementClass.newInstance() instanceof KvmSerializable)
+            if (elementClass.newInstance() instanceof KvmSerializable) {
                 envelope.addMapping(namespace, "", elementClass);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

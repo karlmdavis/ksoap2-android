@@ -27,7 +27,8 @@ import org.xmlpull.v1.*;
 
 public class MarshalFloat implements Marshal {
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo propertyInfo) throws IOException, XmlPullParserException {
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo propertyInfo)
+            throws IOException, XmlPullParserException {
         String stringValue = parser.nextText();
         Object result;
         if (name.equals("float")) {

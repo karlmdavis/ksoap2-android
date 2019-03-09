@@ -21,11 +21,18 @@
 
 package org.ksoap2.transport;
 
-import java.io.*;
+import org.ksoap2.HeaderProperty;
 
-import javax.microedition.io.*;
+import javax.microedition.io.Connector;
+import javax.microedition.io.HttpConnection;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ServiceConnectionMidp implements ServiceConnection {
+    
     private HttpConnection connection;
 
     public ServiceConnectionMidp(String url) throws IOException {
@@ -36,12 +43,42 @@ public class ServiceConnectionMidp implements ServiceConnection {
         connection.close();
     }
 
+    public List getResponseProperties() {
+
+        List retList = new LinkedList();
+        int i = 0;
+        String key;
+            
+        try {
+            while (null != (key = connection.getHeaderFieldKey(i++))) {
+                retList.add(new HeaderProperty(key, connection.getHeaderField(i)));
+            }
+                
+        } catch (IOException exp) {
+            // Absorb errors - if this fails then cookies are the the least of our worries
+        }
+            
+        return retList;
+    }
+
+    public int getResponseCode() throws IOException {
+        return connection.getResponseCode();
+    }
+
     public void setRequestProperty(String string, String soapAction) throws IOException {
         connection.setRequestProperty(string, soapAction);
     }
 
     public void setRequestMethod(String post) throws IOException {
         connection.setRequestMethod(post);
+    }
+
+    public void setFixedLengthStreamingMode(int contentLength) {
+        //  not implemented in MIDP
+    }
+
+    public void setChunkedStreamingMode() {
+
     }
 
     public OutputStream openOutputStream() throws IOException {
@@ -60,4 +97,15 @@ public class ServiceConnectionMidp implements ServiceConnection {
         throw new RuntimeException("ServiceConnectionMidp.getErrorStream is not available.");
     }
 
+    public String getHost() {
+        return connection.getHost();
+    }
+
+    public int getPort() {
+        return connection.getPort();
+    }
+
+    public String getPath() {
+        return connection.getFile();
+    }
 }

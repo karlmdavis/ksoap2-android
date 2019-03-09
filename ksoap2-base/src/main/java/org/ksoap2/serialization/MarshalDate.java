@@ -32,7 +32,8 @@ import org.kobjects.isodate.*;
 public class MarshalDate implements Marshal {
     public static Class DATE_CLASS = new Date().getClass();
 
-    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
+    public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected)
+            throws IOException, XmlPullParserException {
         return IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME);
     }
 
